@@ -1,38 +1,265 @@
-.App {
-  text-align: center;
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+  font-family: 'Cinzel', serif;
+
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
+  width: 100%;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.logo {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
 }
 
-@keyframes App-logo-spin {
+.video-overlay button {
+  margin: 0 10px;
+  padding: 10px 20px;
+}
+.down-arrow {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #deb169;
+  animation: fadeArrow 2s infinite;
+}
+
+@keyframes fadeArrow {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.alumni-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.alumni-card {
+  background: #f5f5f5;
+  padding: 1rem;
+  text-align: center;
+}
+
+.footer {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+.background-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;   /* ensures it covers horizontally */
+  height: 108%;  /* ensures it covers vertically */
+  transform: translate(-50%, -50%);
+  border: none;
+  z-index: -1;
+}
+
+.video-container {
+  position: relative;
+  height: 100vh;   /* full viewport height */
+  width: 100%;     /* full viewport width */
+  overflow: hidden;
+}
+
+.background-video iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;   /* ensures it covers horizontally */
+  min-height: 100%;  /* ensures it covers vertically */
+  transform: translate(-50%, -50%);
+  border: none;
+  z-index: -1;
+}
+
+.video-overlay {
+  position: absolute;
+  bottom: 40px;       /* distance from bottom of video */
+  left: 50%;
+  transform: translateX(-50%); /* center horizontally */
+  text-align: center;
+  color: white;
+  z-index: 1;
+}
+
+.video-overlay button {
+  margin: 0 10px;
+  padding: 10px 20px;
+}
+
+.logo img {
+    height: 150px;
+    width: auto;
+    display: block;
+    background: none;
+    border-radius: 75px;
+}
+
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color: white;
+  z-index: 2;
+}
+
+.logo img {
+  height: 100px;
+  width: auto;
+  display: block;
+}
+
+.menu-button {
+    background: black;
+    border: 3px solid #b89863;
+    color: #e5e5e5;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 1rem;
+    height: 16%;
+    border-radius: 20px;
+    right: 2%;
+    position: relative;
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(20, 20, 20, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.menu-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  position: relative;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.menu-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.menu-links li {
+  margin: 1rem 0;
+}
+
+.menu-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+/* Animations */
+.drop-in {
+  animation-name: dropIn;
+}
+
+@keyframes dropIn {
   from {
-    transform: rotate(0deg);
+    transform: translateY(-200px);
+    opacity: 0;
   }
   to {
-    transform: rotate(360deg);
+    transform: translateY(0);
+    opacity: 1;
   }
+}
+
+.menu-card.closing {
+  animation-name: liftOut;
+}
+
+@keyframes liftOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+}
+
+.bottom-buttons {
+  position: absolute;
+  bottom: 12px;     /* distance from bottom */
+  left: 35px;       /* distance from left */
+  display: flex;
+  gap: 10px;        /* spacing between buttons */
+  z-index: 2;
+}
+
+.bottom-buttons button {
+  background: white;
+  color: rgb(43, 41, 41);
+  border: 4px solid #deb169;
+  padding: 14px 32px;   /* bigger padding = larger button */
+  font-size: 1.2rem;    /* larger text */
+  border-radius: 40px;  /* cfaa6f */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bottom-buttons button:hover {
+  background: #deb169;
+  color: black;
 }
