@@ -45,9 +45,9 @@ const VideoBackground = () => {
 
       <div className="video-overlay">
         <div className="bottom-buttons">
-    <button>Explore Alumni</button>
-    <button>My Account</button>
-    <button>Student Services</button>
+   <button>Explore <span>Alumni</span></button>
+<button>Student <span>Services</span></button>
+<button>My <span>Account</span></button>
   </div>
 
          <div className="down-arrow">⮟⮟</div>
