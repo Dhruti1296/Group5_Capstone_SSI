@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Navbar from "./components/Navbar";
+import SideMenu from "./components/SideMenu";
+import VideoBackground from "./components/VideoBackground";
+import AlumniList from "./components/AlumniList";
+import Footer from "./components/Footer";
+import "./App.css";
 
 function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar onMenuClick={() => setMenuOpen(true)} />
+      <VideoBackground />
+      
+      {/* Side Menu */}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+
+      {/* Alumni Cards */}
+      <AlumniList />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
