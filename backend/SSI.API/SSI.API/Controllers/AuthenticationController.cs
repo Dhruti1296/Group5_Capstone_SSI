@@ -20,11 +20,30 @@ namespace SSI.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(User user)
         {
-            if((user.Role != "Student") && (user.Role != "Alimini"))
+            // null check and handling ....
+            if (user == null)
+                return BadRequest("Invalid data");
+
+            if (string.IsNullOrWhiteSpace(user.Role))
+                return BadRequest("Role is required");
+           
+            if (string.IsNullOrWhiteSpace(user.Email))
+                return BadRequest("Email is required");
+
+            // for role based validation...            
+            var role = user.Role.Trim().ToLower();
+            if ((role != "student") && (role != "alimini"))
             {
                 return BadRequest("Enter valid Role");
             }
-            var existingUser = await _userService.GetByEmail(user.Email);
+           
+            // for email based validation based on the conestoga mail id... 
+            var email = user.Email.Trim().ToLower();
+            if (!email.EndsWith("@conestogac.on.ca"))
+                return BadRequest("Only Conestoga college email is allowed (example@conestogac.on.ca)");
+
+            //duplicate email check...
+            var existingUser = await _userService.GetByEmail(user.Email); 
             if (existingUser != null)
             {
                 return BadRequest("User Email is already registered");
@@ -65,9 +84,5 @@ namespace SSI.API.Controllers
 
             return Unauthorized("Invalid username or password");
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
     }
 }
