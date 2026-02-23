@@ -19,6 +19,11 @@ namespace SSI.API.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task UpdateUser(User user)
+        {
+            await _users.ReplaceOneAsync(u => u.Id == user.Id, user);
+        }
+
         public async Task<User?> GetByEmail(string email)
         {
             return await _users

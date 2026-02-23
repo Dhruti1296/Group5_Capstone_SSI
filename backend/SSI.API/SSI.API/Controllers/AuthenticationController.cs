@@ -65,24 +65,54 @@ namespace SSI.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest login)
         {
-            var user = await _userService.GetByUserName(login.UserName);
-
-            if ((user != null) && (user.Password == login.Password))
-            {
-                return Ok(new { message = "Login successful",
-                    userName = user.UserName,
-                    role = user.Role
-                });
-                
-            }
-
+            //getting the admin details
             var admin = await _adminService.GetByUserName(login.UserName);
             if (admin != null && admin.Password == login.Password)
             {
                 return Ok(new { message = "Login successful", userName = admin.UserName, role = admin.Role });
             }
 
-            return Unauthorized("Invalid username or password");
+            //getting the user details
+            var user = await _userService.GetByUserName(login.UserName);
+            if (user == null)
+            {
+                return BadRequest($"Invalid UserName or password");
+            }
+
+            //checking the user account is locked
+            if ((user.LockUntill.HasValue) && (DateTime.UtcNow < user.LockUntill.Value))
+            {
+                //converting the UTC time to Eastern Time
+                TimeZoneInfo easternTime = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                var lockUntill_LocalTime = TimeZoneInfo.ConvertTimeFromUtc(user.LockUntill.Value, easternTime);
+                return BadRequest($"Account is locked until {lockUntill_LocalTime}");
+            }
+
+            //failed login attempt
+            if (user.Password != login.Password)
+            {
+                //increment the failedloginAttempt value +1
+                user.FailedLoginAttempts++;
+
+                //Checking if the attempts more than 3
+                if (user.FailedLoginAttempts >= 3)
+                {
+                    //added the hours for locking the account
+                    user.LockUntill = DateTime.UtcNow.AddHours(5);
+                    user.FailedLoginAttempts = 0;
+                }
+                await _userService.UpdateUser(user);
+                return Unauthorized("Invalid username or password");
+            }
+
+            user.FailedLoginAttempts = 0;
+            user.LockUntill = null;
+            await _userService.UpdateUser(user);
+           
+                return Ok(new { message = "Login successful",
+                    userName = user.UserName,
+                    role = user.Role
+                });            
         }
     }
 }

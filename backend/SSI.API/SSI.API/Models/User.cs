@@ -16,5 +16,9 @@ namespace SSI.API.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public string Role { get; set; } // Student / Alumni
+
+        //added the security for login attempt
+        public int FailedLoginAttempts { get; set; } = 0;
+        public DateTime? LockUntill {  get; set; }
     }
 }
