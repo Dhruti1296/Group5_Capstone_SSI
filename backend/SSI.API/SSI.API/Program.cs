@@ -21,6 +21,15 @@ namespace SSI.API
             builder.Services.AddSingleton<UserServices>();
             builder.Services.AddSingleton<AdminServices>();
 
+            //Added cors allowing react app to load and check the React URL
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp",
+                    policy => policy.WithOrigins("http://localhost:3000")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod());
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,6 +40,8 @@ namespace SSI.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowReactApp");
 
             app.UseAuthorization();
 
