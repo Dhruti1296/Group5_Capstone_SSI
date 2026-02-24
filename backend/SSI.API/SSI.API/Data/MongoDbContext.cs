@@ -1,5 +1,7 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.Hosting;
+using MongoDB.Driver;
 using SSI.API.Models;
+using System.Xml.Linq;
 
 namespace SSI.API.Data
 {
@@ -14,10 +16,19 @@ namespace SSI.API.Data
         }
         // users
         public IMongoCollection<User> Users =>
-            _database.GetCollection<User>("Users");
+        _database.GetCollection<User>("Users");
 
         //Admin
         public IMongoCollection<Admin> Admins =>
-    _database.GetCollection<Admin>("Admins");
+        _database.GetCollection<Admin>("Admins");
+
+        //Posts...
+        public IMongoCollection<Post> Posts =>
+        _database.GetCollection<Post>("Posts");
+
+        //Comments...
+        public IMongoCollection<Comment> Comments =>
+        _database.GetCollection<Comment>("Comments");
+
     }
 }
