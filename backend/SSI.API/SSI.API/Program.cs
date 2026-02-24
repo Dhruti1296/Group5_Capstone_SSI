@@ -16,10 +16,14 @@ namespace SSI.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //mongodbContext
+            // mongodb : mongodbContext
             builder.Services.AddSingleton<MongoDbContext>();
+
+            // all services...
             builder.Services.AddSingleton<UserServices>();
             builder.Services.AddSingleton<AdminServices>();
+            builder.Services.AddSingleton<PostServices>();
+            builder.Services.AddSingleton<CommentServices>();
 
             //Added cors allowing react app to load and check the React URL
             builder.Services.AddCors(options =>
