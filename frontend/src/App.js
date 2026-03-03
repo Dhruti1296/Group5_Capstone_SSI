@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import SideMenu from "./components/SideMenu";
 import VideoBackground from "./components/VideoBackground";
-import AlumniList from "./components/AlumniList";
 import Footer from "./components/Footer";
+import MakeADifference from "./components/MakeADifference"; // ✅ new import
 import "./App.css";
 
 function App() {
@@ -13,12 +13,11 @@ function App() {
     <div className="App">
       <Navbar onMenuClick={() => setMenuOpen(true)} />
       <VideoBackground />
-      
-      {/* Side Menu */}
+
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
 
-      {/* Alumni Cards */}
-      <AlumniList />
+      {/* Make a Difference section */}
+      <MakeADifference />
 
       {/* Footer */}
       <Footer />
