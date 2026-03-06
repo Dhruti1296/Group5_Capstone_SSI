@@ -1,14 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\sem4\\Group5_Capstone_SSI\\backend\\SSI.API\\",
+  "WorkspaceRootPath": "F:\\sem4\\wordpress-6.9\\Group5_Capstone_SSI\\backend\\SSI.API\\",
   "Documents": [],
   "DocumentGroupContainers": [
     {
-      "Orientation": 1,
+      "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 200,
+          "DockedWidth": 200,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -50,7 +50,7 @@
           ]
         },
         {
-          "DockedHeight": 200,
+          "DockedWidth": 271,
           "SelectedChildIndex": -1,
           "Children": [
             {
