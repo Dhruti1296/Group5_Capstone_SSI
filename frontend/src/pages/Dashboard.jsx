@@ -97,7 +97,7 @@ function Dashboard() {
 
         {/* Column 3 */}
         <div className="dashboard-column lists-column">
-          <h3>Alumni</h3>
+          
           <AlumniList />
           <h3>Students</h3>
           <a href="/students">View Students</a>
