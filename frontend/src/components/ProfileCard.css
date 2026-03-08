@@ -1,0 +1,43 @@
+.profile-card {
+  background: rgba(17,17,17,0.9);
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  margin: 20px 0;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #d4af37;
+  margin-bottom: 10px;
+}
+
+.profile-initials {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #d4af37;
+  color: #111;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.edit-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.edit-link:hover {
+  text-decoration: underline;
+}

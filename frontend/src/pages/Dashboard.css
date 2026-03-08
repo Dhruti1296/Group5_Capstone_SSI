@@ -1,0 +1,219 @@
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* three columns */
+  gap: 2rem;
+  padding: 2rem;
+  background: #111; /* deep black background */
+  color: #fff;      /* white text for contrast */
+   
+}
+
+/* Column 1: Profile */
+.profile-column {
+  text-align: center;
+  background: #000;
+  border: 2px solid #d4af37; /* gold border */
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.profile-pic-wrapper {
+  display: flex;
+  justify-content: center;   /* centers horizontally */
+  margin-bottom: 1rem;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid #d4af37;
+  object-fit: cover;
+}
+
+.profile-pic.initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #d4af37;
+  color: #111;
+  font-size: 3rem;
+  font-weight: bold;
+  border: 4px solid #d4af37;
+}
+.user-name {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: #d4af37;
+}
+
+.profile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.profile-links a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 8px;
+  transition: all 0.3s ease;
+}
+
+.profile-links a:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+/* Column 2: Feed */
+.feed-column {
+  background: #222;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid #d4af37;
+}
+
+/* Column 3: Lists */
+.lists-column {
+  background: #000;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.lists-column h3 {
+  color: #d4af37;
+  margin-top: 1rem;
+}
+
+.lists-column a {
+  display: block;
+  margin: 0.5rem 0;
+  text-decoration: none;
+  color: #fff;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 6px;
+  transition: all 0.3s ease;
+}
+
+.lists-column a:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+.post-box {
+    width: 70vw;
+    margin: 20px auto;
+   
+    background: #000;
+    border: 2px solid #d4af37;
+    border-radius: 20px;
+    padding: 12px 20px;
+    color: #d4af37;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    bottom: 15px;
+    left: -22px;
+}
+
+.post-box:hover {
+  background: #d4af37;
+  color: #111;
+}
+.post-box-inner {
+  display: flex;              /* put children side by side */
+  align-items: center;        /* vertically center them */
+  gap: 12px;                  /* space between circle and text */
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8); /* dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal card */
+.modal-card {
+  background: #111; /* black card */
+  border: 2px solid #d4af37; /* gold border */
+  border-radius: 12px;
+  padding: 20px;
+  width: 400px;
+  color: #fff;
+}
+
+.modal-card h3 {
+  color: #d4af37;
+  margin-bottom: 10px;
+}
+
+.modal-card textarea {
+  width: 100%;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px solid #d4af37;
+  background: #000; /* black textarea */
+  color: #fff;
+  padding: 10px;
+  resize: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.cancel-btn, .post-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid #d4af37;
+  background: transparent;
+  color: #d4af37;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+.post-btn {
+  background: #d4af37;
+  color: #111;
+  font-weight: bold;
+}
+
+.post-btn:hover {
+  background: #fff;
+  color: #111;
+}
+
+.dashboard-page {
+  background: #111;   /* deep black background */
+  color: #fff;
+  min-height: 100vh;
+  padding-top: 140px; /* 👈 same spacing as other pages */
+}
+
+.profile-pic {
+  display: block;              /* make it a block element */
+  margin: 0 auto;              /* center horizontally */
+}

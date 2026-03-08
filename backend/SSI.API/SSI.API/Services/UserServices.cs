@@ -12,23 +12,12 @@ namespace SSI.API.Services
         {
             _users = context.Users;
         }
-        public async Task<User?> GetByUserName(string userName)
-        {
-            return await _users
-                .Find(u => u.UserName == userName)
-                .FirstOrDefaultAsync();
-        }
-
+     
         public async Task<User?> GetByEmail(string email)
         {
             return await _users
                 .Find(u => u.Email == email)
                 .FirstOrDefaultAsync();
-        }
-
-        public async Task Register(User user)
-        {
-            await _users.InsertOneAsync(user);
         }
 
         public async Task<User> Login(string username, string password)
@@ -37,5 +26,15 @@ namespace SSI.API.Services
                 u.UserName == username && u.Password == password
             ).FirstOrDefaultAsync();
         }
+
+        public User GetUserByUserName(string userName)
+        {
+           return _users.Find(u => u.UserName == userName).FirstOrDefault();
+        }
+
+        public void CreateUser(User user)
+       {
+          _users.InsertOne(user);
+       }
     }
 }

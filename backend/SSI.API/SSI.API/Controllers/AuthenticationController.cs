@@ -1,73 +1,94 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using SSI.API.Data;
 using SSI.API.Models;
-using SSI.API.Services;
+using System.Text.RegularExpressions;
+using BCrypt.Net;
 
 namespace SSI.API.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthenticationController : Controller
+    public class AuthController : ControllerBase
     {
-        private readonly UserServices _userService;
-        private readonly AdminServices _adminService;
-        public AuthenticationController(UserServices userService, AdminServices adminService)
+        private readonly MongoDbContext _context;
+
+        public AuthController(MongoDbContext context)
         {
-            _userService = userService;
-            _adminService = adminService;
+            _context = context;
         }
 
-        //register
+        //  Registration endpoint
         [HttpPost("register")]
-        public async Task<IActionResult> Register(User user)
+        public async Task<IActionResult> Register([FromBody] User user)
         {
-            if((user.Role != "Student") && (user.Role != "Alimini"))
-            {
-                return BadRequest("Enter valid Role");
-            }
-            var existingUser = await _userService.GetByEmail(user.Email);
+            user.Email = user.Email.ToLower();
+
+            // Check uniqueness
+            var existingUser = await _context.Users
+                .Find(u => u.UserName == user.UserName || u.Email == user.Email)
+                .FirstOrDefaultAsync();
+
             if (existingUser != null)
             {
-                return BadRequest("User Email is already registered");
+                return BadRequest("Username or Email already exists.");
             }
 
-            var users = new User
+            // Validate email format
+            if (!Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                Password = user.Password,
-                Role = user.Role
-            };
+                return BadRequest("Invalid email format.");
+            }
 
-            await _userService.Register(users);
-            return Ok("Registered Successfully");
+            // Validate password strength
+            if (user.Password.Length < 8)
+            {
+                return BadRequest("Password must be at least 8 characters long.");
+            }
+
+            // Hash password
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+            await _context.Users.InsertOneAsync(user);
+            return Ok("Registration successful!");
         }
 
-        //login
+        //  Login endpoint
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest login)
+        public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
-            var user = await _userService.GetByUserName(login.UserName);
+            var user = await _context.Users.Find(u => u.UserName == login.UserName).FirstOrDefaultAsync();
 
-            if ((user != null) && (user.Password == login.Password))
+            if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             {
-                return Ok(new { message = "Login successful",
+                return Ok(new
+                {
+                    message = "Login successful",
                     userName = user.UserName,
                     role = user.Role
                 });
-                
             }
 
-            var admin = await _adminService.GetByUserName(login.UserName);
-            if (admin != null && admin.Password == login.Password)
+            var admin = await _context.Admins.Find(a => a.UserName == login.UserName).FirstOrDefaultAsync();
+            if (admin != null && BCrypt.Net.BCrypt.Verify(login.Password, admin.Password))
             {
-                return Ok(new { message = "Login successful", userName = admin.UserName, role = admin.Role });
+                return Ok(new
+                {
+                    message = "Login successful",
+                    userName = admin.UserName,
+                    role = admin.Role
+                });
             }
 
             return Unauthorized("Invalid username or password");
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+
+[HttpDelete("clear-users")]
+public async Task<IActionResult> ClearUsers()
+{
+    await _context.Users.DeleteManyAsync(_ => true); // deletes all users
+    await _context.Admins.DeleteManyAsync(_ => true); // optional: clear admins too
+    return Ok("All users deleted.");
+}
     }
 }

@@ -1,44 +1,81 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const VideoBackground = () => {
-  useEffect(() => {
-    // YouTube IFrame API setup
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName("script")[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  const navigate = useNavigate();
 
-    window.onYouTubeIframeAPIReady = () => {
-      window.player = new window.YT.Player("yt-background", {
-        videoId: "Hvizqg8gezU",
-        playerVars: {
-          autoplay: 1,
-          mute: 1,
-          controls: 0,
-          modestbranding: 1,
-          rel: 0,
-          showinfo: 0,
-          start: 0
-        },
-        events: {
-          onReady: (event) => {
-            event.target.playVideo();
+  useEffect(() => {
+    let checkInterval = null;
+
+    const initPlayer = () => {
+      if (window.YT && window.YT.Player) {
+        window.player = new window.YT.Player("yt-background", {
+          videoId: "Hvizqg8gezU",
+          playerVars: {
+            autoplay: 1,
+            mute: 1,
+            controls: 0,
+            modestbranding: 1,
+            rel: 0,
+            showinfo: 0,
+            start: 0
           },
-          onStateChange: (event) => {
-            if (event.data === window.YT.PlayerState.PLAYING) {
-              setInterval(() => {
-                if (window.player.getCurrentTime() >= 84) {
-                  window.player.seekTo(0);
+          events: {
+            onReady: (event) => {
+              event.target.seekTo(0);
+              event.target.playVideo();
+
+              const overlay = document.querySelector(".video-fade-overlay");
+              if (overlay) {
+                overlay.classList.add("fade-in");
+                setTimeout(() => overlay.classList.remove("fade-in"), 1200);
+              }
+            },
+            onStateChange: (event) => {
+              if (event.data === window.YT.PlayerState.PLAYING) {
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                  if (
+                    window.player &&
+                    typeof window.player.getCurrentTime === "function"
+                  ) {
+                    const currentTime = window.player.getCurrentTime();
+                    if (currentTime >= 84) {
+                      window.player.seekTo(0);
+                    }
+                  }
+                }, 1000);
+              } else {
+                if (checkInterval) {
+                  clearInterval(checkInterval);
+                  checkInterval = null;
                 }
-              }, 1000);
+              }
             }
           }
-        }
-      });
+        });
+      }
+    };
+
+    if (!window.YT) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.body.appendChild(tag);
+      window.onYouTubeIframeAPIReady = initPlayer;
+    } else {
+      initPlayer();
+    }
+
+    return () => {
+      if (checkInterval) clearInterval(checkInterval);
+      if (window.player && typeof window.player.destroy === "function") {
+        window.player.destroy();
+        window.player = null;
+      }
     };
   }, []);
 
-  // IntersectionObserver for nav link animation
+  //  Add IntersectionObserver for link bar
   useEffect(() => {
     const linkBar = document.querySelector(".link-bar");
 
@@ -64,18 +101,21 @@ const VideoBackground = () => {
     <>
       <div className="video-container">
         <div id="yt-background" className="background-video"></div>
+        <div className="video-fade-overlay"></div>
 
         <div className="video-overlay">
           <div className="bottom-buttons">
             <button>Explore <span>Alumni</span></button>
             <button>Student <span>Services</span></button>
-            <button>Account <span>Login</span></button>
+            <button onClick={() => navigate("/login")}>
+              Account <span>Login</span>
+            </button>
           </div>
           <div className="down-arrow">⮟⮟</div>
         </div>
       </div>
 
-      {/* Horizontal link bar with animation classes */}
+      {/*  Link bar animates on scroll */}
       <div className="link-bar animation-group animation-zoom-in">
         <a href="/about" className="nav-link animation-item">About</a>
         <a href="/news" className="nav-link animation-item">News</a>

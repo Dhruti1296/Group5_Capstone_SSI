@@ -1,3 +1,4 @@
+using MongoDB.Driver;
 using SSI.API.Data;
 using SSI.API.Services;
 
@@ -9,21 +10,32 @@ namespace SSI.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
+            // Add services to the container
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //mongodbContext
+            // Register MongoDbContext (reads from appsettings.json)
             builder.Services.AddSingleton<MongoDbContext>();
+
+            // Custom services
             builder.Services.AddSingleton<UserServices>();
             builder.Services.AddSingleton<AdminServices>();
 
+            // Add CORS policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000") // React app origin
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -31,12 +43,9 @@ namespace SSI.API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowFrontend");
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
