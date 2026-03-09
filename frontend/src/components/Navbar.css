@@ -27,7 +27,7 @@
 .welcome-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   background: black;
   border: 3px solid #b89863;
   color: #e5e5e5;
@@ -63,4 +63,78 @@
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.welcome-btn {
+  background: transparent;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #d4af37;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%; /* ensures button width consistency */
+}
+
+.welcome-btn:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;   /* directly below button */
+  left: 84px;
+  width: 100%; /* match button width */
+  background: #111;
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  overflow: hidden;
+  animation: slideDown 0.3s ease forwards;
+  z-index: 100;
+}
+
+.dropdown-content a,
+.dropdown-content button {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #fff;
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font: inherit;       /* 👈 ensures same font as parent */
+  font-size: 1rem;     /* 👈 consistent size */
+}
+
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-text {
+  color: #ccc;
+  font-size: 1rem;
 }

@@ -1,15 +1,30 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const { user } = useContext(UserContext);
+  const dropdownRef = useRef(null);
 
   const initials = user?.userName
     ? user.userName.charAt(0).toUpperCase()
     : "G"; // fallback for Guest
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -21,7 +36,7 @@ const Navbar = () => {
 
         {/* Controls on the right */}
         <div className="corner-controls">
-          <div className="welcome-box">
+          <div className="welcome-box" ref={dropdownRef}>
             <div className="profile-circle">
               {user?.profilePic ? (
                 <img src={user.profilePic} alt="profile" />
@@ -29,7 +44,27 @@ const Navbar = () => {
                 initials
               )}
             </div>
-            <span>Welcome, {user?.userName || "Guest"}</span>
+
+            {user && user.userName !== "Guest" ? (
+              <div className="dropdown">
+                <button
+                  className="welcome-btn"
+                  onClick={() => setDropdownOpen((prev) => !prev)}
+                >
+                  Welcome, {user.userName}
+                </button>
+                {dropdownOpen && (
+                  <div className="dropdown-content">
+                    <Link to="/edit-profile">Edit Profile</Link>
+                    <button onClick={() => {/* handle logout */}}>
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <span className="welcome-text">Welcome, Guest</span>
+            )}
           </div>
 
           <button className="menu-button" onClick={() => setMenuOpen(true)}>

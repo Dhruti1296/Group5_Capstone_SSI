@@ -245,3 +245,19 @@
   margin: 0 auto;              /* center horizontally */
 }
 
+.profile-pic.clickable,
+.profile-pic.initials.clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+ 
+}
+
+a {
+  text-decoration: none;
+}
+
+.profile-pic.clickable:hover,
+.profile-pic.initials.clickable:hover {
+  transform: scale(1.05);
+}
+

@@ -1,0 +1,56 @@
+.events-page {
+  min-height: 100vh;
+  background: linear-gradient(140deg, #000 40%, #deb169 85%);
+  color: #fff;
+}
+
+.events-header h2 {
+  text-align: center;
+  color: #d4af37;
+  margin: 2rem 0;
+}
+
+.events-table-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Cinzel', serif;
+  color: #fff;
+}
+
+.events-table th,
+.events-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.date-row th {
+  background: #111;
+  color: #d4af37;
+  text-align: left;
+}
+
+.events-table a {
+  color: #deb169;
+  text-decoration: none;
+  position: relative;
+}
+
+.events-table a::after {
+  content: "";
+  position: absolute;
+  width: 4rem;
+  border-top: 1px solid #d4af37;
+  bottom: -0.5rem;
+  left: 0;
+  transition: 0.4s all ease;
+}
+
+.events-table a:hover::after {
+  width: 100%;
+}

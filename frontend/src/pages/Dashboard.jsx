@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Stories from "../components/Stories";
 import AlumniList from "../components/AlumniList";
 import "./Dashboard.css";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const { user } = useContext(UserContext);
@@ -32,19 +33,19 @@ function Dashboard() {
     <div className="dashboard-page">
       <Navbar />
 
-     {/* Post box trigger */}
-<div className="post-box" onClick={() => setShowModal(true)}>
-  <div className="post-box-inner">
-    <div className="profile-circle">
-      {user.profilePic ? (
-        <img src={user.profilePic} alt="profile" />
-      ) : (
-        user.userName.charAt(0).toUpperCase()
-      )}
-    </div>
-    <span>What’s on your mind, {user.userName}?</span>
-  </div>
-</div>
+      {/* Post box trigger */}
+      <div className="post-box" onClick={() => setShowModal(true)}>
+        <div className="post-box-inner">
+          <div className="profile-circle">
+            {user.profilePic ? (
+              <img src={user.profilePic} alt="profile" />
+            ) : (
+              user.userName.charAt(0).toUpperCase()
+            )}
+          </div>
+          <span>What’s on your mind, {user.userName}?</span>
+        </div>
+      </div>
 
       {/* Modal */}
       {showModal && (
@@ -66,20 +67,26 @@ function Dashboard() {
 
       <div className="dashboard-layout">
         {/* Column 1 */}
+        {/* Column 1 */}
         <div className="dashboard-column profile-column">
           {/* Profile pic + links */}
-         {user.profilePic ? (
-  <img
-    src={user.profilePic}
-    alt="Profile"
-    className="profile-pic"
-  />
-) : (
-  <div className="profile-pic initials">
-    {user.userName.charAt(0).toUpperCase()}
-  </div>
-)}
-<h3 className="user-name">{user.userName}</h3>
+          {user.profilePic ? (
+            <Link to="/edit-profile">
+              <img
+                src={user.profilePic}
+                alt="Profile"
+                className="profile-pic clickable"
+              />
+            </Link>
+          ) : (
+            <Link to="/edit-profile">
+              <div className="profile-pic initials clickable">
+                {user.userName.charAt(0).toUpperCase()}
+              </div>
+            </Link>
+          )}
+
+          <h3 className="user-name">{user.userName}</h3>
           <nav className="profile-links">
             <a href="/stories">Stories</a>
             <a href="/news">News</a>
@@ -89,7 +96,6 @@ function Dashboard() {
             <a href="/get-involved">Get Involved</a>
           </nav>
         </div>
-
         {/* Column 2 */}
         <div className="dashboard-column feed-column">
           <Stories />
@@ -97,7 +103,7 @@ function Dashboard() {
 
         {/* Column 3 */}
         <div className="dashboard-column lists-column">
-          
+
           <AlumniList />
           <h3>Students</h3>
           <a href="/students">View Students</a>
