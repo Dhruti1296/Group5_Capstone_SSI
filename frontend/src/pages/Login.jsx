@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
 import Footer from "../components/Footer";
-import { UserContext } from "../context/UserContext"; // ✅ import context
+import { UserContext } from "../context/UserContext";
 import "./Login.css";
 
 function Login() {
@@ -12,52 +11,57 @@ function Login() {
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState(null);
 
-  const { setUser } = useContext(UserContext); // ✅ get context
+  const { setUser, saveToken } = useContext(UserContext);
   const navigate = useNavigate();
 
   const showNotification = (message, type) => {
     setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000); // auto-hide after 3s
+    setTimeout(() => setNotification(null), 3000);
   };
 
- const handleLogin = async () => {
-  const btn = document.querySelector(".login-button");
-  btn.classList.add("clicked");
-  setTimeout(() => btn.classList.remove("clicked"), 600);
+  const handleLogin = async () => {
+    const btn = document.querySelector(".login-button");
+    btn.classList.add("clicked");
+    setTimeout(() => btn.classList.remove("clicked"), 600);
 
-  try {
-    const response = await fetch("https://localhost:7276/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName, password }),
-    });
+    try {
+      const response = await fetch("https://localhost:7276/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName, password }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      setUser({ userName: data.userName, email: data.email, profilePic: data.profilePic || null });
+      if (response.ok) {
+        const data = await response.json();
 
-      showNotification("Login successful! Redirecting...", "success");
+        saveToken(data.token);
+        setUser({
+          userName: data.userName,
+          email: data.email,
+          role: data.role,
+          profilePic: data.profilePic || null,
+        });
 
-      setUserName("");
-      setPassword("");
+      
 
-      document.querySelector(".login-container").classList.add("fade-out");
-      setTimeout(() => navigate("/dashboard"), 800);
-    } else {
-      const error = await response.text();
-      showNotification("⚠️ Login failed: " + error, "error");
+        showNotification("Login successful! Redirecting...", "success");
+        setUserName("");
+        setPassword("");
+        document.querySelector(".login-container").classList.add("fade-out");
+        setTimeout(() => navigate("/dashboard"), 800);
+      } else {
+        const error = await response.text();
+        showNotification("⚠️ Login failed: " + error, "error");
+      }
+    } catch (err) {
+      showNotification("⚠️ Network error: " + err.message, "error");
     }
-  } catch (err) {
-    showNotification("⚠️ Network error: " + err.message, "error");
-  }
-};
+  };
 
   return (
     <div className="login-page">
-     
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
 
-      {/*  Notification banner */}
       {notification && (
         <div className={`notification ${notification.type}`}>
           {notification.message}

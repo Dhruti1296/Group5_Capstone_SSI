@@ -1,76 +1,76 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import SideMenu from "./components/SideMenu";
 import VideoBackground from "./components/VideoBackground";
 import Footer from "./components/Footer";
 import MakeADifference from "./components/MakeADifference";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import EditProfile from "./pages/EditProfile";
-import News from "./pages/News"; 
-import Events from "./pages/Events"; 
+import News from "./pages/News";
+import Events from "./pages/Events";
+import Alumni from "./pages/Alumni";
+import Volunteer from "./pages/Volunteer";
+import Mentor from "./pages/Mentor";
+import BecomeMentor from "./pages/BecomeMentor";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminRoute from "./routes/AdminRoute";
+import Chat from "./pages/Chat";
 
 import "./App.css";
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
     <UserProvider>
       <Router>
         <div className="App">
-          <Navbar onMenuClick={() => setMenuOpen(true)} />
-
           <Routes>
-            {/* Home page */}
-            <Route
-              path="/"
-              element={
-                <>
-                  <VideoBackground />
-                  {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
-                  <MakeADifference />
-                  <Footer />
-                </>
-              }
-            />
-
-            {/* Login page */}
+            <Route path="/" element={
+              <>
+                <Navbar />
+                <VideoBackground />
+                <MakeADifference />
+                <Footer />
+              </>
+            } />
             <Route path="/login" element={<Login />} />
-
-            {/* Register page */}
             <Route path="/register" element={<Register />} />
-
-            {/* Dashboard page (protected) */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Edit Profile page (protected) */}
-            <Route
-              path="/edit-profile"
-              element={
-                <ProtectedRoute>
-                  <EditProfile />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* News page (public) */}
             <Route path="/news" element={<News />} />
-            {/* Events page (public) */}
             <Route path="/events" element={<Events />} />
+
+            <Route path="/dashboard" element={
+              <ProtectedRoute><Dashboard /></ProtectedRoute>
+            } />
+            <Route path="/edit-profile" element={
+              <ProtectedRoute><EditProfile /></ProtectedRoute>
+            } />
+            <Route path="/alumni" element={
+              <ProtectedRoute><Alumni /></ProtectedRoute>
+            } />
+            <Route path="/volunteer" element={
+              <ProtectedRoute><Volunteer /></ProtectedRoute>
+            } />
+            <Route path="/mentor" element={
+              <ProtectedRoute><Mentor /></ProtectedRoute>
+            } />
+            <Route path="/become-mentor" element={
+              <ProtectedRoute><BecomeMentor /></ProtectedRoute>
+            } />
+            <Route path="/chat/:roomId" element={
+              <ProtectedRoute><Chat /></ProtectedRoute>
+            } />
+            {/* Admin routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={
+              <AdminRoute><AdminDashboard /></AdminRoute>
+            } />
           </Routes>
         </div>
       </Router>

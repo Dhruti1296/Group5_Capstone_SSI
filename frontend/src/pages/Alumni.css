@@ -1,0 +1,113 @@
+.alumni-page {
+  min-height: 100vh;
+  background: linear-gradient(140deg, #000 40%, #deb169 85%);
+  color: #fff;
+}
+
+.alumni-header {
+  text-align: center;
+  padding: 8rem 2rem 2rem;
+}
+
+.alumni-header h2 {
+  font-size: 2.5rem;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+}
+
+.alumni-header p {
+  color: #ccc;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.alumni-search {
+  width: 100%;
+  max-width: 480px;
+  padding: 12px 20px;
+  background: #111;
+  border: 2px solid #d4af37;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 1rem;
+  font-family: 'Cinzel', serif;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.alumni-search:focus {
+  border-color: #fff;
+}
+
+.alumni-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 2rem 4rem;
+}
+
+.alumni-card {
+  background: #000;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.alumni-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+}
+
+.alumni-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #d4af37;
+  color: #111;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 2px solid #d4af37;
+}
+
+.alumni-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.alumni-name {
+  color: #d4af37;
+  font-size: 1rem;
+  margin: 0 0 0.2rem;
+}
+
+.alumni-detail {
+  color: #ccc;
+  font-size: 0.85rem;
+  margin: 0 0 0.2rem;
+}
+
+.alumni-username {
+  color: #666;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.alumni-empty {
+  color: #aaa;
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 3rem 0;
+}

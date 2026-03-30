@@ -146,16 +146,7 @@ html {
   z-index: 1000;
 }
 
-.menu-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 300px;
-  text-align: center;
-  position: relative;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
-}
+
 
 .close-button {
   position: absolute;
@@ -200,21 +191,7 @@ html {
   }
 }
 
-.menu-card.closing {
-  animation-name: liftOut;
-}
 
-@keyframes liftOut {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  to {
-    transform: translateY(-200px);
-    opacity: 0;
-  }
-}
 
 .bottom-buttons {
   position: absolute;
@@ -315,14 +292,29 @@ html {
 .side-menu {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  right: 0;              /* anchor to right side */
+  width: 320px;
   height: 100%;
-  background: hwb(0 100% 0% / 0.416);
+  background: #111;
+  border-left: 2px solid #d4af37;
+  transform: translateX(100%);    /* start off-screen */
+  transition: transform 0.4s ease;
   z-index: 1000;
   padding: 2rem;
   font-family: 'Cinzel', serif;
-  /* 👈 force Cinzel here */
+}
+
+.side-menu.open {
+  transform: translateX(0);       /* slide into view */
+}
+
+.side-menu.closing {
+  animation: slideOut 0.5s forwards;
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
 }
 
 .side-menu h2,
@@ -516,4 +508,71 @@ html {
 @keyframes fadeOverlay {
   from { opacity: 1; }
   to   { opacity: 0; }
+}
+
+.menu-card {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background: #111;
+  border-left: 2px solid #d4af37;
+  padding: 2rem;
+  z-index: 1001;
+  font-family: 'Cinzel', serif;
+  overflow-y: auto;
+}
+
+.menu-card.drop-in {
+  animation: slideInRight 0.4s ease forwards;
+}
+
+.menu-card.closing {
+  animation: slideOut 0.4s ease forwards;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.menu-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-links li a,
+.menu-links li .menu-logout-btn {
+  display: block;
+  padding: 12px 16px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.menu-links li a:hover,
+.menu-links li .menu-logout-btn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #d4af37;
+  color: #d4af37;
 }
