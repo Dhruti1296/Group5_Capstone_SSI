@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MongoDB.Driver;
 using SSI.API.Data;
 using SSI.API.Models;
+using SSI.API.Services;
 using System.Text.RegularExpressions;
-using BCrypt.Net;
 
 namespace SSI.API.Controllers
 {
@@ -12,70 +13,73 @@ namespace SSI.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly MongoDbContext _context;
+        private readonly TokenService _tokenService;
 
-        public AuthController(MongoDbContext context)
+        public AuthController(MongoDbContext context, TokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService;
         }
 
-        //  Registration endpoint
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
             user.Email = user.Email.ToLower();
 
-            // Check uniqueness
             var existingUser = await _context.Users
                 .Find(u => u.UserName == user.UserName || u.Email == user.Email)
                 .FirstOrDefaultAsync();
 
             if (existingUser != null)
-            {
                 return BadRequest("Username or Email already exists.");
-            }
 
-            // Validate email format
             if (!Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-            {
                 return BadRequest("Invalid email format.");
-            }
 
-            // Validate password strength
             if (user.Password.Length < 8)
-            {
                 return BadRequest("Password must be at least 8 characters long.");
-            }
 
-            // Hash password
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             await _context.Users.InsertOneAsync(user);
             return Ok("Registration successful!");
         }
 
-        //  Login endpoint
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
-            var user = await _context.Users.Find(u => u.UserName == login.UserName).FirstOrDefaultAsync();
+            // Check regular users
+            var user = await _context.Users
+                .Find(u => u.UserName == login.UserName)
+                .FirstOrDefaultAsync();
 
             if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             {
+                var token = _tokenService.GenerateToken(user.UserName, user.Role);
                 return Ok(new
                 {
                     message = "Login successful",
+                    token,
                     userName = user.UserName,
+                    email = user.Email,
                     role = user.Role
                 });
             }
 
-            var admin = await _context.Admins.Find(a => a.UserName == login.UserName).FirstOrDefaultAsync();
+            // Check admins
+            var admin = await _context.Admins
+                .Find(a => a.UserName == login.UserName)
+                .FirstOrDefaultAsync();
+
             if (admin != null && BCrypt.Net.BCrypt.Verify(login.Password, admin.Password))
             {
+                var token = _tokenService.GenerateToken(admin.UserName, admin.Role);
                 return Ok(new
                 {
                     message = "Login successful",
+                    token,
                     userName = admin.UserName,
+                    email = (string?)null,
                     role = admin.Role
                 });
             }
@@ -83,12 +87,12 @@ namespace SSI.API.Controllers
             return Unauthorized("Invalid username or password");
         }
 
-[HttpDelete("clear-users")]
-public async Task<IActionResult> ClearUsers()
-{
-    await _context.Users.DeleteManyAsync(_ => true); // deletes all users
-    await _context.Admins.DeleteManyAsync(_ => true); // optional: clear admins too
-    return Ok("All users deleted.");
-}
+        [HttpDelete("clear-users")]
+        public async Task<IActionResult> ClearUsers()
+        {
+            await _context.Users.DeleteManyAsync(_ => true);
+            await _context.Admins.DeleteManyAsync(_ => true);
+            return Ok("All users deleted.");
+        }      
     }
 }
