@@ -11,7 +11,7 @@ namespace SSI.API.Models
         public string? Id { get; set; }
 
         [BsonElement("RoomId")]
-        public string RoomId { get; set; } = null!; // studentUserName_mentorUserName
+        public string RoomId { get; set; } = null!;
 
         [BsonElement("SenderUserName")]
         public string SenderUserName { get; set; } = null!;
@@ -21,5 +21,8 @@ namespace SSI.API.Models
 
         [BsonElement("SentAt")]
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
+
+        [BsonElement("IsRead")]
+        public bool IsRead { get; set; } = false;
     }
 }

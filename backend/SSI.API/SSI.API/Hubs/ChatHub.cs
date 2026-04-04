@@ -16,19 +16,23 @@ namespace SSI.API.Hubs
             _mentorshipService = mentorshipService;
         }
 
-        // Join a chat room
         public async Task JoinRoom(string roomId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+
+            // Mark all messages in this room as read for this user
+            var userName = Context.User?.FindFirstValue(ClaimTypes.Name);
+            if (userName != null)
+            {
+                await _mentorshipService.MarkMessagesReadAsync(roomId, userName);
+            }
         }
 
-        // Leave a chat room
         public async Task LeaveRoom(string roomId)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
         }
 
-        // Send a message to a room
         public async Task SendMessage(string roomId, string message)
         {
             var userName = Context.User?.FindFirstValue(ClaimTypes.Name);
@@ -39,20 +43,20 @@ namespace SSI.API.Hubs
                 RoomId = roomId,
                 SenderUserName = userName,
                 Message = message,
-                SentAt = DateTime.UtcNow
+                SentAt = DateTime.UtcNow,
+                IsRead = false
             };
 
-            // Save to MongoDB
             await _mentorshipService.SaveMessageAsync(chatMessage);
 
-            // Broadcast to everyone in the room
             await Clients.Group(roomId).SendAsync("ReceiveMessage", new
             {
                 id = chatMessage.Id,
                 roomId = chatMessage.RoomId,
                 senderUserName = chatMessage.SenderUserName,
                 message = chatMessage.Message,
-                sentAt = chatMessage.SentAt
+                sentAt = chatMessage.SentAt,
+                isRead = chatMessage.IsRead
             });
         }
     }

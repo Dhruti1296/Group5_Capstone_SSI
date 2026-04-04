@@ -40,5 +40,14 @@ namespace SSI.API.Services
                 .Set(v => v.Status, status);
             await _applications.UpdateOneAsync(v => v.Id == id, update);
         }
+
+            public async Task<List<VolunteerApplication>> GetByUserNameAsync(string userName)
+{
+    return await _applications
+        .Find(v => v.UserName == userName)
+        .ToListAsync();
+}
     }
+
+
 }

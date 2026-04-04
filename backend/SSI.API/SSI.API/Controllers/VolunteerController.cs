@@ -39,5 +39,16 @@ namespace SSI.API.Controllers
             await _volunteerService.CreateAsync(application);
             return Ok(application);
         }
+
+        // GET /api/volunteer/my-applications
+       [HttpGet("my-applications")]
+       public async Task<IActionResult> GetMyApplications()
+       {
+         var userName = User.FindFirstValue(ClaimTypes.Name);
+         if (userName == null) return Unauthorized();
+
+         var applications = await _volunteerService.GetByUserNameAsync(userName);
+         return Ok(applications);
+        }
     }
 }

@@ -14,17 +14,20 @@ namespace SSI.API.Controllers
         private readonly PostService _postService;
         private readonly MentorService _mentorService;
         private readonly VolunteerService _volunteerService;
+        private readonly NotificationService _notificationService;
 
         public AdminController(
             UserServices userServices,
             PostService postService,
             MentorService mentorService,
-            VolunteerService volunteerService)
+            VolunteerService volunteerService,
+            NotificationService notificationService)
         {
             _userServices = userServices;
             _postService = postService;
             _mentorService = mentorService;
             _volunteerService = volunteerService;
+            _notificationService = notificationService;
         }
 
         // GET /api/admin/users
@@ -36,13 +39,13 @@ namespace SSI.API.Controllers
 
             var result = users.Select(u => new
             {
-                u.Id,
-                u.UserName,
-                u.Email,
-                u.Role,
-                u.Name,
-                u.Surname,
-                MentorStatus = mentorApps
+                id = u.Id,
+                userName = u.UserName,
+                email = u.Email,
+                role = u.Role,
+                name = u.Name,
+                surname = u.Surname,
+                mentorStatus = mentorApps
                     .FirstOrDefault(m => m.UserName == u.UserName)?.Status
             });
 
@@ -94,8 +97,40 @@ namespace SSI.API.Controllers
         public async Task<IActionResult> UpdateVolunteerStatus(
             string id, [FromBody] StatusRequest request)
         {
+            var applications = await _volunteerService.GetAllAsync();
+            var application = applications.FirstOrDefault(v => v.Id == id);
+
+            if (application == null)
+                return NotFound("Application not found.");
+
             await _volunteerService.UpdateStatusAsync(id, request.Status);
+
+            if (request.Status == "Approved")
+            {
+                await _notificationService.CreateAsync(
+                    application.UserName!,
+                    $"Your volunteer application for \"{application.OpportunityTitle}\" has been approved! We look forward to seeing you there.",
+                    "success"
+                );
+            }
+            else if (request.Status == "Rejected")
+            {
+                await _notificationService.CreateAsync(
+                    application.UserName!,
+                    $"Unfortunately your volunteer application for \"{application.OpportunityTitle}\" was not approved this time.",
+                    "info"
+                );
+            }
+
             return Ok("Status updated.");
+        }
+
+        // DELETE /api/admin/posts/{postId}/comments/{commentIndex}
+        [HttpDelete("posts/{postId}/comments/{commentIndex}")]
+        public async Task<IActionResult> DeleteComment(string postId, int commentIndex)
+        {
+           await _postService.DeleteCommentAsync(postId, commentIndex);
+           return Ok("Comment deleted.");
         }
     }
 

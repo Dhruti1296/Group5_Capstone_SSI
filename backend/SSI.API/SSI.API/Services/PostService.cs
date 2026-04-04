@@ -79,5 +79,18 @@ namespace SSI.API.Services
 {
     await _posts.DeleteOneAsync(p => p.Id == postId);
 }
+
+public async Task DeleteCommentAsync(string postId, int commentIndex)
+{
+    var post = await _posts.Find(p => p.Id == postId).FirstOrDefaultAsync();
+    if (post == null) return;
+
+    if (commentIndex < 0 || commentIndex >= post.Comments.Count) return;
+
+    post.Comments.RemoveAt(commentIndex);
+
+    var update = Builders<Post>.Update.Set(p => p.Comments, post.Comments);
+    await _posts.UpdateOneAsync(p => p.Id == postId, update);
+}
     }
 }

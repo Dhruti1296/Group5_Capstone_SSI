@@ -109,5 +109,26 @@ namespace SSI.API.Services
         {
             return $"{studentUserName}_{mentorUserName}";
         }
+
+        // Get count of unread messages in a room for a specific user
+public async Task<long> GetUnreadCountAsync(string roomId, string userName)
+{
+    return await _messages
+        .CountDocumentsAsync(m => m.RoomId == roomId && 
+                                   m.SenderUserName != userName && 
+                                   m.IsRead == false);
+}
+
+// Mark all messages in a room as read for a user
+public async Task MarkMessagesReadAsync(string roomId, string userName)
+{
+    var update = Builders<ChatMessage>.Update.Set(m => m.IsRead, true);
+    await _messages.UpdateManyAsync(
+        m => m.RoomId == roomId && 
+             m.SenderUserName != userName && 
+             m.IsRead == false,
+        update
+    );
+}
     }
 }

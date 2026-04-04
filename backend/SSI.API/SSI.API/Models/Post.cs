@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SSI.API.Models
 {
+    [BsonIgnoreExtraElements]
     public class Post
     {
         [BsonId]
@@ -19,12 +20,13 @@ namespace SSI.API.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("Likes")]
-        public List<string> Likes { get; set; } = new(); // stores userNames who liked
+        public List<string> Likes { get; set; } = new();
 
         [BsonElement("Comments")]
         public List<Comment> Comments { get; set; } = new();
     }
 
+    [BsonIgnoreExtraElements]
     public class Comment
     {
         [BsonElement("UserName")]
