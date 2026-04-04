@@ -63,7 +63,7 @@ namespace EventService.Controllers
             //validation
             if(string.IsNullOrEmpty(adminUserName))
             {
-                return Unauthorized("Admin User Name is Required");
+                return Unauthorized("Admin UserName is Required");
             }
 
             //To call admin api
@@ -80,7 +80,7 @@ namespace EventService.Controllers
             //Checking the role
             if(admin == null || admin.Role.ToLower() != "admin")
             {
-                return Forbid("Only admin can create events");
+                return Forbid("Only admin can able to create events");
             }
 
             //checking the model state
