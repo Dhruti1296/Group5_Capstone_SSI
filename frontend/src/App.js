@@ -23,6 +23,7 @@ import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
 import Chat from "./pages/Chat";
+import Students from "./pages/Students";
 
 import "./App.css";
 
@@ -65,6 +66,9 @@ function App() {
             } />
             <Route path="/chat/:roomId" element={
               <ProtectedRoute><Chat /></ProtectedRoute>
+            } />
+            <Route path="/students" element={
+              <ProtectedRoute><Students /></ProtectedRoute>
             } />
             {/* Admin routes */}
             <Route path="/admin/login" element={<AdminLogin />} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import * as signalR from "@microsoft/signalr";
+import EmojiPicker from "emoji-picker-react";
 import Navbar from "../components/Navbar";
 import { UserContext } from "../context/UserContext";
 import { authFetch } from "../utils/authFetch";
@@ -18,7 +19,10 @@ function Chat() {
   const [connection, setConnection] = useState(null);
   const [connected, setConnected] = useState(false);
   const [otherUser, setOtherUser] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const bottomRef = useRef(null);
+  const emojiPickerRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Derive the other person's name from roomId
   useEffect(() => {
@@ -28,6 +32,14 @@ function Chat() {
       setOtherUser(other);
     }
   }, [roomId, user]);
+
+  // Mark messages as read when chat opens
+  useEffect(() => {
+    if (!roomId) return;
+    authFetch(`${API}/api/mentorship/chat/${roomId}/mark-read`, {
+      method: "PATCH",
+    }).catch((err) => console.error("Failed to mark read:", err));
+  }, [roomId]);
 
   // Load chat history
   useEffect(() => {
@@ -57,6 +69,9 @@ function Chat() {
 
     newConnection.on("ReceiveMessage", (message) => {
       setMessages((prev) => [...prev, message]);
+      authFetch(`${API}/api/mentorship/chat/${roomId}/mark-read`, {
+        method: "PATCH",
+      }).catch(() => {});
     });
 
     newConnection.start()
@@ -79,12 +94,40 @@ function Chat() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Close emoji picker on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(e.target)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleEmojiClick = (emojiData) => {
+    const emoji = emojiData.emoji;
+    const cursorPos = inputRef.current?.selectionStart ?? input.length;
+    const newInput =
+      input.slice(0, cursorPos) + emoji + input.slice(cursorPos);
+    setInput(newInput);
+    // Keep focus on input after selecting emoji
+    setTimeout(() => {
+      inputRef.current?.focus();
+      const newPos = cursorPos + emoji.length;
+      inputRef.current?.setSelectionRange(newPos, newPos);
+    }, 10);
+  };
+
   const handleSend = async () => {
     if (!input.trim() || !connection || !connected) return;
-
     try {
       await connection.invoke("SendMessage", roomId, input.trim());
       setInput("");
+      setShowEmojiPicker(false);
     } catch (err) {
       console.error("Failed to send message:", err);
     }
@@ -103,7 +146,6 @@ function Chat() {
     });
   };
 
-  // Group messages by date
   const groupedMessages = messages.reduce((groups, msg) => {
     const date = formatDate(msg.sentAt);
     if (!groups[date]) groups[date] = [];
@@ -166,9 +208,31 @@ function Chat() {
           <div ref={bottomRef} />
         </div>
 
+        {/* Emoji picker */}
+        {showEmojiPicker && (
+          <div className="emoji-picker-wrapper" ref={emojiPickerRef}>
+            <EmojiPicker
+              onEmojiClick={handleEmojiClick}
+              theme="dark"
+              skinTonesDisabled
+              searchDisabled={false}
+              height={380}
+              width="100%"
+            />
+          </div>
+        )}
+
         {/* Input */}
         <div className="chat-input-row">
+          <button
+            className="emoji-toggle-btn"
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            title="Add emoji"
+          >
+            😊
+          </button>
           <input
+            ref={inputRef}
             type="text"
             className="chat-input"
             placeholder="Type a message..."

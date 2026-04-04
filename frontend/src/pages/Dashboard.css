@@ -514,3 +514,60 @@ a {
   background: #d4af37;
   color: #111;
 }
+
+.chat-btn {
+  position: relative;
+}
+
+.chat-unread-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #e05c5c;
+  color: #fff;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lists-column-links {
+  background: radial-gradient(
+    circle at center,
+    #000 45%,
+    #deb169 100%
+  );
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.lists-column-links h3 {
+  color: #d4af37;
+  font-size: 0.88rem;
+  margin: 0 0 0.8rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.5rem;
+}
+
+.lists-column-links a {
+  display: block;
+  margin: 0.5rem 0;
+  text-decoration: none;
+  color: #fff;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 6px 10px;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.lists-column-links a:hover {
+  background: #d4af37;
+  color: #111;
+}

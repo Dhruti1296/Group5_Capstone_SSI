@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import "./AdminLogin.css";
 
@@ -38,7 +38,7 @@ function AdminLogin() {
           userName: data.userName,
           role: data.role,
         });
-        setAuthReady(true); // tell AdminRoute we are ready — no redirect
+        setAuthReady(true);
 
         navigate("/admin/dashboard");
       } else {
@@ -80,6 +80,16 @@ function AdminLogin() {
         <button className="admin-login-btn" onClick={handleLogin}>
           Login
         </button>
+
+        {/* Navigation links */}
+        <div className="admin-login-links">
+          <Link to="/login" className="admin-back-link">
+            ← Back to User Login
+          </Link>
+          <Link to="/" className="admin-back-link">
+            Go to Main Site
+          </Link>
+        </div>
       </div>
     </div>
   );

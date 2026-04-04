@@ -203,17 +203,7 @@ const EditProfile = () => {
                         </>
                     )}
 
-                    {user?.role === "Staff" && (
-                        <label>
-                            Department:
-                            <input
-                                type="text"
-                                name="department"
-                                value={formData.department}
-                                onChange={handleChange}
-                            />
-                        </label>
-                    )}
+                  
 
                     {user?.role === "Alumni" && (
                         <label>

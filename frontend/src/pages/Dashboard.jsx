@@ -20,6 +20,7 @@ function Dashboard() {
   const [myMentor, setMyMentor] = useState(null);
   const [myMentees, setMyMentees] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [unreadCounts, setUnreadCounts] = useState({});
 
   // Fetch posts
   useEffect(() => {
@@ -53,8 +54,29 @@ function Dashboard() {
             authFetch(`${API}/api/mentorship/my-mentees`),
             authFetch(`${API}/api/mentorship/my-requests`),
           ]);
-          if (menteesRes.ok) setMyMentees(await menteesRes.json());
-          if (requestsRes.ok) setPendingRequests(await requestsRes.json());
+          if (menteesRes.ok) {
+            const menteesData = await menteesRes.json();
+            setMyMentees(
+              menteesData.filter(
+                (m) => m !== null && m.studentUserName && m.status === "Accepted"
+              )
+            );
+          }
+          if (requestsRes.ok) {
+            const requestsData = await requestsRes.json();
+            setPendingRequests(
+              requestsData.filter(
+                (r) => r !== null && r.studentUserName && r.status === "Pending"
+              )
+            );
+          }
+        }
+
+        // Fetch unread message counts
+        const unreadRes = await authFetch(`${API}/api/mentorship/unread-counts`);
+        if (unreadRes.ok) {
+          const counts = await unreadRes.json();
+          setUnreadCounts(counts);
         }
       } catch (err) {
         console.error("Failed to fetch mentor data:", err);
@@ -194,11 +216,9 @@ function Dashboard() {
           <h3 className="user-name">{user.userName}</h3>
 
           <nav className="profile-links">
-            <a href="/stories">Stories</a>
             <a href="/news">News</a>
             <a href="/events">Events</a>
-            <a href="/services">Student Services</a>
-            <a href="/alumni">Alumni</a>
+           
             <a href="/volunteer">Volunteer</a>
             {user.role === "Alumni" ? (
               <a href="/become-mentor">Be a Mentor</a>
@@ -230,108 +250,122 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Column 3 — Right sidebar */}
-        <div className="dashboard-column lists-column">
+       {/* Column 3 — Right sidebar */}
+<div className="dashboard-column lists-column">
 
-          {/* Student — show active mentor with chat */}
-          {user.role === "Student" && myMentor && (
-            <div className="side-connection-card">
-              <h3>Your Mentor</h3>
-              <div className="side-connection-row">
-                <div className="side-avatar">
-                  {myMentor.mentorName.charAt(0)}
-                </div>
-                <div className="side-info">
-                  <p className="side-name">{myMentor.mentorName}</p>
-                  <p className="side-sub">@{myMentor.mentorUserName}</p>
-                </div>
-                <button
-                  className="chat-btn"
-                  onClick={() =>
-                    navigate(
-                      `/chat/${myMentor.studentUserName}_${myMentor.mentorUserName}`
-                    )
-                  }
-                >
-                  💬
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Alumni — pending mentorship requests */}
-          {user.role === "Alumni" && pendingRequests.length > 0 && (
-            <div className="side-connection-card">
-              <h3>Mentorship Requests</h3>
-              {pendingRequests.map((req) => (
-                <div key={req.id} className="side-request-row">
-                  <div className="side-avatar">
-                    {(req.studentName || req.studentUserName).charAt(0)}
-                  </div>
-                  <div className="side-info">
-                    <p className="side-name">
-                      {req.studentName || req.studentUserName}
-                    </p>
-                    <p className="side-sub">@{req.studentUserName}</p>
-                  </div>
-                  <div className="side-request-actions">
-                    <button
-                      className="accept-btn"
-                      onClick={() => handleAcceptRequest(req.id)}
-                    >
-                      ✓
-                    </button>
-                    <button
-                      className="decline-btn"
-                      onClick={() => handleDeclineRequest(req.id)}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Alumni — active mentees with chat */}
-          {user.role === "Alumni" && myMentees.length > 0 && (
-            <div className="side-connection-card">
-              <h3>Your Mentees</h3>
-              {myMentees.map((mentee) => (
-                <div key={mentee.id} className="side-connection-row">
-                  <div className="side-avatar">
-                    {(mentee.studentName || mentee.studentUserName).charAt(0)}
-                  </div>
-                  <div className="side-info">
-                    <p className="side-name">
-                      {mentee.studentName || mentee.studentUserName}
-                    </p>
-                    <p className="side-sub">@{mentee.studentUserName}</p>
-                  </div>
-                  <button
-                    className="chat-btn"
-                    onClick={() =>
-                      navigate(
-                        `/chat/${mentee.studentUserName}_${mentee.mentorUserName}`
-                      )
-                    }
-                  >
-                    💬
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Alumni connections list */}
-          <AlumniList />
-
-          <h3>Students</h3>
-          <a href="/students">View Students</a>
-          <h3>Staff</h3>
-          <a href="/staff">View Staff</a>
-
+  {/* Student — show active mentor with chat */}
+  {user.role === "Student" && myMentor && (
+    <div className="side-connection-card">
+      <h3>Your Mentor</h3>
+      <div className="side-connection-row">
+        <div className="side-avatar">
+          {myMentor.mentorName.charAt(0)}
         </div>
+        <div className="side-info">
+          <p className="side-name">{myMentor.mentorName}</p>
+          <p className="side-sub">@{myMentor.mentorUserName}</p>
+        </div>
+        <button
+          className="chat-btn"
+          onClick={() =>
+            navigate(
+              `/chat/${myMentor.studentUserName}_${myMentor.mentorUserName}`
+            )
+          }
+        >
+          💬
+          {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`] > 0 && (
+            <span className="chat-unread-badge">
+              {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`]}
+            </span>
+          )}
+        </button>
+      </div>
+    </div>
+  )}
+
+  {/* Alumni — pending mentorship requests */}
+  {user.role === "Alumni" && pendingRequests.length > 0 && (
+    <div className="side-connection-card">
+      <h3>Mentorship Requests</h3>
+      {pendingRequests
+        .filter((req) => req && req.studentUserName)
+        .map((req) => (
+          <div key={req.id} className="side-request-row">
+            <div className="side-avatar">
+              {(req.studentName || req.studentUserName).charAt(0)}
+            </div>
+            <div className="side-info">
+              <p className="side-name">
+                {req.studentName || req.studentUserName}
+              </p>
+              <p className="side-sub">@{req.studentUserName}</p>
+            </div>
+            <div className="side-request-actions">
+              <button
+                className="accept-btn"
+                onClick={() => handleAcceptRequest(req.id)}
+              >
+                ✓
+              </button>
+              <button
+                className="decline-btn"
+                onClick={() => handleDeclineRequest(req.id)}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        ))}
+    </div>
+  )}
+
+  {/* Alumni — active mentees with chat */}
+  {user.role === "Alumni" && myMentees.length > 0 && (
+    <div className="side-connection-card">
+      <h3>Your Mentees</h3>
+      {myMentees
+        .filter((mentee) => mentee && mentee.studentUserName)
+        .map((mentee) => (
+          <div key={mentee.id} className="side-connection-row">
+            <div className="side-avatar">
+              {(mentee.studentName || mentee.studentUserName).charAt(0)}
+            </div>
+            <div className="side-info">
+              <p className="side-name">
+                {mentee.studentName || mentee.studentUserName}
+              </p>
+              <p className="side-sub">@{mentee.studentUserName}</p>
+            </div>
+            <button
+              className="chat-btn"
+              onClick={() =>
+                navigate(
+                  `/chat/${mentee.studentUserName}_${mentee.mentorUserName}`
+                )
+              }
+            >
+              💬
+              {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`] > 0 && (
+                <span className="chat-unread-badge">
+                  {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`]}
+                </span>
+              )}
+            </button>
+          </div>
+        ))}
+    </div>
+  )}
+
+  {/* Directory links */}
+ <div className="lists-column-links">
+  <h3>Directory</h3>
+  <Link to="/alumni">View Alumni</Link>
+  <Link to="/students">View Students</Link>
+</div>
+
+
+</div>
       </div>
 
       <Footer />

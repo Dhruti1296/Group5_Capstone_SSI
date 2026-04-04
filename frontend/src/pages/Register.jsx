@@ -109,7 +109,7 @@ const handleRegister = async () => {
           >
             <option value="Student">Student</option>
             <option value="Alumni">Alumni</option>
-            <option value="Staff">Staff</option>
+           
           </select>
           <button onClick={handleRegister} className="register-button animation-item">
             Register

@@ -20,7 +20,7 @@ function AdminDashboard() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
-
+const [expandedPosts, setExpandedPosts] = useState({});
   const filteredMentors = mentors.filter((m) => {
     if (mentorFilter === "All") return true;
     return (m.status || "Pending") === mentorFilter;
@@ -80,39 +80,54 @@ function AdminDashboard() {
     }
   };
 
-  const handleDeleteUser = async (userName) => {
-    if (!window.confirm(`Delete user ${userName}?`)) return;
-    const res = await authFetch(`${API}/api/admin/users/${userName}`, { method: "DELETE" });
-    if (res.ok) {
-      setUsers((prev) => prev.filter((u) => u.userName !== userName));
-      showNotification("User deleted.", "success");
-    }
-  };
-
-  const handleDeletePost = async (id) => {
-    if (!window.confirm("Delete this post?")) return;
-    const res = await authFetch(`${API}/api/admin/posts/${id}`, { method: "DELETE" });
-    if (res.ok) {
-      setPosts((prev) => prev.filter((p) => p.id !== id));
-      showNotification("Post deleted.", "success");
-    }
-  };
-
-  const handleVolunteerStatus = async (id, status) => {
-    const res = await authFetch(
-      `${API}/api/admin/volunteer-applications/${id}/status`,
-      {
-        method: "PATCH",
-        body: JSON.stringify({ status }),
-      }
+ const handleDeleteComment = async (postId, commentIndex) => {
+  const res = await authFetch(
+    `${API}/api/admin/posts/${postId}/comments/${commentIndex}`,
+    { method: "DELETE" }
+  );
+  if (res.ok) {
+    setPosts((prev) =>
+      prev.map((p) => {
+        if (p.id !== postId) return p;
+        const updatedComments = p.comments.filter((_, i) => i !== commentIndex);
+        return { ...p, comments: updatedComments };
+      })
     );
-    if (res.ok) {
-      setVolunteers((prev) =>
-        prev.map((v) => (v.id === id ? { ...v, status } : v))
-      );
-      showNotification("Status updated.", "success");
+    showNotification("Comment deleted.", "success");
+  }
+};
+
+const handleDeleteUser = async (userName) => {
+  const res = await authFetch(`${API}/api/admin/users/${userName}`, { method: "DELETE" });
+  if (res.ok) {
+    setUsers((prev) => prev.filter((u) => u.userName !== userName));
+    showNotification("User deleted.", "success");
+  }
+};
+
+const handleDeletePost = async (id) => {
+  const res = await authFetch(`${API}/api/admin/posts/${id}`, { method: "DELETE" });
+  if (res.ok) {
+    setPosts((prev) => prev.filter((p) => p.id !== id));
+    showNotification("Post deleted.", "success");
+  }
+};
+
+const handleVolunteerStatus = async (id, status) => {
+  const res = await authFetch(
+    `${API}/api/admin/volunteer-applications/${id}/status`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
     }
-  };
+  );
+  if (res.ok) {
+    setVolunteers((prev) =>
+      prev.map((v) => (v.id === id ? { ...v, status } : v))
+    );
+    showNotification("Status updated.", "success");
+  }
+};
 
   const handleLogout = () => {
     logout();
@@ -318,7 +333,7 @@ function AdminDashboard() {
                     onChange={(e) => setUserSearch(e.target.value)}
                   />
                   <div className="filter-tabs">
-                    {["All", "Student", "Alumni", "Staff"].map((r) => (
+                    {["All", "Student", "Alumni"].map((r) => (
                       <button
                         key={r}
                         className={"filter-tab " + (userRoleFilter === r ? "active" : "")}
@@ -394,38 +409,84 @@ function AdminDashboard() {
             )}
 
             {/* Post Moderation */}
-            {activeTab === "posts" && (
-              <div className="admin-section">
-                <h2>Post Moderation</h2>
-                {posts.length === 0 ? (
-                  <p className="admin-empty">No posts found.</p>
-                ) : (
-                  posts.map((p) => (
-                    <div key={p.id} className="admin-card">
-                      <div className="admin-card-header">
-                        <div>
-                          <h3>@{p.userName}</h3>
-                          <p className="admin-meta">{formatDate(p.createdAt)}</p>
-                        </div>
-                        <div className="admin-post-stats">
-                          <span>♥ {p.likes?.length || 0}</span>
-                          <span>💬 {p.comments?.length || 0}</span>
-                        </div>
+           {activeTab === "posts" && (
+  <div className="admin-section">
+    <h2>Post Moderation</h2>
+    {posts.length === 0 ? (
+      <p className="admin-empty">No posts found.</p>
+    ) : (
+      posts.map((p) => (
+        <div key={p.id} className="admin-card">
+          <div className="admin-card-header">
+            <div>
+              <h3>@{p.userName}</h3>
+              <p className="admin-meta">{formatDate(p.createdAt)}</p>
+            </div>
+            <div className="admin-post-stats">
+              <span>♥ {p.likes?.length || 0}</span>
+              <span>💬 {p.comments?.length || 0}</span>
+            </div>
+          </div>
+
+          <p className="admin-post-content">{p.content}</p>
+
+          {/* Comments section */}
+          {p.comments && p.comments.length > 0 && (
+            <div className="admin-comments-section">
+              <button
+                className="toggle-comments-btn"
+                onClick={() =>
+                  setExpandedPosts((prev) => ({
+                    ...prev,
+                    [p.id]: !prev[p.id],
+                  }))
+                }
+              >
+                {expandedPosts[p.id]
+                  ? "Hide Comments"
+                  : `Show ${p.comments.length} Comment${p.comments.length > 1 ? "s" : ""}`}
+              </button>
+
+              {expandedPosts[p.id] && (
+                <div className="admin-comments-list">
+                  {p.comments.map((c, i) => (
+                    <div key={i} className="admin-comment-row">
+                      <div className="admin-comment-content">
+                        <span className="admin-comment-author">
+                          @{c.userName}
+                        </span>
+                        <span className="admin-comment-text">{c.text}</span>
+                        <span className="admin-comment-time">
+                          {formatDate(c.createdAt)}
+                        </span>
                       </div>
-                      <p className="admin-post-content">{p.content}</p>
-                      <div className="admin-actions">
-                        <button
-                          className="reject-btn"
-                          onClick={() => handleDeletePost(p.id)}
-                        >
-                          Delete Post
-                        </button>
-                      </div>
+                      <button
+                        className="delete-comment-btn"
+                        onClick={() => handleDeleteComment(p.id, i)}
+                        title="Delete comment"
+                      >
+                        ✕
+                      </button>
                     </div>
-                  ))
-                )}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="admin-actions">
+            <button
+              className="reject-btn"
+              onClick={() => handleDeletePost(p.id)}
+            >
+              Delete Post
+            </button>
+          </div>
+        </div>
+      ))
+    )}
+  </div>
+)}
           </>
         )}
       </div>

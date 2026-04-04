@@ -376,3 +376,84 @@
   font-size: 0.8rem;
   margin-bottom: 1rem;
 }
+
+.admin-comments-section {
+  margin: 0.8rem 0;
+  border-top: 1px solid #222;
+  padding-top: 0.8rem;
+}
+
+.toggle-comments-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #888;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-family: 'Cinzel', serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.8rem;
+}
+
+.toggle-comments-btn:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+.admin-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-comment-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: #000;
+  border-radius: 6px;
+  padding: 8px 10px;
+  border: 1px solid #1a1a1a;
+}
+
+.admin-comment-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.admin-comment-author {
+  color: #d4af37;
+  font-size: 0.78rem;
+  font-weight: bold;
+}
+
+.admin-comment-text {
+  color: #ccc;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.admin-comment-time {
+  color: #555;
+  font-size: 0.7rem;
+}
+
+.delete-comment-btn {
+  background: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.delete-comment-btn:hover {
+  background: #e05c5c;
+  color: #fff;
+}

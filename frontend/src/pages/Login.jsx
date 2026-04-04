@@ -11,7 +11,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState(null);
 
-  const { setUser, saveToken } = useContext(UserContext);
+  const { setUser, saveToken, refreshUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const showNotification = (message, type) => {
@@ -25,7 +25,7 @@ function Login() {
     setTimeout(() => btn.classList.remove("clicked"), 600);
 
     try {
-      const response = await fetch("https://localhost:7276/api/auth/login", {
+      const response = await fetch("http://localhost:5277/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName, password }),
@@ -34,15 +34,19 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
 
+        // Save token first — must be done before refreshUser
         saveToken(data.token);
+
+        // Set basic user info immediately so UI isn't blank
         setUser({
           userName: data.userName,
           email: data.email,
           role: data.role,
-          profilePic: data.profilePic || null,
+          profilePic: null,
         });
 
-      
+        // Now fetch full profile including profilePic from MongoDB
+        await refreshUser();
 
         showNotification("Login successful! Redirecting...", "success");
         setUserName("");
