@@ -54,3 +54,74 @@
 .events-table a:hover::after {
   width: 100%;
 }
+
+.events-subtitle {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.events-source-link {
+  color: #d4af37;
+  text-decoration: none;
+}
+
+.events-source-link:hover {
+  text-decoration: underline;
+}
+
+.events-loading {
+  text-align: center;
+  color: #aaa;
+  padding: 4rem;
+  font-size: 1rem;
+}
+
+.events-error {
+  text-align: center;
+  color: #e05c5c;
+  padding: 4rem;
+}
+
+.event-link-btn {
+  background: transparent;
+  border: none;
+  color: #deb169;
+  font-family: 'Cinzel', serif;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.event-link-btn::after {
+  content: "";
+  position: absolute;
+  width: 4rem;
+  border-top: 1px solid #d4af37;
+  bottom: -0.5rem;
+  left: 0;
+  transition: 0.4s all ease;
+}
+
+.event-link-btn:hover::after {
+  width: 100%;
+}
+
+.event-time {
+  color: #ccc;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.event-location {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.event-row:hover {
+  background: rgba(212, 175, 55, 0.05);
+}

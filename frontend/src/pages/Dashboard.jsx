@@ -1,12 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../context/UserContext";
 import { authFetch } from "../utils/authFetch";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import AlumniList from "../components/AlumniList";
 import PostCard from "../components/PostCard";
 import "./Dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
+import EmojiPicker from "emoji-picker-react";
 
 const API = "http://localhost:5277";
 
@@ -21,6 +21,8 @@ function Dashboard() {
   const [myMentees, setMyMentees] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
   const [unreadCounts, setUnreadCounts] = useState({});
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const postInputRef = useRef(null);
 
   // Fetch posts
   useEffect(() => {
@@ -165,33 +167,80 @@ function Dashboard() {
       </div>
 
       {/* Post modal */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <h3>Create Post</h3>
-            <textarea
-              value={postText}
-              onChange={(e) => setPostText(e.target.value)}
-              placeholder="Share your thoughts..."
-              autoFocus
-            />
-            <div className="modal-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => {
-                  setShowModal(false);
-                  setPostText("");
-                }}
-              >
-                Cancel
-              </button>
-              <button className="post-btn" onClick={handlePost}>
-                Post
-              </button>
-            </div>
-          </div>
+   {showModal && (
+  <div className="modal-overlay" onClick={(e) => {
+    if (e.target.classList.contains("modal-overlay")) {
+      setShowModal(false);
+      setPostText("");
+      setShowEmojiPicker(false);
+    }
+  }}>
+    <div className="modal-card">
+      <h3>Create Post</h3>
+
+      <div className="post-input-wrapper">
+        <textarea
+          ref={postInputRef}
+          value={postText}
+          onChange={(e) => setPostText(e.target.value)}
+          placeholder="Share your thoughts..."
+          autoFocus
+        />
+        <button
+          className="post-emoji-btn"
+          onClick={() => setShowEmojiPicker((prev) => !prev)}
+          title="Add emoji"
+          type="button"
+        >
+          😊
+        </button>
+      </div>
+
+      {showEmojiPicker && (
+        <div className="post-emoji-picker-wrapper">
+          <EmojiPicker
+            onEmojiClick={(emojiData) => {
+              const emoji = emojiData.emoji;
+              const textarea = postInputRef.current;
+              if (!textarea) return;
+              const start = textarea.selectionStart;
+              const end = textarea.selectionEnd;
+              const newText =
+                postText.slice(0, start) + emoji + postText.slice(end);
+              setPostText(newText);
+              // Restore cursor position after emoji
+              setTimeout(() => {
+                textarea.focus();
+                const newPos = start + emoji.length;
+                textarea.setSelectionRange(newPos, newPos);
+              }, 10);
+            }}
+            theme="dark"
+            skinTonesDisabled
+            height={320}
+            width="100%"
+          />
         </div>
       )}
+
+      <div className="modal-actions">
+        <button
+          className="cancel-btn"
+          onClick={() => {
+            setShowModal(false);
+            setPostText("");
+            setShowEmojiPicker(false);
+          }}
+        >
+          Cancel
+        </button>
+        <button className="post-btn" onClick={handlePost}>
+          Post
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       <div className="dashboard-layout">
 
@@ -218,7 +267,7 @@ function Dashboard() {
           <nav className="profile-links">
             <a href="/news">News</a>
             <a href="/events">Events</a>
-           
+
             <a href="/volunteer">Volunteer</a>
             {user.role === "Alumni" ? (
               <a href="/become-mentor">Be a Mentor</a>
@@ -250,122 +299,122 @@ function Dashboard() {
           )}
         </div>
 
-       {/* Column 3 — Right sidebar */}
+        {/* Column 3 — Right sidebar */}
 <div className="dashboard-column lists-column">
 
-  {/* Student — show active mentor with chat */}
-  {user.role === "Student" && myMentor && (
-    <div className="side-connection-card">
-      <h3>Your Mentor</h3>
-      <div className="side-connection-row">
-        <div className="side-avatar">
-          {myMentor.mentorName.charAt(0)}
-        </div>
-        <div className="side-info">
-          <p className="side-name">{myMentor.mentorName}</p>
-          <p className="side-sub">@{myMentor.mentorUserName}</p>
-        </div>
-        <button
-          className="chat-btn"
-          onClick={() =>
-            navigate(
-              `/chat/${myMentor.studentUserName}_${myMentor.mentorUserName}`
-            )
-          }
-        >
-          💬
-          {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`] > 0 && (
-            <span className="chat-unread-badge">
-              {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`]}
-            </span>
+          {/* Student — show active mentor with chat */}
+          {user.role === "Student" && myMentor && (
+            <div className="side-connection-card">
+              <h3>Your Mentor</h3>
+              <div className="side-connection-row">
+                <div className="side-avatar">
+                  {myMentor.mentorName.charAt(0)}
+                </div>
+                <div className="side-info">
+                  <p className="side-name">{myMentor.mentorName}</p>
+                  <p className="side-sub">@{myMentor.mentorUserName}</p>
+                </div>
+                <button
+                  className="chat-btn"
+                  onClick={() =>
+                    navigate(
+                      `/chat/${myMentor.studentUserName}_${myMentor.mentorUserName}`
+                    )
+                  }
+                >
+                  💬
+                  {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`] > 0 && (
+                    <span className="chat-unread-badge">
+                      {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`]}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
           )}
-        </button>
-      </div>
-    </div>
-  )}
 
-  {/* Alumni — pending mentorship requests */}
-  {user.role === "Alumni" && pendingRequests.length > 0 && (
-    <div className="side-connection-card">
-      <h3>Mentorship Requests</h3>
-      {pendingRequests
-        .filter((req) => req && req.studentUserName)
-        .map((req) => (
-          <div key={req.id} className="side-request-row">
-            <div className="side-avatar">
-              {(req.studentName || req.studentUserName).charAt(0)}
+          {/* Alumni — pending mentorship requests */}
+          {user.role === "Alumni" && pendingRequests.length > 0 && (
+            <div className="side-connection-card">
+              <h3>Mentorship Requests</h3>
+              {pendingRequests
+                .filter((req) => req && req.studentUserName)
+                .map((req) => (
+                  <div key={req.id} className="side-request-row">
+                    <div className="side-avatar">
+                      {(req.studentName || req.studentUserName).charAt(0)}
+                    </div>
+                    <div className="side-info">
+                      <p className="side-name">
+                        {req.studentName || req.studentUserName}
+                      </p>
+                      <p className="side-sub">@{req.studentUserName}</p>
+                    </div>
+                    <div className="side-request-actions">
+                      <button
+                        className="accept-btn"
+                        onClick={() => handleAcceptRequest(req.id)}
+                      >
+                        ✓
+                      </button>
+                      <button
+                        className="decline-btn"
+                        onClick={() => handleDeclineRequest(req.id)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))}
             </div>
-            <div className="side-info">
-              <p className="side-name">
-                {req.studentName || req.studentUserName}
-              </p>
-              <p className="side-sub">@{req.studentUserName}</p>
+          )}
+
+          {/* Alumni — active mentees with chat */}
+          {user.role === "Alumni" && myMentees.length > 0 && (
+            <div className="side-connection-card">
+              <h3>Your Mentees</h3>
+              {myMentees
+                .filter((mentee) => mentee && mentee.studentUserName)
+                .map((mentee) => (
+                  <div key={mentee.id} className="side-connection-row">
+                    <div className="side-avatar">
+                      {(mentee.studentName || mentee.studentUserName).charAt(0)}
+                    </div>
+                    <div className="side-info">
+                      <p className="side-name">
+                        {mentee.studentName || mentee.studentUserName}
+                      </p>
+                      <p className="side-sub">@{mentee.studentUserName}</p>
+                    </div>
+                    <button
+                      className="chat-btn"
+                      onClick={() =>
+                        navigate(
+                          `/chat/${mentee.studentUserName}_${mentee.mentorUserName}`
+                        )
+                      }
+                    >
+                      💬
+                      {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`] > 0 && (
+                        <span className="chat-unread-badge">
+                          {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`]}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                ))}
             </div>
-            <div className="side-request-actions">
-              <button
-                className="accept-btn"
-                onClick={() => handleAcceptRequest(req.id)}
-              >
-                ✓
-              </button>
-              <button
-                className="decline-btn"
-                onClick={() => handleDeclineRequest(req.id)}
-              >
-                ✕
-              </button>
-            </div>
+          )}
+
+          {/* Directory links */}
+          <div className="lists-column-links">
+            <h3>Directory</h3>
+            <Link to="/alumni">View Alumni</Link>
+            <Link to="/students">View Students</Link>
           </div>
-        ))}
-    </div>
-  )}
-
-  {/* Alumni — active mentees with chat */}
-  {user.role === "Alumni" && myMentees.length > 0 && (
-    <div className="side-connection-card">
-      <h3>Your Mentees</h3>
-      {myMentees
-        .filter((mentee) => mentee && mentee.studentUserName)
-        .map((mentee) => (
-          <div key={mentee.id} className="side-connection-row">
-            <div className="side-avatar">
-              {(mentee.studentName || mentee.studentUserName).charAt(0)}
-            </div>
-            <div className="side-info">
-              <p className="side-name">
-                {mentee.studentName || mentee.studentUserName}
-              </p>
-              <p className="side-sub">@{mentee.studentUserName}</p>
-            </div>
-            <button
-              className="chat-btn"
-              onClick={() =>
-                navigate(
-                  `/chat/${mentee.studentUserName}_${mentee.mentorUserName}`
-                )
-              }
-            >
-              💬
-              {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`] > 0 && (
-                <span className="chat-unread-badge">
-                  {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`]}
-                </span>
-              )}
-            </button>
-          </div>
-        ))}
-    </div>
-  )}
-
-  {/* Directory links */}
- <div className="lists-column-links">
-  <h3>Directory</h3>
-  <Link to="/alumni">View Alumni</Link>
-  <Link to="/students">View Students</Link>
-</div>
 
 
-</div>
+        </div>
       </div>
 
       <Footer />

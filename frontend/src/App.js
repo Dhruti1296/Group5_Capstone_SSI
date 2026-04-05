@@ -24,6 +24,8 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
 import Chat from "./pages/Chat";
 import Students from "./pages/Students";
+import EventDetail from "./pages/EventDetail";
+import NewsDetail from "./pages/NewsDetail";
 
 import "./App.css";
 
@@ -70,6 +72,10 @@ function App() {
             <Route path="/students" element={
               <ProtectedRoute><Students /></ProtectedRoute>
             } />
+            <Route path="/events" element={<Events />} />
+            <Route path="/events/detail" element={<EventDetail />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/detail" element={<NewsDetail />} />
             {/* Admin routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={

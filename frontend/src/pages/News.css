@@ -93,3 +93,38 @@ body {
 .news-card:hover .news-title::after {
   width: 100%;
 }
+
+.news-source-text {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.news-source-link {
+  color: #d4af37;
+  text-decoration: none;
+}
+
+.news-source-link:hover {
+  text-decoration: underline;
+}
+
+.news-loading {
+  text-align: center;
+  color: #aaa;
+  padding: 4rem;
+}
+
+.news-error {
+  text-align: center;
+  color: #e05c5c;
+  padding: 4rem;
+}
+
+.news-read-more {
+  color: #d4af37;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
