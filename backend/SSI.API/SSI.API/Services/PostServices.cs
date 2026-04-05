@@ -43,5 +43,13 @@ namespace SSI.API.Services
             var result = await _posts.DeleteOneAsync(p => p.Id == id && p.Author == author);
             return result.DeletedCount > 0;
         }
+
+
+        // ADMIN
+        public async Task<bool> DeleteAnyByIdAsync(string id)
+        {
+            var result = await _posts.DeleteOneAsync(p => p.Id == id);
+            return result.DeletedCount > 0;
+        }
     }
 }

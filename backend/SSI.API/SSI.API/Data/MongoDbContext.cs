@@ -30,5 +30,14 @@ namespace SSI.API.Data
         public IMongoCollection<Comment> Comments =>
         _database.GetCollection<Comment>("Comments");
 
+        //ContactMessage...
+        public IMongoCollection<ContactMessage> ContactMessages =>
+        _database.GetCollection<ContactMessage>("ContactMessages");
+
+        public IMongoCollection<AlumniProfile> AlumniProfiles =>
+            _database.GetCollection<AlumniProfile>("AlumniProfiles");
+
+        public IMongoCollection<ConnectionRequest> ConnectionRequests =>
+            _database.GetCollection<ConnectionRequest>("ConnectionRequests");
     }
 }

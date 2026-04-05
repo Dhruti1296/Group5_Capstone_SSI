@@ -42,5 +42,26 @@ namespace SSI.API.Services
                 u.UserName == username && u.Password == password
             ).FirstOrDefaultAsync();
         }
+   
+        // ADMIN....
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await _users.Find(_ => true).ToListAsync();
+        }
+
+        public async Task<List<User>> SearchAsync(string keyword)
+        {
+            return await _users.Find(u =>
+                u.UserName.Contains(keyword) ||
+                u.Email.Contains(keyword) ||
+                u.Role.Contains(keyword)
+            ).ToListAsync();
+        }
+
+        public async Task<bool> DeleteByIdAsync(string id)
+        {
+            var result = await _users.DeleteOneAsync(u => u.Id == id);
+            return result.DeletedCount > 0;
+        }
     }
 }

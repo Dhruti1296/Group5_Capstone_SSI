@@ -24,6 +24,9 @@ namespace SSI.API
             builder.Services.AddSingleton<AdminServices>();
             builder.Services.AddSingleton<PostServices>();
             builder.Services.AddSingleton<CommentServices>();
+            builder.Services.AddSingleton<ContactServices>();
+            builder.Services.AddSingleton<AlumniService>();
+            builder.Services.AddSingleton<ConnectionService>();           
 
             //Added cors allowing react app to load and check the React URL
             builder.Services.AddCors(options =>

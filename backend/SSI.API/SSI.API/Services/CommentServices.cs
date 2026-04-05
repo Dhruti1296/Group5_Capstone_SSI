@@ -54,5 +54,19 @@ namespace SSI.API.Services
             return result.DeletedCount > 0;
         }
 
+        // ADMIN
+        public async Task<List<Comment>> GetAllAsync()
+        {
+            return await _comments.Find(_ => true)
+                                  .SortByDescending(c => c.CreatedAt)
+                                  .ToListAsync();
+        }
+
+        public async Task<bool> DeleteAnyByIdAsync(string commentId)
+        {
+            var result = await _comments.DeleteOneAsync(c => c.Id == commentId);
+            return result.DeletedCount > 0;
+        }
+
     }
 }
