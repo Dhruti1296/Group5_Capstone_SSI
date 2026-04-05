@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { UserContext } from "../context/UserContext";
 import { authFetch } from "../utils/authFetch";
 import "./Volunteer.css";
 
@@ -43,7 +42,6 @@ const opportunities = [
 ];
 
 function Volunteer() {
-  const { user } = useContext(UserContext);
   const [applied, setApplied] = useState({});
   const [statuses, setStatuses] = useState({});
   const [notification, setNotification] = useState(null);

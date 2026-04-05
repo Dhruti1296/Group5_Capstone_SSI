@@ -1,12 +1,10 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import SideMenu from "../components/SideMenu";
 import Footer from "../components/Footer";
 import { UserContext } from "../context/UserContext";
 import "./Login.css";
 
 function Login() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState(null);
@@ -64,7 +62,6 @@ function Login() {
 
   return (
     <div className="login-page">
-      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
 
       {notification && (
         <div className={`notification ${notification.type}`}>
