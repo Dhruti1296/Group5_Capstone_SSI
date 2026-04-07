@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SSI.API.Models;
+using SSI.API.Services;
 
 namespace SSI.API.Controllers
 {
@@ -71,3 +73,4 @@ namespace SSI.API.Controllers
 
         }
     }
+}

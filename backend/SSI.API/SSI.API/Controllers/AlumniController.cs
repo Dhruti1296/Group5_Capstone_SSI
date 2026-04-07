@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SSI.API.Models;
+using SSI.API.Services;
 
 namespace SSI.API.Controllers
 {
-    public class AlumniController : Controller
-    {
         [ApiController]
         [Route("api/alumni")]
         public class AlumniController : ControllerBase
