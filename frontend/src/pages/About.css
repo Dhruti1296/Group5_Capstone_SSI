@@ -1,0 +1,65 @@
+/* Page wrapper */
+.about-wrapper {
+padding: 40px;
+background: linear-gradient(to right, #000000, #c89b3c);
+min-height: 100vh;
+}
+
+/* Title */
+.about-title {
+text-align: center;
+color: #d4af37;
+margin-bottom: 30px;
+}
+
+/* Main card */
+.about-card {
+background: #1e1e1e;
+border-radius: 20px;
+padding: 30px;
+color: white;
+box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+/* About section */
+.about-section {
+margin-bottom: 30px;
+}
+
+.about-section h3 {
+color: #d4af37;
+}
+
+/* Team */
+.team-section h3 {
+color: #d4af37;
+margin-bottom: 20px;
+}
+
+/* Rows */
+.team-row {
+display: flex;
+gap: 20px;
+margin-bottom: 20px;
+}
+
+/* Members */
+.team-member {
+flex: 1;
+background: #2a2a2a;
+padding: 15px;
+border-radius: 10px;
+border: 1px solid #d4af37;
+}
+
+.team-member h4 {
+margin-bottom: 5px;
+color: #d4af37;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+.team-row {
+flex-direction: column;
+}
+}

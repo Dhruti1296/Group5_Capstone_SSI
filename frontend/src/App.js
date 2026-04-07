@@ -10,6 +10,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import EditProfile from "./pages/EditProfile";
+
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+
 import News from "./pages/News";
 import Events from "./pages/Events";
 import Alumni from "./pages/Alumni";
@@ -45,6 +49,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/news" element={<News />} />
             <Route path="/events" element={<Events />} />
+
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
 
             <Route path="/dashboard" element={
               <ProtectedRoute><Dashboard /></ProtectedRoute>

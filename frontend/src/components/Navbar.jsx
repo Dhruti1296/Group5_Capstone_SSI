@@ -199,36 +199,40 @@ const Navbar = () => {
           >
             <button className="close-button" onClick={handleMenuClose}>✕</button>
             {menuOpen && (
-  <div className="menu-overlay" onClick={handleMenuClose}>
-    <div
-      className={"menu-card drop-in " + (closing ? "closing" : "")}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button className="close-button" onClick={handleMenuClose}>✕</button>
-      <ul className="menu-links">
-        {/* Show Dashboard only if logged in */}
-        {user && user.userName !== "Guest" && (
-          <li><Link to="/dashboard" onClick={handleMenuClose}>Dashboard</Link></li>
-        )}
-        <li><Link to="/news" onClick={handleMenuClose}>News</Link></li>
-        <li><Link to="/events" onClick={handleMenuClose}>Events</Link></li>
-        <li><Link to="/alumni" onClick={handleMenuClose}>Alumni</Link></li>
-        <li><Link to="/volunteer" onClick={handleMenuClose}>Volunteer</Link></li>
-        <li><Link to="/mentor" onClick={handleMenuClose}>Mentor</Link></li>
-        <li><Link to="/edit-profile" onClick={handleMenuClose}>Edit Profile</Link></li>
-        {user && user.userName !== "Guest" ? (
-          <li>
-            <button onClick={handleLogout} className="menu-logout-btn">
-              Logout
-            </button>
-          </li>
-        ) : (
-          <li><Link to="/login" onClick={handleMenuClose}>Login</Link></li>
-        )}
-      </ul>
-    </div>
-  </div>
-)}
+              <div className="menu-overlay" onClick={handleMenuClose}>
+                <div
+                  className={"menu-card drop-in " + (closing ? "closing" : "")}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button className="close-button" onClick={handleMenuClose}>✕</button>
+                  <ul className="menu-links">
+                    {/* Show Dashboard only if logged in */}
+                    {user && user.userName !== "Guest" && (
+                      <li><Link to="/dashboard" onClick={handleMenuClose}>Dashboard</Link></li>
+                    )}
+                    <li><Link to="/news" onClick={handleMenuClose}>News</Link></li>
+                    <li><Link to="/events" onClick={handleMenuClose}>Events</Link></li>
+
+                    <li><Link to="/about" onClick={handleMenuClose}>About Us</Link></li>
+                    <li><Link to="/contact" onClick={handleMenuClose}>Contact Us</Link></li>
+
+                    <li><Link to="/alumni" onClick={handleMenuClose}>Alumni</Link></li>
+                    <li><Link to="/volunteer" onClick={handleMenuClose}>Volunteer</Link></li>
+                    <li><Link to="/mentor" onClick={handleMenuClose}>Mentor</Link></li>
+                    <li><Link to="/edit-profile" onClick={handleMenuClose}>Edit Profile</Link></li>
+                    {user && user.userName !== "Guest" ? (
+                      <li>
+                        <button onClick={handleLogout} className="menu-logout-btn">
+                          Logout
+                        </button>
+                      </li>
+                    ) : (
+                      <li><Link to="/login" onClick={handleMenuClose}>Login</Link></li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
