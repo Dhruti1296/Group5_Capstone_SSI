@@ -6,57 +6,30 @@ import "./Volunteer.css";
 
 const API = "http://localhost:5277";
 
-const opportunities = [
-  {
-    id: 1,
-    title: "Campus Open House Helper",
-    date: "March 7, 2026",
-    location: "Kitchener – Doon",
-    description:
-      "Help prospective students navigate the campus, answer questions, and represent your program during Spring Open House.",
-  },
-  {
-    id: 2,
-    title: "Food Bank Drive Organizer",
-    date: "March 15, 2026",
-    location: "Cambridge Campus",
-    description:
-      "Coordinate donation collection points across campus and help sort and deliver food to the local community food bank.",
-  },
-  {
-    id: 3,
-    title: "International Students Welcome Team",
-    date: "April 1, 2026",
-    location: "Waterloo Campus",
-    description:
-      "Welcome new international students, help with campus orientation, and assist with settling-in activities.",
-  },
-  {
-    id: 4,
-    title: "Pow Wow Event Volunteer",
-    date: "March 21, 2026",
-    location: "Kitchener – Doon",
-    description:
-      "Support the Sixteenth Annual Traditional Pow Wow — assist with logistics, setup, and creating a welcoming environment.",
-  },
-];
-
 function Volunteer() {
+  const [opportunities, setOpportunities] = useState([]);
   const [applied, setApplied] = useState({});
   const [statuses, setStatuses] = useState({});
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // On mount — check which opportunities the user already applied for
   useEffect(() => {
-    const checkApplications = async () => {
+    const fetchAll = async () => {
       try {
-        const res = await authFetch(`${API}/api/volunteer/my-applications`);
-        if (res.ok) {
-          const data = await res.json();
+        // Fetch opportunities
+        const oppRes = await fetch(`${API}/api/volunteer/opportunities`);
+        if (oppRes.ok) {
+          const oppsData = await oppRes.json();
+          setOpportunities(oppsData);
+        }
+
+        // Fetch user's existing applications
+        const appRes = await authFetch(`${API}/api/volunteer/my-applications`);
+        if (appRes.ok) {
+          const appsData = await appRes.json();
           const appliedMap = {};
           const statusMap = {};
-          data.forEach((app) => {
+          appsData.forEach((app) => {
             appliedMap[app.opportunityId] = true;
             statusMap[app.opportunityId] = app.status;
           });
@@ -64,12 +37,12 @@ function Volunteer() {
           setStatuses(statusMap);
         }
       } catch (err) {
-        console.error("Failed to check applications:", err);
+        console.error("Failed to load:", err);
       } finally {
         setLoading(false);
       }
     };
-    checkApplications();
+    fetchAll();
   }, []);
 
   const showNotification = (message, type) => {
@@ -78,18 +51,20 @@ function Volunteer() {
   };
 
   const handleApply = async (opp) => {
+    const oppId = opp.id;
     try {
       const res = await authFetch(`${API}/api/volunteer/apply`, {
         method: "POST",
         body: JSON.stringify({
-          opportunityId: opp.id,
+          opportunityId: oppId,
           opportunityTitle: opp.title,
         }),
       });
 
       if (res.ok) {
-        setApplied((prev) => ({ ...prev, [opp.id]: true }));
-        setStatuses((prev) => ({ ...prev, [opp.id]: "Pending" }));
+        // Immediately update UI
+        setApplied((prev) => ({ ...prev, [oppId]: true }));
+        setStatuses((prev) => ({ ...prev, [oppId]: "Pending" }));
         showNotification(`Applied for "${opp.title}"!`, "success");
       } else {
         const err = await res.text();
@@ -136,27 +111,45 @@ function Volunteer() {
           <p style={{ color: "#aaa", textAlign: "center", gridColumn: "1/-1" }}>
             Loading...
           </p>
+        ) : opportunities.length === 0 ? (
+          <p style={{ color: "#aaa", textAlign: "center", gridColumn: "1/-1" }}>
+            No volunteer opportunities available right now. Check back soon!
+          </p>
         ) : (
-          opportunities.map((opp) => (
-            <div key={opp.id} className="volunteer-card">
-              <div className="volunteer-card-header">
-                <h3>{opp.title}</h3>
-                <span className="volunteer-badge">Open</span>
+          opportunities.map((opp) => {
+            const oppId = opp.id;
+            const status = statuses[oppId];
+            return (
+              <div key={oppId} className="volunteer-card">
+                <div className="volunteer-card-header">
+                  <h3>{opp.title}</h3>
+                  <span className="volunteer-badge">Open</span>
+                </div>
+                <div className="volunteer-meta">
+                  <span>📅 {opp.date}</span>
+                  <span>📍 {opp.location}</span>
+                </div>
+                <p className="volunteer-desc">{opp.description}</p>
+
+                {/* Status banner — shows after applying */}
+                {applied[oppId] && (
+                  <div className={`volunteer-status-banner ${status?.toLowerCase() || "pending"}`}>
+                    {status === "Approved" && "🎉 Your application has been approved!"}
+                    {status === "Rejected" && "Your application was not selected this time."}
+                    {status === "Pending" && "⏳ Application submitted — awaiting review"}
+                  </div>
+                )}
+
+                <button
+                  className={getButtonClass(oppId)}
+                  onClick={() => handleApply(opp)}
+                  disabled={!!applied[oppId]}
+                >
+                  {getButtonLabel(oppId)}
+                </button>
               </div>
-              <div className="volunteer-meta">
-                <span>📅 {opp.date}</span>
-                <span>📍 {opp.location}</span>
-              </div>
-              <p className="volunteer-desc">{opp.description}</p>
-              <button
-                className={getButtonClass(opp.id)}
-                onClick={() => handleApply(opp)}
-                disabled={applied[opp.id]}
-              >
-                {getButtonLabel(opp.id)}
-              </button>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 

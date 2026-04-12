@@ -457,3 +457,40 @@
   background: #e05c5c;
   color: #fff;
 }
+
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.admin-section-header h2 {
+  margin: 0;
+}
+
+.opp-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.opp-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.opp-form-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+}
+
+@media (max-width: 700px) {
+  .opp-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

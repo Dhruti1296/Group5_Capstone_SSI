@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import "./MakeADifference.css";
 
 const MakeADifference = () => {
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -13,7 +18,7 @@ const MakeADifference = () => {
           }
         });
       },
-      { threshold: 0.1 } // easier trigger
+      { threshold: 0.1 }
     );
 
     document
@@ -22,6 +27,27 @@ const MakeADifference = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleBecomeMentor = (e) => {
+    e.preventDefault();
+    if (!user) {
+      navigate("/register");
+    } else if (user.role === "Alumni") {
+      navigate("/become-mentor");
+    } else {
+      // Student or any other role
+      navigate("/mentor");
+    }
+  };
+
+  const handleVolunteer = (e) => {
+    e.preventDefault();
+    if (!user) {
+      navigate("/register");
+    } else {
+      navigate("/volunteer");
+    }
+  };
 
   return (
     <>
@@ -43,54 +69,74 @@ const MakeADifference = () => {
           </h2>
 
           <p className="section-intro-text animate-when-content-appears">
-            The community’s annual support of College priorities is a crucial
+            The community's annual support of College priorities is a crucial
             component of what makes our education possible and exceptional.
             Experience the joy and rewards of giving back.
           </p>
         </div>
       </section>
 
-      {/* Cards section below background */}
+      {/* Cards section */}
       <section className="cards-section">
-        {/* Centered intro text above cards */}
         <div className="cards-intro-text">
           <p>
-            Our comprehensive range of programming meets the needs of a variety of learners,
-            providing multiple entry points and established pathways to ensure that individuals across our
-            community can access the education they need for their chosen careers.
+            Our comprehensive range of programming meets the needs of a variety
+            of learners, providing multiple entry points and established pathways
+            to ensure that individuals across our community can access the
+            education they need for their chosen careers.
           </p>
         </div>
 
-        {/* Cards grid */}
         <div className="grid cols-3 animation-zoom-in animation-group">
+          {/* Best College in Ontario */}
           <div className="card animation-item">
-            <a href="https://example.com" className="card-link">
+            <a
+              className="card-link"
+              href="https://blogs1.conestogac.on.ca/news/2026/01/conestoga_ranked_best_college.php"
+              target="_blank"
+              rel="noreferrer"
+            >
               <img src="/images/card1.jpg" alt="Card 1" />
               <div className="card-body">
                 <h3 className="card-title">Best College in Ontario</h3>
-                <p>Conestoga has been ranked as the Best College in Ontario by CourseCompare for the second consecutive year.</p>
+                <p>
+                  Conestoga has been ranked as the Best College in Ontario by
+                  CourseCompare for the second consecutive year.
+                </p>
                 <span className="card-arrow">⮞⮞</span>
               </div>
             </a>
           </div>
 
+          {/* Be a Mentor */}
           <div className="card animation-item">
-            <a href="https://example.com" className="card-link">
+            <a href="#" className="card-link" onClick={handleBecomeMentor}>
               <img src="/images/card2.jpg" alt="Card 2" />
               <div className="card-body">
                 <h3 className="card-title">Be a Mentor</h3>
-                <p>An extraordinary opportunity to develop positive relationships with students and help them navigate the campus life.</p>
+                <p>
+                  {!user
+                    ? "Sign up to mentor students and help them navigate campus life."
+                    : user.role === "Alumni"
+                      ? "Apply to become a mentor and guide current Conestoga students."
+                      : "Connect with an alumni mentor who can help guide your journey."}
+                </p>
                 <span className="card-arrow">⮞⮞</span>
               </div>
             </a>
           </div>
 
+          {/* Volunteer */}
           <div className="card animation-item">
-            <a href="https://example.com" className="card-link">
+            <a href="#" className="card-link" onClick={handleVolunteer}>
               <img src="/images/card3.jpg" alt="Card 3" />
               <div className="card-body">
                 <h3 className="card-title">Volunteer</h3>
-                <p>An incredible way to enrich your life and the lives of others in countless ways.</p>
+                <p>
+                  {!user
+                    ? "Sign up to browse and apply for volunteer opportunities."
+                    : "Browse open volunteer opportunities and apply today."}
+                </p>
                 <span className="card-arrow">⮞⮞</span>
               </div>
             </a>

@@ -12,9 +12,9 @@ function Alumni() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchAlumni = async () => {
       try {
-        const res = await authFetch(`${API}/api/user/list?role=Alumni`);
+        const res = await fetch(`${API}/api/user/list?role=Alumni`);
         if (res.ok) {
           const data = await res.json();
           setAlumniList(data);
@@ -25,7 +25,7 @@ function Alumni() {
         setLoading(false);
       }
     };
-    fetch();
+    fetchAlumni();
   }, []);
 
   const filtered = alumniList.filter((a) =>

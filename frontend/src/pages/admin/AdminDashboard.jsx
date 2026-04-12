@@ -18,9 +18,16 @@ function AdminDashboard() {
   const [volunteers, setVolunteers] = useState([]);
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
-const [expandedPosts, setExpandedPosts] = useState({});
+  const [expandedPosts, setExpandedPosts] = useState({});
+  const [oppForm, setOppForm] = useState({
+    title: "", description: "", date: "", location: "", rawDate: ""
+  });
+  const [showOppForm, setShowOppForm] = useState(false);
+  const [editingOpp, setEditingOpp] = useState(null);
+
   const filteredMentors = mentors.filter((m) => {
     if (mentorFilter === "All") return true;
     return (m.status || "Pending") === mentorFilter;
@@ -34,23 +41,19 @@ const [expandedPosts, setExpandedPosts] = useState({});
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const [mRes, vRes, uRes, pRes] = await Promise.all([
+        const [mRes, vRes, uRes, pRes, oppRes] = await Promise.all([
           authFetch(`${API}/api/admin/mentor-applications`),
           authFetch(`${API}/api/admin/volunteer-applications`),
           authFetch(`${API}/api/admin/users`),
           authFetch(`${API}/api/admin/posts`),
+          authFetch(`${API}/api/admin/volunteer-opportunities`),
         ]);
 
         if (mRes.ok) setMentors(await mRes.json());
         if (vRes.ok) setVolunteers(await vRes.json());
-        if (uRes.ok) {
-          const usersData = await uRes.json();
-          console.log("Users response:", usersData);
-          setUsers(usersData);
-        } else {
-          console.log("Users request failed:", uRes.status);
-        }
+        if (uRes.ok) setUsers(await uRes.json());
         if (pRes.ok) setPosts(await pRes.json());
+        if (oppRes.ok) setOpportunities(await oppRes.json());
       } catch (err) {
         console.error("Failed to load admin data:", err);
       } finally {
@@ -80,54 +83,112 @@ const [expandedPosts, setExpandedPosts] = useState({});
     }
   };
 
- const handleDeleteComment = async (postId, commentIndex) => {
-  const res = await authFetch(
-    `${API}/api/admin/posts/${postId}/comments/${commentIndex}`,
-    { method: "DELETE" }
-  );
-  if (res.ok) {
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id !== postId) return p;
-        const updatedComments = p.comments.filter((_, i) => i !== commentIndex);
-        return { ...p, comments: updatedComments };
-      })
+  const handleDeleteComment = async (postId, commentIndex) => {
+    const res = await authFetch(
+      `${API}/api/admin/posts/${postId}/comments/${commentIndex}`,
+      { method: "DELETE" }
     );
-    showNotification("Comment deleted.", "success");
-  }
-};
-
-const handleDeleteUser = async (userName) => {
-  const res = await authFetch(`${API}/api/admin/users/${userName}`, { method: "DELETE" });
-  if (res.ok) {
-    setUsers((prev) => prev.filter((u) => u.userName !== userName));
-    showNotification("User deleted.", "success");
-  }
-};
-
-const handleDeletePost = async (id) => {
-  const res = await authFetch(`${API}/api/admin/posts/${id}`, { method: "DELETE" });
-  if (res.ok) {
-    setPosts((prev) => prev.filter((p) => p.id !== id));
-    showNotification("Post deleted.", "success");
-  }
-};
-
-const handleVolunteerStatus = async (id, status) => {
-  const res = await authFetch(
-    `${API}/api/admin/volunteer-applications/${id}/status`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({ status }),
+    if (res.ok) {
+      setPosts((prev) =>
+        prev.map((p) => {
+          if (p.id !== postId) return p;
+          const updatedComments = p.comments.filter((_, i) => i !== commentIndex);
+          return { ...p, comments: updatedComments };
+        })
+      );
+      showNotification("Comment deleted.", "success");
     }
-  );
-  if (res.ok) {
-    setVolunteers((prev) =>
-      prev.map((v) => (v.id === id ? { ...v, status } : v))
+  };
+
+  const handleDeleteUser = async (userName) => {
+    const res = await authFetch(`${API}/api/admin/users/${userName}`, { method: "DELETE" });
+    if (res.ok) {
+      setUsers((prev) => prev.filter((u) => u.userName !== userName));
+      showNotification("User deleted.", "success");
+    }
+  };
+
+  const handleDeletePost = async (id) => {
+    const res = await authFetch(`${API}/api/admin/posts/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setPosts((prev) => prev.filter((p) => p.id !== id));
+      showNotification("Post deleted.", "success");
+    }
+  };
+
+  const handleVolunteerStatus = async (id, status) => {
+    const res = await authFetch(
+      `${API}/api/admin/volunteer-applications/${id}/status`,
+      { method: "PATCH", body: JSON.stringify({ status }) }
     );
-    showNotification("Status updated.", "success");
-  }
-};
+    if (res.ok) {
+      setVolunteers((prev) =>
+        prev.map((v) => (v.id === id ? { ...v, status } : v))
+      );
+      showNotification("Status updated.", "success");
+    }
+  };
+
+  const handleCreateOpportunity = async () => {
+    if (!oppForm.title || !oppForm.description || !oppForm.date || !oppForm.location) {
+      showNotification("All fields are required.", "error");
+      return;
+    }
+    const res = await authFetch(`${API}/api/admin/volunteer-opportunities`, {
+      method: "POST",
+      body: JSON.stringify(oppForm),
+    });
+    if (res.ok) {
+      const created = await res.json();
+      setOpportunities((prev) => [...prev, created]);
+      setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+      setShowOppForm(false);
+      showNotification("Opportunity created!", "success");
+    }
+  };
+
+  const handleUpdateOpportunity = async () => {
+    if (!oppForm.title || !oppForm.description || !oppForm.date || !oppForm.location) {
+      showNotification("All fields are required.", "error");
+      return;
+    }
+    const res = await authFetch(
+      `${API}/api/admin/volunteer-opportunities/${editingOpp.id}`,
+      { method: "PUT", body: JSON.stringify(oppForm) }
+    );
+    if (res.ok) {
+      setOpportunities((prev) =>
+        prev.map((o) => o.id === editingOpp.id ? { ...o, ...oppForm } : o)
+      );
+      setEditingOpp(null);
+      setShowOppForm(false);
+      setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+      showNotification("Opportunity updated!", "success");
+    }
+  };
+
+  const handleDeleteOpportunity = async (id) => {
+    const res = await authFetch(
+      `${API}/api/admin/volunteer-opportunities/${id}`,
+      { method: "DELETE" }
+    );
+    if (res.ok) {
+      setOpportunities((prev) => prev.filter((o) => o.id !== id));
+      showNotification("Opportunity deleted.", "success");
+    }
+  };
+
+  const handleEditOpportunity = (opp) => {
+    setEditingOpp(opp);
+    setOppForm({
+      title: opp.title,
+      description: opp.description,
+      date: opp.date,
+      location: opp.location,
+      rawDate: "",
+    });
+    setShowOppForm(true);
+  };
 
   const handleLogout = () => {
     logout();
@@ -178,6 +239,13 @@ const handleVolunteerStatus = async (id, status) => {
             Post Moderation
             <span className="badge">{posts.length}</span>
           </button>
+          <button
+            className={activeTab === "opportunities" ? "active" : ""}
+            onClick={() => setActiveTab("opportunities")}
+          >
+            Volunteer Opportunities
+            <span className="badge">{opportunities.length}</span>
+          </button>
         </nav>
 
         <button className="admin-logout" onClick={handleLogout}>
@@ -202,7 +270,6 @@ const handleVolunteerStatus = async (id, status) => {
             {activeTab === "mentors" && (
               <div className="admin-section">
                 <h2>Mentor Applications</h2>
-
                 <div className="filter-tabs">
                   {["All", "Pending", "Approved", "Rejected"].map((f) => (
                     <button
@@ -214,14 +281,11 @@ const handleVolunteerStatus = async (id, status) => {
                       <span className="badge">
                         {f === "All"
                           ? mentors.length
-                          : mentors.filter((m) =>
-                              (m.status || "Pending") === f
-                            ).length}
+                          : mentors.filter((m) => (m.status || "Pending") === f).length}
                       </span>
                     </button>
                   ))}
                 </div>
-
                 {filteredMentors.length === 0 ? (
                   <p className="admin-empty">No applications in this category.</p>
                 ) : (
@@ -323,7 +387,6 @@ const handleVolunteerStatus = async (id, status) => {
             {activeTab === "users" && (
               <div className="admin-section">
                 <h2>Manage Users</h2>
-
                 <div className="user-controls">
                   <input
                     type="text"
@@ -349,11 +412,9 @@ const handleVolunteerStatus = async (id, status) => {
                     ))}
                   </div>
                 </div>
-
                 {(() => {
                   const filtered = users.filter((u) => {
-                    const matchesRole =
-                      userRoleFilter === "All" || u.role === userRoleFilter;
+                    const matchesRole = userRoleFilter === "All" || u.role === userRoleFilter;
                     const search = userSearch.toLowerCase();
                     const matchesSearch =
                       !search ||
@@ -363,7 +424,6 @@ const handleVolunteerStatus = async (id, status) => {
                       u.surname?.toLowerCase().includes(search);
                     return matchesRole && matchesSearch;
                   });
-
                   return filtered.length === 0 ? (
                     <p className="admin-empty">No users found.</p>
                   ) : (
@@ -409,84 +469,225 @@ const handleVolunteerStatus = async (id, status) => {
             )}
 
             {/* Post Moderation */}
-           {activeTab === "posts" && (
-  <div className="admin-section">
-    <h2>Post Moderation</h2>
-    {posts.length === 0 ? (
-      <p className="admin-empty">No posts found.</p>
-    ) : (
-      posts.map((p) => (
-        <div key={p.id} className="admin-card">
-          <div className="admin-card-header">
-            <div>
-              <h3>@{p.userName}</h3>
-              <p className="admin-meta">{formatDate(p.createdAt)}</p>
-            </div>
-            <div className="admin-post-stats">
-              <span>♥ {p.likes?.length || 0}</span>
-              <span>💬 {p.comments?.length || 0}</span>
-            </div>
-          </div>
-
-          <p className="admin-post-content">{p.content}</p>
-
-          {/* Comments section */}
-          {p.comments && p.comments.length > 0 && (
-            <div className="admin-comments-section">
-              <button
-                className="toggle-comments-btn"
-                onClick={() =>
-                  setExpandedPosts((prev) => ({
-                    ...prev,
-                    [p.id]: !prev[p.id],
-                  }))
-                }
-              >
-                {expandedPosts[p.id]
-                  ? "Hide Comments"
-                  : `Show ${p.comments.length} Comment${p.comments.length > 1 ? "s" : ""}`}
-              </button>
-
-              {expandedPosts[p.id] && (
-                <div className="admin-comments-list">
-                  {p.comments.map((c, i) => (
-                    <div key={i} className="admin-comment-row">
-                      <div className="admin-comment-content">
-                        <span className="admin-comment-author">
-                          @{c.userName}
-                        </span>
-                        <span className="admin-comment-text">{c.text}</span>
-                        <span className="admin-comment-time">
-                          {formatDate(c.createdAt)}
-                        </span>
+            {activeTab === "posts" && (
+              <div className="admin-section">
+                <h2>Post Moderation</h2>
+                {posts.length === 0 ? (
+                  <p className="admin-empty">No posts found.</p>
+                ) : (
+                  posts.map((p) => (
+                    <div key={p.id} className="admin-card">
+                      <div className="admin-card-header">
+                        <div>
+                          <h3>@{p.userName}</h3>
+                          <p className="admin-meta">{formatDate(p.createdAt)}</p>
+                        </div>
+                        <div className="admin-post-stats">
+                          <span>♥ {p.likes?.length || 0}</span>
+                          <span>💬 {p.comments?.length || 0}</span>
+                        </div>
                       </div>
+                      <p className="admin-post-content">{p.content}</p>
+                      {p.comments && p.comments.length > 0 && (
+                        <div className="admin-comments-section">
+                          <button
+                            className="toggle-comments-btn"
+                            onClick={() =>
+                              setExpandedPosts((prev) => ({
+                                ...prev,
+                                [p.id]: !prev[p.id],
+                              }))
+                            }
+                          >
+                            {expandedPosts[p.id]
+                              ? "Hide Comments"
+                              : `Show ${p.comments.length} Comment${p.comments.length > 1 ? "s" : ""}`}
+                          </button>
+                          {expandedPosts[p.id] && (
+                            <div className="admin-comments-list">
+                              {p.comments.map((c, i) => (
+                                <div key={i} className="admin-comment-row">
+                                  <div className="admin-comment-content">
+                                    <span className="admin-comment-author">@{c.userName}</span>
+                                    <span className="admin-comment-text">{c.text}</span>
+                                    <span className="admin-comment-time">{formatDate(c.createdAt)}</span>
+                                  </div>
+                                  <button
+                                    className="delete-comment-btn"
+                                    onClick={() => handleDeleteComment(p.id, i)}
+                                    title="Delete comment"
+                                  >
+                                    ✕
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="admin-actions">
+                        <button
+                          className="reject-btn"
+                          onClick={() => handleDeletePost(p.id)}
+                        >
+                          Delete Post
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+
+            {/* Volunteer Opportunities */}
+            {activeTab === "opportunities" && (
+              <div className="admin-section">
+                <div className="admin-section-header">
+                  <h2>Volunteer Opportunities</h2>
+                  <button
+                    className="approve-btn"
+                    onClick={() => {
+                      setEditingOpp(null);
+                      setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+                      setShowOppForm((prev) => !prev);
+                    }}
+                  >
+                    {showOppForm && !editingOpp ? "Cancel" : "+ New Opportunity"}
+                  </button>
+                </div>
+
+                {/* Create / Edit Form */}
+                {showOppForm && (
+                  <div className="admin-card" style={{ marginBottom: "1.5rem" }}>
+                    <h3 style={{ color: "#d4af37", marginBottom: "1rem" }}>
+                      {editingOpp ? "Edit Opportunity" : "Create New Opportunity"}
+                    </h3>
+                    <div className="opp-form-grid">
+                      <div className="opp-form-field">
+                        <label>Title</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Campus Open House Helper"
+                          value={oppForm.title}
+                          onChange={(e) => setOppForm({ ...oppForm, title: e.target.value })}
+                          className="admin-search"
+                        />
+                      </div>
+                      <div className="opp-form-field">
+                        <label>Date</label>
+                        <input
+                          type="date"
+                          value={oppForm.rawDate || ""}
+                          onChange={(e) => {
+                            const raw = e.target.value; // "2026-04-20"
+                            if (!raw) return;
+                            const [year, month, day] = raw.split("-");
+                            const formatted = new Date(
+                              parseInt(year),
+                              parseInt(month) - 1,
+                              parseInt(day)
+                            ).toLocaleDateString("en-US", {
+                              month: "long", day: "numeric", year: "numeric"
+                            });
+                            setOppForm({ ...oppForm, rawDate: raw, date: formatted });
+                          }}
+                          className="admin-search"
+                          style={{ colorScheme: "dark" }}
+                        />
+                        {oppForm.date && (
+                          <span style={{ fontSize: "0.75rem", color: "#888", marginTop: "4px" }}>
+                            {oppForm.date}
+                          </span>
+                        )}
+                      </div>
+                      <div className="opp-form-field">
+                        <label>Location</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Kitchener – Doon"
+                          value={oppForm.location}
+                          onChange={(e) => setOppForm({ ...oppForm, location: e.target.value })}
+                          className="admin-search"
+                        />
+                      </div>
+                    </div>
+                    <div className="opp-form-field" style={{ marginTop: "0.8rem" }}>
+                      <label>Description</label>
+                      <textarea
+                        placeholder="Describe the volunteer opportunity..."
+                        value={oppForm.description}
+                        onChange={(e) => setOppForm({ ...oppForm, description: e.target.value })}
+                        rows={3}
+                        style={{
+                          width: "100%",
+                          background: "#0a0a0a",
+                          border: "1px solid #333",
+                          borderRadius: "8px",
+                          color: "#fff",
+                          padding: "10px 14px",
+                          fontFamily: "inherit",
+                          fontSize: "0.88rem",
+                          resize: "vertical",
+                          outline: "none",
+                        }}
+                      />
+                    </div>
+                    <div className="admin-actions" style={{ marginTop: "1rem" }}>
                       <button
-                        className="delete-comment-btn"
-                        onClick={() => handleDeleteComment(p.id, i)}
-                        title="Delete comment"
+                        className="approve-btn"
+                        onClick={editingOpp ? handleUpdateOpportunity : handleCreateOpportunity}
                       >
-                        ✕
+                        {editingOpp ? "Save Changes" : "Create Opportunity"}
+                      </button>
+                      <button
+                        className="reject-btn"
+                        onClick={() => {
+                          setShowOppForm(false);
+                          setEditingOpp(null);
+                          setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+                        }}
+                      >
+                        Cancel
                       </button>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+                  </div>
+                )}
 
-          <div className="admin-actions">
-            <button
-              className="reject-btn"
-              onClick={() => handleDeletePost(p.id)}
-            >
-              Delete Post
-            </button>
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-)}
+                {/* Opportunities List */}
+                {opportunities.length === 0 ? (
+                  <p className="admin-empty">No opportunities yet. Create one above.</p>
+                ) : (
+                  opportunities.map((opp) => (
+                    <div key={opp.id} className="admin-card">
+                      <div className="admin-card-header">
+                        <div>
+                          <h3>{opp.title}</h3>
+                          <p className="admin-meta">📅 {opp.date} &nbsp;·&nbsp; 📍 {opp.location}</p>
+                        </div>
+                        <span className={"status-badge " + (opp.status?.toLowerCase() || "open")}>
+                          {opp.status || "Open"}
+                        </span>
+                      </div>
+                      <p className="admin-bio">{opp.description}</p>
+                      <div className="admin-actions">
+                        <button
+                          className="approve-btn"
+                          onClick={() => handleEditOpportunity(opp)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="reject-btn"
+                          onClick={() => handleDeleteOpportunity(opp.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
           </>
         )}
       </div>

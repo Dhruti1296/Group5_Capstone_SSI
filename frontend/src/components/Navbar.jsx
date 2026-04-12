@@ -23,7 +23,6 @@ const Navbar = () => {
     ? user.userName.charAt(0).toUpperCase()
     : "G";
 
-  // Fetch notifications when user is logged in
   useEffect(() => {
     if (!user || user.role === "Admin") return;
 
@@ -41,13 +40,10 @@ const Navbar = () => {
     };
 
     fetchNotifications();
-
-    // Poll every 30 seconds for new notifications
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
   }, [user]);
 
-  // Close notif dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -107,7 +103,7 @@ const Navbar = () => {
 
         <div className="corner-controls">
 
-          {/* Notification Bell — only for logged in non-admin users */}
+          {/* Notification Bell */}
           {user && user.role !== "Admin" && (
             <div className="notif-wrapper" ref={notifRef}>
               <button
@@ -153,6 +149,7 @@ const Navbar = () => {
             </div>
           )}
 
+          {/* User / Guest area */}
           <div className="welcome-box" ref={dropdownRef}>
             <div className="profile-circle">
               {user?.profilePic ? (
@@ -180,7 +177,9 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              <span className="welcome-text">Welcome, Guest</span>
+              <Link to="/login" className="guest-link">
+                Welcome Guest
+              </Link>
             )}
           </div>
 
@@ -198,37 +197,26 @@ const Navbar = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <button className="close-button" onClick={handleMenuClose}>✕</button>
-            {menuOpen && (
-  <div className="menu-overlay" onClick={handleMenuClose}>
-    <div
-      className={"menu-card drop-in " + (closing ? "closing" : "")}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button className="close-button" onClick={handleMenuClose}>✕</button>
-      <ul className="menu-links">
-        {/* Show Dashboard only if logged in */}
-        {user && user.userName !== "Guest" && (
-          <li><Link to="/dashboard" onClick={handleMenuClose}>Dashboard</Link></li>
-        )}
-        <li><Link to="/news" onClick={handleMenuClose}>News</Link></li>
-        <li><Link to="/events" onClick={handleMenuClose}>Events</Link></li>
-        <li><Link to="/alumni" onClick={handleMenuClose}>Alumni</Link></li>
-        <li><Link to="/volunteer" onClick={handleMenuClose}>Volunteer</Link></li>
-        <li><Link to="/mentor" onClick={handleMenuClose}>Mentor</Link></li>
-        <li><Link to="/edit-profile" onClick={handleMenuClose}>Edit Profile</Link></li>
-        {user && user.userName !== "Guest" ? (
-          <li>
-            <button onClick={handleLogout} className="menu-logout-btn">
-              Logout
-            </button>
-          </li>
-        ) : (
-          <li><Link to="/login" onClick={handleMenuClose}>Login</Link></li>
-        )}
-      </ul>
-    </div>
-  </div>
-)}
+            <ul className="menu-links">
+              {user && user.userName !== "Guest" && (
+                <li><Link to="/dashboard" onClick={handleMenuClose}>Dashboard</Link></li>
+              )}
+              <li><Link to="/news" onClick={handleMenuClose}>News</Link></li>
+              <li><Link to="/events" onClick={handleMenuClose}>Events</Link></li>
+              <li><Link to="/alumni" onClick={handleMenuClose}>Alumni</Link></li>
+              <li><Link to="/volunteer" onClick={handleMenuClose}>Volunteer</Link></li>
+              <li><Link to="/mentor" onClick={handleMenuClose}>Mentor</Link></li>
+              <li><Link to="/edit-profile" onClick={handleMenuClose}>Edit Profile</Link></li>
+              {user && user.userName !== "Guest" ? (
+                <li>
+                  <button onClick={handleLogout} className="menu-logout-btn">
+                    Logout
+                  </button>
+                </li>
+              ) : (
+                <li><Link to="/login" onClick={handleMenuClose}>Login</Link></li>
+              )}
+            </ul>
           </div>
         </div>
       )}

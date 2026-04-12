@@ -129,3 +129,69 @@
   color: #e05c5c;
   cursor: default;
 }
+
+.volunteer-status-banner {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.volunteer-status-banner.pending {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+
+.volunteer-status-banner.approved {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #6EE7B7;
+}
+
+.volunteer-status-banner.rejected {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.volunteer-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  background: #C9A84C;
+  color: #111;
+}
+
+.volunteer-btn:hover:not(:disabled) {
+  background: #E8C97A;
+  transform: scale(1.01);
+}
+
+.volunteer-btn:disabled {
+  cursor: default;
+  transform: none;
+}
+
+.volunteer-btn.applied {
+  background: #E8E2D6;
+  color: #6B7280;
+}
+
+.volunteer-btn.approved {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.volunteer-btn.rejected {
+  background: #FEE2E2;
+  color: #991B1B;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 
 const Footer = () => (
-  <footer className="site-footer animate-when-content-appears">
+  <footer id="contact-footer" className="site-footer animate-when-content-appears">
     <div className="footer-card">
       {/* Contact Info */}
       <div className="footer-contact">

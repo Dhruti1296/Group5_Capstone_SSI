@@ -105,8 +105,12 @@ const VideoBackground = () => {
 
         <div className="video-overlay">
           <div className="bottom-buttons">
-            <button>Explore <span>Alumni</span></button>
-            <button>Student <span>Services</span></button>
+            <button onClick={() => navigate("/alumni")}>
+              Explore <span>Alumni</span>
+            </button>
+            <button onClick={() => window.open("https://www.conestogac.on.ca/", "_blank")}>
+              Student <span>Services</span>
+            </button>
             <button onClick={() => navigate("/login")}>
               Account <span>Login</span>
             </button>
@@ -120,7 +124,17 @@ const VideoBackground = () => {
         <a href="/about" className="nav-link animation-item">About</a>
         <a href="/news" className="nav-link animation-item">News</a>
         <a href="/events" className="nav-link animation-item">Events</a>
-        <a href="/contact" className="nav-link animation-item">Contact</a>
+        <a
+          href="#contact-footer"
+          className="nav-link animation-item"
+          onClick={(e) => {
+            e.preventDefault();
+            const footer = document.getElementById("contact-footer");
+            if (footer) footer.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
+          Contact
+        </a>
       </div>
 
       <div className="community-section">

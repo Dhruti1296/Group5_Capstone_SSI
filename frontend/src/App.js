@@ -18,6 +18,7 @@ import Mentor from "./pages/Mentor";
 import BecomeMentor from "./pages/BecomeMentor";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import About from "./pages/About";
 
 import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -45,17 +46,20 @@ function App() {
             } />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/about" element={<About />} />
             <Route path="/news" element={<News />} />
+            <Route path="/news/detail" element={<NewsDetail />} />
             <Route path="/events" element={<Events />} />
-
+            <Route path="/events/detail" element={<EventDetail />} />
+            <Route path="/alumni" element={<Alumni />} />
+            <Route path="/students" element={
+              <ProtectedRoute><Students /></ProtectedRoute>
+            } />
             <Route path="/dashboard" element={
               <ProtectedRoute><Dashboard /></ProtectedRoute>
             } />
             <Route path="/edit-profile" element={
               <ProtectedRoute><EditProfile /></ProtectedRoute>
-            } />
-            <Route path="/alumni" element={
-              <ProtectedRoute><Alumni /></ProtectedRoute>
             } />
             <Route path="/volunteer" element={
               <ProtectedRoute><Volunteer /></ProtectedRoute>
@@ -69,13 +73,6 @@ function App() {
             <Route path="/chat/:roomId" element={
               <ProtectedRoute><Chat /></ProtectedRoute>
             } />
-            <Route path="/students" element={
-              <ProtectedRoute><Students /></ProtectedRoute>
-            } />
-            <Route path="/events" element={<Events />} />
-            <Route path="/events/detail" element={<EventDetail />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/news/detail" element={<NewsDetail />} />
             {/* Admin routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={
