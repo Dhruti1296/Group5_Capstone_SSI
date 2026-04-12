@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SSI.API.Models
 {
+    [BsonIgnoreExtraElements]
     public class VolunteerApplication
     {
         [BsonId]
@@ -13,7 +14,7 @@ namespace SSI.API.Models
         public string? UserName { get; set; }
 
         [BsonElement("OpportunityId")]
-        public int OpportunityId { get; set; }
+        public string OpportunityId { get; set; } = null!;  // changed from int to string
 
         [BsonElement("OpportunityTitle")]
         public string OpportunityTitle { get; set; } = null!;

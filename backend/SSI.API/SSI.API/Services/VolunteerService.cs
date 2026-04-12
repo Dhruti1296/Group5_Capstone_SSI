@@ -21,13 +21,13 @@ namespace SSI.API.Services
                 .ToListAsync();
         }
 
-        public async Task<VolunteerApplication?> GetByUserAndOpportunityAsync(
-            string userName, int opportunityId)
-        {
-            return await _applications
-                .Find(v => v.UserName == userName && v.OpportunityId == opportunityId)
-                .FirstOrDefaultAsync();
-        }
+       public async Task<VolunteerApplication?> GetByUserAndOpportunityAsync(
+    string userName, string opportunityId)  // changed int to string
+{
+    return await _applications
+        .Find(v => v.UserName == userName && v.OpportunityId == opportunityId)
+        .FirstOrDefaultAsync();
+}
 
         public async Task CreateAsync(VolunteerApplication application)
         {
@@ -47,6 +47,8 @@ namespace SSI.API.Services
         .Find(v => v.UserName == userName)
         .ToListAsync();
 }
+
+
     }
 
 

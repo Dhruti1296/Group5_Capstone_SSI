@@ -71,27 +71,29 @@ namespace SSI.API.Controllers
         }
 
         // GET /api/user/list?role=Alumni
-        [HttpGet("list")]
-        public async Task<IActionResult> GetByRole([FromQuery] string role)
-        {
-            if (string.IsNullOrWhiteSpace(role))
-                return BadRequest("Role is required.");
+      // GET /api/user/list?role=Alumni
+[AllowAnonymous]
+[HttpGet("list")]
+public async Task<IActionResult> GetByRole([FromQuery] string role)
+{
+    if (string.IsNullOrWhiteSpace(role))
+        return BadRequest("Role is required.");
 
-            var users = await _userServices.GetByRoleAsync(role);
+    var users = await _userServices.GetByRoleAsync(role);
 
-            var result = users.Select(u => new
-            {
-                u.UserName,
-                u.Name,
-                u.Surname,
-                u.ProfilePic,
-                u.PassedOutYear,
-                u.CourseName,
-                u.Department
-            });
+    var result = users.Select(u => new
+    {
+        u.UserName,
+        u.Name,
+        u.Surname,
+        u.ProfilePic,
+        u.PassedOutYear,
+        u.CourseName,
+        u.Department
+    });
 
-            return Ok(result);
-        }
+    return Ok(result);
+}
 
         [HttpGet("ping")]
 [AllowAnonymous]

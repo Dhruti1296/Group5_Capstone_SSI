@@ -36,5 +36,8 @@ namespace SSI.API.Data
 
         public IMongoCollection<ChatMessage> ChatMessages =>
             _database.GetCollection<ChatMessage>("ChatMessages");
+        
+        public IMongoCollection<VolunteerOpportunity> VolunteerOpportunities =>
+    _database.GetCollection<VolunteerOpportunity>("VolunteerOpportunities");
     }
 }

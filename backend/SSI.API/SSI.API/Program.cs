@@ -59,6 +59,7 @@ namespace SSI.API
             builder.Services.AddSingleton<NotificationService>();
             builder.Services.AddSingleton<MentorshipService>(); // NEW
             builder.Services.AddSingleton<EventScraperService>();
+            builder.Services.AddSingleton<VolunteerOpportunityService>();
 
             // JWT
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");

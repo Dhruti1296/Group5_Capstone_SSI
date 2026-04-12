@@ -15,19 +15,22 @@ namespace SSI.API.Controllers
         private readonly MentorService _mentorService;
         private readonly VolunteerService _volunteerService;
         private readonly NotificationService _notificationService;
+        private readonly VolunteerOpportunityService _opportunityService;
 
         public AdminController(
             UserServices userServices,
             PostService postService,
             MentorService mentorService,
             VolunteerService volunteerService,
-            NotificationService notificationService)
+            NotificationService notificationService,
+            VolunteerOpportunityService opportunityService)
         {
             _userServices = userServices;
             _postService = postService;
             _mentorService = mentorService;
             _volunteerService = volunteerService;
             _notificationService = notificationService;
+            _opportunityService = opportunityService;
         }
 
         // GET /api/admin/users
@@ -132,6 +135,41 @@ namespace SSI.API.Controllers
            await _postService.DeleteCommentAsync(postId, commentIndex);
            return Ok("Comment deleted.");
         }
+
+        // GET all opportunities including closed
+[HttpGet("volunteer-opportunities")]
+public async Task<IActionResult> GetAllOpportunities()
+{
+    var opps = await _opportunityService.GetAllAsync();
+    return Ok(opps);
+}
+
+// POST create opportunity
+[HttpPost("volunteer-opportunities")]
+public async Task<IActionResult> CreateOpportunity([FromBody] VolunteerOpportunity opp)
+{
+    opp.CreatedAt = DateTime.UtcNow;
+    await _opportunityService.CreateAsync(opp);
+    return Ok(opp);
+}
+
+// PUT update opportunity
+[HttpPut("volunteer-opportunities/{id}")]
+public async Task<IActionResult> UpdateOpportunity(string id, [FromBody] VolunteerOpportunity opp)
+{
+    await _opportunityService.UpdateAsync(id, opp);
+    return Ok(opp);
+}
+
+// DELETE opportunity
+[HttpDelete("volunteer-opportunities/{id}")]
+public async Task<IActionResult> DeleteOpportunity(string id)
+{
+    await _opportunityService.DeleteAsync(id);
+    return Ok("Deleted.");
+}
+
+
     }
 
     public class StatusRequest

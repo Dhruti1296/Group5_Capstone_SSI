@@ -12,10 +12,12 @@ namespace SSI.API.Controllers
     public class VolunteerController : ControllerBase
     {
         private readonly VolunteerService _volunteerService;
+private readonly VolunteerOpportunityService _opportunityService;
 
-        public VolunteerController(VolunteerService volunteerService)
+        public VolunteerController(VolunteerService volunteerService,VolunteerOpportunityService opportunityService)
         {
             _volunteerService = volunteerService;
+            _opportunityService = opportunityService;
         }
 
         // POST /api/volunteer/apply
@@ -50,5 +52,14 @@ namespace SSI.API.Controllers
          var applications = await _volunteerService.GetByUserNameAsync(userName);
          return Ok(applications);
         }
+
+        // Public — anyone can see open opportunities
+[AllowAnonymous]
+[HttpGet("opportunities")]
+public async Task<IActionResult> GetOpportunities()
+{
+    var opps = await _opportunityService.GetAllAsync();
+    return Ok(opps.Where(o => o.Status == "Open"));
+}
     }
 }
