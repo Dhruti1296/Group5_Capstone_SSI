@@ -7,6 +7,38 @@ import "./AdminDashboard.css";
 const API = "http://localhost:5277";
 const EVENT_SERVICE = "http://localhost:5237";
 
+// ── Pagination hook — must be outside component ──
+function usePagination(items, pageSize = 10) {
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  const paginated = items.slice((page - 1) * pageSize, page * pageSize);
+  return { paginated, page, setPage, totalPages };
+}
+
+// ── Pagination component ──
+function Pagination({ page, totalPages, setPage }) {
+  if (totalPages <= 1) return null;
+  return (
+    <div className="pagination">
+      <button
+        className="page-btn"
+        onClick={() => setPage((p) => Math.max(1, p - 1))}
+        disabled={page === 1}
+      >
+        ← Prev
+      </button>
+      <span className="page-info">Page {page} of {totalPages}</span>
+      <button
+        className="page-btn"
+        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+        disabled={page === totalPages}
+      >
+        Next →
+      </button>
+    </div>
+  );
+}
+
 function AdminDashboard() {
   const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
@@ -37,10 +69,31 @@ function AdminDashboard() {
   const [showSsiForm, setShowSsiForm] = useState(false);
   const [editingSsiEvent, setEditingSsiEvent] = useState(null);
 
+  // ── Filtered lists ────────────────────────────
   const filteredMentors = mentors.filter((m) => {
     if (mentorFilter === "All") return true;
     return (m.status || "Pending") === mentorFilter;
   });
+
+  const filteredUsers = users.filter((u) => {
+    const matchesRole = userRoleFilter === "All" || u.role === userRoleFilter;
+    const search = userSearch.toLowerCase();
+    const matchesSearch =
+      !search ||
+      u.userName?.toLowerCase().includes(search) ||
+      u.email?.toLowerCase().includes(search) ||
+      u.name?.toLowerCase().includes(search) ||
+      u.surname?.toLowerCase().includes(search);
+    return matchesRole && matchesSearch;
+  });
+
+  // ── Pagination ────────────────────────────────
+  const mentorPagination = usePagination(filteredMentors);
+  const volunteerPagination = usePagination(volunteers);
+  const userPagination = usePagination(filteredUsers, 15);
+  const postPagination = usePagination(posts, 5);
+  const oppPagination = usePagination(opportunities);
+  const ssiPagination = usePagination(ssiEvents);
 
   const showNotification = (message, type) => {
     setNotification({ message, type });
@@ -64,7 +117,6 @@ function AdminDashboard() {
         if (pRes.ok) setPosts(await pRes.json());
         if (oppRes.ok) setOpportunities(await oppRes.json());
 
-        // Fetch SSI events from microservice
         try {
           const ssiRes = await fetch(`${EVENT_SERVICE}/api/events`);
           if (ssiRes.ok) setSsiEvents(await ssiRes.json());
@@ -111,8 +163,7 @@ function AdminDashboard() {
       setPosts((prev) =>
         prev.map((p) => {
           if (p.id !== postId) return p;
-          const updatedComments = p.comments.filter((_, i) => i !== commentIndex);
-          return { ...p, comments: updatedComments };
+          return { ...p, comments: p.comments.filter((_, i) => i !== commentIndex) };
         })
       );
       showNotification("Comment deleted.", "success");
@@ -262,7 +313,6 @@ function AdminDashboard() {
     }
   };
 
-  // ── Utils ─────────────────────────────────────
   const handleLogout = () => {
     logout();
     navigate("/admin/login");
@@ -348,7 +398,6 @@ function AdminDashboard() {
 
       {/* Main content */}
       <div className="admin-main">
-
         {notification && (
           <div className={"admin-toast " + notification.type}>
             {notification.message}
@@ -382,53 +431,60 @@ function AdminDashboard() {
                 {filteredMentors.length === 0 ? (
                   <p className="admin-empty">No applications in this category.</p>
                 ) : (
-                  filteredMentors.map((m) => (
-                    <div key={m.id} className="admin-card">
-                      <div className="admin-card-header">
-                        <div>
-                          <h3>{m.name}</h3>
-                          <p className="admin-meta">{m.role}</p>
-                          {m.passedOutYear && (
-                            <p className="admin-meta">Class of {m.passedOutYear}</p>
-                          )}
-                          <p className="admin-meta">@{m.userName}</p>
+                  <>
+                    {mentorPagination.paginated.map((m) => (
+                      <div key={m.id} className="admin-card">
+                        <div className="admin-card-header">
+                          <div>
+                            <h3>{m.name}</h3>
+                            <p className="admin-meta">{m.role}</p>
+                            {m.passedOutYear && (
+                              <p className="admin-meta">Class of {m.passedOutYear}</p>
+                            )}
+                            <p className="admin-meta">@{m.userName}</p>
+                          </div>
+                          <span className={"status-badge " + (m.status || "pending").toLowerCase()}>
+                            {m.status || "Pending"}
+                          </span>
                         </div>
-                        <span className={"status-badge " + (m.status || "pending").toLowerCase()}>
-                          {m.status || "Pending"}
-                        </span>
+                        <p className="admin-bio">{m.bio}</p>
+                        <div className="admin-tags">
+                          {m.expertise?.map((tag) => (
+                            <span key={tag} className="admin-tag">{tag}</span>
+                          ))}
+                        </div>
+                        <p className="admin-meta">Email: {m.email}</p>
+                        {m.linkedin && (
+                          <p className="admin-meta">
+                            LinkedIn:{" "}
+                            <a href={m.linkedin} target="_blank" rel="noreferrer">{m.linkedin}</a>
+                          </p>
+                        )}
+                        <p className="admin-meta">Applied: {formatDate(m.appliedAt)}</p>
+                        <div className="admin-actions">
+                          <button
+                            className="approve-btn"
+                            onClick={() => handleApproveMentor(m.id)}
+                            disabled={m.status === "Approved"}
+                          >
+                            {m.status === "Approved" ? "✓ Approved" : "Approve"}
+                          </button>
+                          <button
+                            className="reject-btn"
+                            onClick={() => handleRejectMentor(m.id)}
+                            disabled={m.status === "Rejected"}
+                          >
+                            {m.status === "Rejected" ? "✗ Rejected" : "Reject"}
+                          </button>
+                        </div>
                       </div>
-                      <p className="admin-bio">{m.bio}</p>
-                      <div className="admin-tags">
-                        {m.expertise?.map((tag) => (
-                          <span key={tag} className="admin-tag">{tag}</span>
-                        ))}
-                      </div>
-                      <p className="admin-meta">Email: {m.email}</p>
-                      {m.linkedin && (
-                        <p className="admin-meta">
-                          LinkedIn:{" "}
-                          <a href={m.linkedin} target="_blank" rel="noreferrer">{m.linkedin}</a>
-                        </p>
-                      )}
-                      <p className="admin-meta">Applied: {formatDate(m.appliedAt)}</p>
-                      <div className="admin-actions">
-                        <button
-                          className="approve-btn"
-                          onClick={() => handleApproveMentor(m.id)}
-                          disabled={m.status === "Approved"}
-                        >
-                          {m.status === "Approved" ? "✓ Approved" : "Approve"}
-                        </button>
-                        <button
-                          className="reject-btn"
-                          onClick={() => handleRejectMentor(m.id)}
-                          disabled={m.status === "Rejected"}
-                        >
-                          {m.status === "Rejected" ? "✗ Rejected" : "Reject"}
-                        </button>
-                      </div>
-                    </div>
-                  ))
+                    ))}
+                    <Pagination
+                      page={mentorPagination.page}
+                      totalPages={mentorPagination.totalPages}
+                      setPage={mentorPagination.setPage}
+                    />
+                  </>
                 )}
               </div>
             )}
@@ -440,36 +496,43 @@ function AdminDashboard() {
                 {volunteers.length === 0 ? (
                   <p className="admin-empty">No applications yet.</p>
                 ) : (
-                  volunteers.map((v) => (
-                    <div key={v.id} className="admin-card">
-                      <div className="admin-card-header">
-                        <div>
-                          <h3>{v.opportunityTitle}</h3>
-                          <p className="admin-meta">Applied by: @{v.userName}</p>
-                          <p className="admin-meta">Date: {formatDate(v.appliedAt)}</p>
+                  <>
+                    {volunteerPagination.paginated.map((v) => (
+                      <div key={v.id} className="admin-card">
+                        <div className="admin-card-header">
+                          <div>
+                            <h3>{v.opportunityTitle}</h3>
+                            <p className="admin-meta">Applied by: @{v.userName}</p>
+                            <p className="admin-meta">Date: {formatDate(v.appliedAt)}</p>
+                          </div>
+                          <span className={"status-badge " + (v.status?.toLowerCase() || "pending")}>
+                            {v.status || "Pending"}
+                          </span>
                         </div>
-                        <span className={"status-badge " + (v.status?.toLowerCase() || "pending")}>
-                          {v.status || "Pending"}
-                        </span>
+                        <div className="admin-actions">
+                          <button
+                            className="approve-btn"
+                            onClick={() => handleVolunteerStatus(v.id, "Approved")}
+                            disabled={v.status === "Approved"}
+                          >
+                            {v.status === "Approved" ? "✓ Approved" : "Approve"}
+                          </button>
+                          <button
+                            className="reject-btn"
+                            onClick={() => handleVolunteerStatus(v.id, "Rejected")}
+                            disabled={v.status === "Rejected"}
+                          >
+                            {v.status === "Rejected" ? "✗ Rejected" : "Reject"}
+                          </button>
+                        </div>
                       </div>
-                      <div className="admin-actions">
-                        <button
-                          className="approve-btn"
-                          onClick={() => handleVolunteerStatus(v.id, "Approved")}
-                          disabled={v.status === "Approved"}
-                        >
-                          {v.status === "Approved" ? "✓ Approved" : "Approve"}
-                        </button>
-                        <button
-                          className="reject-btn"
-                          onClick={() => handleVolunteerStatus(v.id, "Rejected")}
-                          disabled={v.status === "Rejected"}
-                        >
-                          {v.status === "Rejected" ? "✗ Rejected" : "Reject"}
-                        </button>
-                      </div>
-                    </div>
-                  ))
+                    ))}
+                    <Pagination
+                      page={volunteerPagination.page}
+                      totalPages={volunteerPagination.totalPages}
+                      setPage={volunteerPagination.setPage}
+                    />
+                  </>
                 )}
               </div>
             )}
@@ -503,59 +566,51 @@ function AdminDashboard() {
                     ))}
                   </div>
                 </div>
-                {(() => {
-                  const filtered = users.filter((u) => {
-                    const matchesRole = userRoleFilter === "All" || u.role === userRoleFilter;
-                    const search = userSearch.toLowerCase();
-                    const matchesSearch =
-                      !search ||
-                      u.userName?.toLowerCase().includes(search) ||
-                      u.email?.toLowerCase().includes(search) ||
-                      u.name?.toLowerCase().includes(search) ||
-                      u.surname?.toLowerCase().includes(search);
-                    return matchesRole && matchesSearch;
-                  });
-                  return filtered.length === 0 ? (
-                    <p className="admin-empty">No users found.</p>
-                  ) : (
-                    <>
-                      <p className="results-count">
-                        Showing {filtered.length} of {users.length} users
-                      </p>
-                      {filtered.map((u) => (
-                        <div key={u.userName} className="admin-card">
-                          <div className="admin-card-header">
-                            <div>
-                              <h3>@{u.userName}</h3>
-                              {u.name && (
-                                <p className="admin-meta">{u.name} {u.surname}</p>
-                              )}
-                              <p className="admin-meta">{u.email}</p>
-                            </div>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", alignItems: "flex-end" }}>
-                              <span className={"status-badge " + u.role?.toLowerCase()}>
-                                {u.role}
-                              </span>
-                              {u.mentorStatus && (
-                                <span className={"status-badge " + u.mentorStatus.toLowerCase()}>
-                                  Mentor: {u.mentorStatus}
-                                </span>
-                              )}
-                            </div>
+                {filteredUsers.length === 0 ? (
+                  <p className="admin-empty">No users found.</p>
+                ) : (
+                  <>
+                    <p className="results-count">
+                      Showing {Math.min(userPagination.page * 15, filteredUsers.length)} of {filteredUsers.length} users
+                    </p>
+                    {userPagination.paginated.map((u) => (
+                      <div key={u.userName} className="admin-card">
+                        <div className="admin-card-header">
+                          <div>
+                            <h3>@{u.userName}</h3>
+                            {u.name && (
+                              <p className="admin-meta">{u.name} {u.surname}</p>
+                            )}
+                            <p className="admin-meta">{u.email}</p>
                           </div>
-                          <div className="admin-actions">
-                            <button
-                              className="reject-btn"
-                              onClick={() => handleDeleteUser(u.userName)}
-                            >
-                              Delete User
-                            </button>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", alignItems: "flex-end" }}>
+                            <span className={"status-badge " + u.role?.toLowerCase()}>
+                              {u.role}
+                            </span>
+                            {u.mentorStatus && (
+                              <span className={"status-badge " + u.mentorStatus.toLowerCase()}>
+                                Mentor: {u.mentorStatus}
+                              </span>
+                            )}
                           </div>
                         </div>
-                      ))}
-                    </>
-                  );
-                })()}
+                        <div className="admin-actions">
+                          <button
+                            className="reject-btn"
+                            onClick={() => handleDeleteUser(u.userName)}
+                          >
+                            Delete User
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    <Pagination
+                      page={userPagination.page}
+                      totalPages={userPagination.totalPages}
+                      setPage={userPagination.setPage}
+                    />
+                  </>
+                )}
               </div>
             )}
 
@@ -566,66 +621,73 @@ function AdminDashboard() {
                 {posts.length === 0 ? (
                   <p className="admin-empty">No posts found.</p>
                 ) : (
-                  posts.map((p) => (
-                    <div key={p.id} className="admin-card">
-                      <div className="admin-card-header">
-                        <div>
-                          <h3>@{p.userName}</h3>
-                          <p className="admin-meta">{formatDate(p.createdAt)}</p>
+                  <>
+                    {postPagination.paginated.map((p) => (
+                      <div key={p.id} className="admin-card">
+                        <div className="admin-card-header">
+                          <div>
+                            <h3>@{p.userName}</h3>
+                            <p className="admin-meta">{formatDate(p.createdAt)}</p>
+                          </div>
+                          <div className="admin-post-stats">
+                            <span>♥ {p.likes?.length || 0}</span>
+                            <span>💬 {p.comments?.length || 0}</span>
+                          </div>
                         </div>
-                        <div className="admin-post-stats">
-                          <span>♥ {p.likes?.length || 0}</span>
-                          <span>💬 {p.comments?.length || 0}</span>
-                        </div>
-                      </div>
-                      <p className="admin-post-content">{p.content}</p>
-                      {p.comments && p.comments.length > 0 && (
-                        <div className="admin-comments-section">
-                          <button
-                            className="toggle-comments-btn"
-                            onClick={() =>
-                              setExpandedPosts((prev) => ({
-                                ...prev,
-                                [p.id]: !prev[p.id],
-                              }))
-                            }
-                          >
-                            {expandedPosts[p.id]
-                              ? "Hide Comments"
-                              : `Show ${p.comments.length} Comment${p.comments.length > 1 ? "s" : ""}`}
-                          </button>
-                          {expandedPosts[p.id] && (
-                            <div className="admin-comments-list">
-                              {p.comments.map((c, i) => (
-                                <div key={i} className="admin-comment-row">
-                                  <div className="admin-comment-content">
-                                    <span className="admin-comment-author">@{c.userName}</span>
-                                    <span className="admin-comment-text">{c.text}</span>
-                                    <span className="admin-comment-time">{formatDate(c.createdAt)}</span>
+                        <p className="admin-post-content">{p.content}</p>
+                        {p.comments && p.comments.length > 0 && (
+                          <div className="admin-comments-section">
+                            <button
+                              className="toggle-comments-btn"
+                              onClick={() =>
+                                setExpandedPosts((prev) => ({
+                                  ...prev,
+                                  [p.id]: !prev[p.id],
+                                }))
+                              }
+                            >
+                              {expandedPosts[p.id]
+                                ? "Hide Comments"
+                                : `Show ${p.comments.length} Comment${p.comments.length > 1 ? "s" : ""}`}
+                            </button>
+                            {expandedPosts[p.id] && (
+                              <div className="admin-comments-list">
+                                {p.comments.map((c, i) => (
+                                  <div key={i} className="admin-comment-row">
+                                    <div className="admin-comment-content">
+                                      <span className="admin-comment-author">@{c.userName}</span>
+                                      <span className="admin-comment-text">{c.text}</span>
+                                      <span className="admin-comment-time">{formatDate(c.createdAt)}</span>
+                                    </div>
+                                    <button
+                                      className="delete-comment-btn"
+                                      onClick={() => handleDeleteComment(p.id, i)}
+                                      title="Delete comment"
+                                    >
+                                      ✕
+                                    </button>
                                   </div>
-                                  <button
-                                    className="delete-comment-btn"
-                                    onClick={() => handleDeleteComment(p.id, i)}
-                                    title="Delete comment"
-                                  >
-                                    ✕
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          )}
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <div className="admin-actions">
+                          <button
+                            className="reject-btn"
+                            onClick={() => handleDeletePost(p.id)}
+                          >
+                            Delete Post
+                          </button>
                         </div>
-                      )}
-                      <div className="admin-actions">
-                        <button
-                          className="reject-btn"
-                          onClick={() => handleDeletePost(p.id)}
-                        >
-                          Delete Post
-                        </button>
                       </div>
-                    </div>
-                  ))
+                    ))}
+                    <Pagination
+                      page={postPagination.page}
+                      totalPages={postPagination.totalPages}
+                      setPage={postPagination.setPage}
+                    />
+                  </>
                 )}
               </div>
             )}
@@ -733,28 +795,35 @@ function AdminDashboard() {
                 {opportunities.length === 0 ? (
                   <p className="admin-empty">No opportunities yet. Create one above.</p>
                 ) : (
-                  opportunities.map((opp) => (
-                    <div key={opp.id} className="admin-card">
-                      <div className="admin-card-header">
-                        <div>
-                          <h3>{opp.title}</h3>
-                          <p className="admin-meta">📅 {opp.date} &nbsp;·&nbsp; 📍 {opp.location}</p>
+                  <>
+                    {oppPagination.paginated.map((opp) => (
+                      <div key={opp.id} className="admin-card">
+                        <div className="admin-card-header">
+                          <div>
+                            <h3>{opp.title}</h3>
+                            <p className="admin-meta">📅 {opp.date} &nbsp;·&nbsp; 📍 {opp.location}</p>
+                          </div>
+                          <span className={"status-badge " + (opp.status?.toLowerCase() || "open")}>
+                            {opp.status || "Open"}
+                          </span>
                         </div>
-                        <span className={"status-badge " + (opp.status?.toLowerCase() || "open")}>
-                          {opp.status || "Open"}
-                        </span>
+                        <p className="admin-bio">{opp.description}</p>
+                        <div className="admin-actions">
+                          <button className="approve-btn" onClick={() => handleEditOpportunity(opp)}>
+                            Edit
+                          </button>
+                          <button className="reject-btn" onClick={() => handleDeleteOpportunity(opp.id)}>
+                            Delete
+                          </button>
+                        </div>
                       </div>
-                      <p className="admin-bio">{opp.description}</p>
-                      <div className="admin-actions">
-                        <button className="approve-btn" onClick={() => handleEditOpportunity(opp)}>
-                          Edit
-                        </button>
-                        <button className="reject-btn" onClick={() => handleDeleteOpportunity(opp.id)}>
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  ))
+                    ))}
+                    <Pagination
+                      page={oppPagination.page}
+                      totalPages={oppPagination.totalPages}
+                      setPage={oppPagination.setPage}
+                    />
+                  </>
                 )}
               </div>
             )}
@@ -875,34 +944,40 @@ function AdminDashboard() {
                     </span>
                   </p>
                 ) : (
-                  ssiEvents.map((event) => (
-                    <div key={event.id} className="admin-card">
-                      <div className="admin-card-header">
-                        <div>
-                          <h3>{event.title}</h3>
-                          <p className="admin-meta">
-                            📅 {formatDate(event.eventDate)}
-                            &nbsp;·&nbsp;
-                            📍 {event.location}
-                            {event.type && <>&nbsp;·&nbsp; 🏷️ {event.type}</>}
-                          </p>
+                  <>
+                    {ssiPagination.paginated.map((event) => (
+                      <div key={event.id} className="admin-card">
+                        <div className="admin-card-header">
+                          <div>
+                            <h3>{event.title}</h3>
+                            <p className="admin-meta">
+                              📅 {formatDate(event.eventDate)}
+                              &nbsp;·&nbsp;
+                              📍 {event.location}
+                              {event.type && <>&nbsp;·&nbsp; 🏷️ {event.type}</>}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="admin-bio">{event.description}</p>
+                        <div className="admin-actions">
+                          <button
+                            className="reject-btn"
+                            onClick={() => handleDeleteSsiEvent(event.id)}
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
-                      <p className="admin-bio">{event.description}</p>
-                      <div className="admin-actions">
-                        <button
-                          className="reject-btn"
-                          onClick={() => handleDeleteSsiEvent(event.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  ))
+                    ))}
+                    <Pagination
+                      page={ssiPagination.page}
+                      totalPages={ssiPagination.totalPages}
+                      setPage={ssiPagination.setPage}
+                    />
+                  </>
                 )}
               </div>
             )}
-
           </>
         )}
       </div>

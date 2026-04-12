@@ -494,3 +494,42 @@
     grid-template-columns: 1fr;
   }
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #222;
+}
+
+.page-btn {
+  padding: 8px 20px;
+  background: transparent;
+  border: 1.5px solid #d4af37;
+  border-radius: 999px;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #d4af37;
+  color: #111;
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.82rem;
+  color: #888;
+  font-family: 'Cinzel', serif;
+}
