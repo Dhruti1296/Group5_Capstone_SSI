@@ -84,7 +84,7 @@ namespace SSI.API.Controllers
                 });
             }
 
-            return Unauthorized("Invalid username or password");
+            return Unauthorized("Invalid username or password.");
         }
 
         [HttpDelete("clear-users")]
@@ -93,6 +93,6 @@ namespace SSI.API.Controllers
             await _context.Users.DeleteManyAsync(_ => true);
             await _context.Admins.DeleteManyAsync(_ => true);
             return Ok("All users deleted.");
-        }      
+        }
     }
 }

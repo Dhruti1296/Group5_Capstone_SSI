@@ -62,3 +62,14 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+# Visual Studio files
+.vs/
+**/.vs/
+
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
