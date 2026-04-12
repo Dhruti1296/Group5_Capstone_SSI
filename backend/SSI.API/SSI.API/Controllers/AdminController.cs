@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SSI.API.Models;
 using SSI.API.Services;
+using SSI.API.Data;
+using MongoDB.Driver;
 
 namespace SSI.API.Controllers
 {
@@ -16,6 +18,7 @@ namespace SSI.API.Controllers
         private readonly VolunteerService _volunteerService;
         private readonly NotificationService _notificationService;
         private readonly VolunteerOpportunityService _opportunityService;
+        private readonly MongoDbContext _context;
 
         public AdminController(
             UserServices userServices,
@@ -23,7 +26,8 @@ namespace SSI.API.Controllers
             MentorService mentorService,
             VolunteerService volunteerService,
             NotificationService notificationService,
-            VolunteerOpportunityService opportunityService)
+            VolunteerOpportunityService opportunityService,
+            MongoDbContext context)
         {
             _userServices = userServices;
             _postService = postService;
@@ -31,6 +35,7 @@ namespace SSI.API.Controllers
             _volunteerService = volunteerService;
             _notificationService = notificationService;
             _opportunityService = opportunityService;
+            _context = context;
         }
 
         // GET /api/admin/users
@@ -167,6 +172,20 @@ public async Task<IActionResult> DeleteOpportunity(string id)
 {
     await _opportunityService.DeleteAsync(id);
     return Ok("Deleted.");
+}
+
+// GET /api/admins/{userName} — used by Event Microservice for admin validation
+[AllowAnonymous]
+[HttpGet("/api/admins/{userName}")]
+public async Task<IActionResult> GetAdminByUserName(string userName)
+{
+    var admin = await _context.Admins
+        .Find(a => a.UserName == userName)
+        .FirstOrDefaultAsync();
+
+    if (admin == null) return NotFound("Admin not found.");
+
+    return Ok(new { admin.UserName, admin.Role });
 }
 
 

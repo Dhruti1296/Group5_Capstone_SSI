@@ -63,10 +63,16 @@ function EventDetail() {
     <div className="event-detail-page">
       <Navbar />
 
-      <div className="event-detail-container">
-        <button className="event-back-btn" onClick={() => navigate("/events")}>
-          ← Back to Events
-        </button>
+     <div className="event-detail-container">
+<button
+  className="event-back-btn"
+  onClick={() => {
+    console.log("back clicked");
+    navigate("/events");
+  }}
+>
+  ← Back to Events
+</button>
 
         {loading ? (
           <p className="event-detail-loading">Loading event details...</p>

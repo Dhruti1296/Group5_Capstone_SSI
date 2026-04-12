@@ -5,6 +5,7 @@ import { authFetch } from "../../utils/authFetch";
 import "./AdminDashboard.css";
 
 const API = "http://localhost:5277";
+const EVENT_SERVICE = "http://localhost:5237";
 
 function AdminDashboard() {
   const { user, logout } = useContext(UserContext);
@@ -19,14 +20,22 @@ function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [opportunities, setOpportunities] = useState([]);
+  const [ssiEvents, setSsiEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [expandedPosts, setExpandedPosts] = useState({});
+
   const [oppForm, setOppForm] = useState({
     title: "", description: "", date: "", location: "", rawDate: ""
   });
   const [showOppForm, setShowOppForm] = useState(false);
   const [editingOpp, setEditingOpp] = useState(null);
+
+  const [ssiEventForm, setSsiEventForm] = useState({
+    title: "", description: "", type: "", location: "", rawDate: "", eventDate: ""
+  });
+  const [showSsiForm, setShowSsiForm] = useState(false);
+  const [editingSsiEvent, setEditingSsiEvent] = useState(null);
 
   const filteredMentors = mentors.filter((m) => {
     if (mentorFilter === "All") return true;
@@ -54,6 +63,14 @@ function AdminDashboard() {
         if (uRes.ok) setUsers(await uRes.json());
         if (pRes.ok) setPosts(await pRes.json());
         if (oppRes.ok) setOpportunities(await oppRes.json());
+
+        // Fetch SSI events from microservice
+        try {
+          const ssiRes = await fetch(`${EVENT_SERVICE}/api/events`);
+          if (ssiRes.ok) setSsiEvents(await ssiRes.json());
+        } catch (err) {
+          console.warn("Event microservice not running:", err.message);
+        }
       } catch (err) {
         console.error("Failed to load admin data:", err);
       } finally {
@@ -63,6 +80,7 @@ function AdminDashboard() {
     fetchAll();
   }, []);
 
+  // ── Mentor handlers ───────────────────────────
   const handleApproveMentor = async (id) => {
     const res = await authFetch(`${API}/api/mentor/${id}/approve`, { method: "PATCH" });
     if (res.ok) {
@@ -83,6 +101,7 @@ function AdminDashboard() {
     }
   };
 
+  // ── Post handlers ─────────────────────────────
   const handleDeleteComment = async (postId, commentIndex) => {
     const res = await authFetch(
       `${API}/api/admin/posts/${postId}/comments/${commentIndex}`,
@@ -100,14 +119,6 @@ function AdminDashboard() {
     }
   };
 
-  const handleDeleteUser = async (userName) => {
-    const res = await authFetch(`${API}/api/admin/users/${userName}`, { method: "DELETE" });
-    if (res.ok) {
-      setUsers((prev) => prev.filter((u) => u.userName !== userName));
-      showNotification("User deleted.", "success");
-    }
-  };
-
   const handleDeletePost = async (id) => {
     const res = await authFetch(`${API}/api/admin/posts/${id}`, { method: "DELETE" });
     if (res.ok) {
@@ -116,6 +127,16 @@ function AdminDashboard() {
     }
   };
 
+  // ── User handlers ─────────────────────────────
+  const handleDeleteUser = async (userName) => {
+    const res = await authFetch(`${API}/api/admin/users/${userName}`, { method: "DELETE" });
+    if (res.ok) {
+      setUsers((prev) => prev.filter((u) => u.userName !== userName));
+      showNotification("User deleted.", "success");
+    }
+  };
+
+  // ── Volunteer handlers ────────────────────────
   const handleVolunteerStatus = async (id, status) => {
     const res = await authFetch(
       `${API}/api/admin/volunteer-applications/${id}/status`,
@@ -129,6 +150,7 @@ function AdminDashboard() {
     }
   };
 
+  // ── Opportunity handlers ──────────────────────
   const handleCreateOpportunity = async () => {
     if (!oppForm.title || !oppForm.description || !oppForm.date || !oppForm.location) {
       showNotification("All fields are required.", "error");
@@ -190,6 +212,57 @@ function AdminDashboard() {
     setShowOppForm(true);
   };
 
+  // ── SSI Event handlers ────────────────────────
+  const handleCreateSsiEvent = async () => {
+    if (!ssiEventForm.title || !ssiEventForm.description ||
+        !ssiEventForm.eventDate || !ssiEventForm.location) {
+      showNotification("All fields are required.", "error");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("title", ssiEventForm.title);
+    formData.append("description", ssiEventForm.description);
+    formData.append("type", ssiEventForm.type || "");
+    formData.append("location", ssiEventForm.location);
+    formData.append("eventDate", ssiEventForm.eventDate);
+
+    try {
+      const res = await fetch(`${EVENT_SERVICE}/api/events`, {
+        method: "POST",
+        headers: { "adminUserName": user?.userName },
+        body: formData,
+      });
+      if (res.ok) {
+        const updated = await fetch(`${EVENT_SERVICE}/api/events`);
+        if (updated.ok) setSsiEvents(await updated.json());
+        setSsiEventForm({ title: "", description: "", type: "", location: "", rawDate: "", eventDate: "" });
+        setShowSsiForm(false);
+        showNotification("SSI Event created!", "success");
+      } else {
+        const err = await res.text();
+        showNotification("Failed: " + err, "error");
+      }
+    } catch (err) {
+      showNotification("Event service not running.", "error");
+    }
+  };
+
+  const handleDeleteSsiEvent = async (id) => {
+    try {
+      const res = await fetch(`${EVENT_SERVICE}/api/events/${id}`, {
+        method: "DELETE",
+        headers: { "adminUserName": user?.userName },
+      });
+      if (res.ok) {
+        setSsiEvents((prev) => prev.filter((e) => e.id !== id));
+        showNotification("Event deleted.", "success");
+      }
+    } catch (err) {
+      showNotification("Event service not running.", "error");
+    }
+  };
+
+  // ── Utils ─────────────────────────────────────
   const handleLogout = () => {
     logout();
     navigate("/admin/login");
@@ -199,6 +272,19 @@ function AdminDashboard() {
     new Date(iso).toLocaleDateString("en-US", {
       month: "short", day: "numeric", year: "numeric",
     });
+
+  const textareaStyle = {
+    width: "100%",
+    background: "#0a0a0a",
+    border: "1px solid #333",
+    borderRadius: "8px",
+    color: "#fff",
+    padding: "10px 14px",
+    fontFamily: "inherit",
+    fontSize: "0.88rem",
+    resize: "vertical",
+    outline: "none",
+  };
 
   return (
     <div className="admin-dashboard">
@@ -246,6 +332,13 @@ function AdminDashboard() {
             Volunteer Opportunities
             <span className="badge">{opportunities.length}</span>
           </button>
+          <button
+            className={activeTab === "ssiEvents" ? "active" : ""}
+            onClick={() => setActiveTab("ssiEvents")}
+          >
+            SSI Events
+            <span className="badge">{ssiEvents.length}</span>
+          </button>
         </nav>
 
         <button className="admin-logout" onClick={handleLogout}>
@@ -266,7 +359,7 @@ function AdminDashboard() {
           <p className="admin-loading">Loading data...</p>
         ) : (
           <>
-            {/* Mentor Applications */}
+            {/* ── Mentor Applications ── */}
             {activeTab === "mentors" && (
               <div className="admin-section">
                 <h2>Mentor Applications</h2>
@@ -314,9 +407,7 @@ function AdminDashboard() {
                       {m.linkedin && (
                         <p className="admin-meta">
                           LinkedIn:{" "}
-                          <a href={m.linkedin} target="_blank" rel="noreferrer">
-                            {m.linkedin}
-                          </a>
+                          <a href={m.linkedin} target="_blank" rel="noreferrer">{m.linkedin}</a>
                         </p>
                       )}
                       <p className="admin-meta">Applied: {formatDate(m.appliedAt)}</p>
@@ -342,7 +433,7 @@ function AdminDashboard() {
               </div>
             )}
 
-            {/* Volunteer Applications */}
+            {/* ── Volunteer Applications ── */}
             {activeTab === "volunteers" && (
               <div className="admin-section">
                 <h2>Volunteer Applications</h2>
@@ -383,7 +474,7 @@ function AdminDashboard() {
               </div>
             )}
 
-            {/* Manage Users */}
+            {/* ── Manage Users ── */}
             {activeTab === "users" && (
               <div className="admin-section">
                 <h2>Manage Users</h2>
@@ -468,7 +559,7 @@ function AdminDashboard() {
               </div>
             )}
 
-            {/* Post Moderation */}
+            {/* ── Post Moderation ── */}
             {activeTab === "posts" && (
               <div className="admin-section">
                 <h2>Post Moderation</h2>
@@ -539,7 +630,7 @@ function AdminDashboard() {
               </div>
             )}
 
-            {/* Volunteer Opportunities */}
+            {/* ── Volunteer Opportunities ── */}
             {activeTab === "opportunities" && (
               <div className="admin-section">
                 <div className="admin-section-header">
@@ -556,7 +647,6 @@ function AdminDashboard() {
                   </button>
                 </div>
 
-                {/* Create / Edit Form */}
                 {showOppForm && (
                   <div className="admin-card" style={{ marginBottom: "1.5rem" }}>
                     <h3 style={{ color: "#d4af37", marginBottom: "1rem" }}>
@@ -579,13 +669,11 @@ function AdminDashboard() {
                           type="date"
                           value={oppForm.rawDate || ""}
                           onChange={(e) => {
-                            const raw = e.target.value; // "2026-04-20"
+                            const raw = e.target.value;
                             if (!raw) return;
                             const [year, month, day] = raw.split("-");
                             const formatted = new Date(
-                              parseInt(year),
-                              parseInt(month) - 1,
-                              parseInt(day)
+                              parseInt(year), parseInt(month) - 1, parseInt(day)
                             ).toLocaleDateString("en-US", {
                               month: "long", day: "numeric", year: "numeric"
                             });
@@ -618,18 +706,7 @@ function AdminDashboard() {
                         value={oppForm.description}
                         onChange={(e) => setOppForm({ ...oppForm, description: e.target.value })}
                         rows={3}
-                        style={{
-                          width: "100%",
-                          background: "#0a0a0a",
-                          border: "1px solid #333",
-                          borderRadius: "8px",
-                          color: "#fff",
-                          padding: "10px 14px",
-                          fontFamily: "inherit",
-                          fontSize: "0.88rem",
-                          resize: "vertical",
-                          outline: "none",
-                        }}
+                        style={textareaStyle}
                       />
                     </div>
                     <div className="admin-actions" style={{ marginTop: "1rem" }}>
@@ -653,7 +730,6 @@ function AdminDashboard() {
                   </div>
                 )}
 
-                {/* Opportunities List */}
                 {opportunities.length === 0 ? (
                   <p className="admin-empty">No opportunities yet. Create one above.</p>
                 ) : (
@@ -670,15 +746,153 @@ function AdminDashboard() {
                       </div>
                       <p className="admin-bio">{opp.description}</p>
                       <div className="admin-actions">
-                        <button
-                          className="approve-btn"
-                          onClick={() => handleEditOpportunity(opp)}
-                        >
+                        <button className="approve-btn" onClick={() => handleEditOpportunity(opp)}>
                           Edit
                         </button>
+                        <button className="reject-btn" onClick={() => handleDeleteOpportunity(opp.id)}>
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+
+            {/* ── SSI Events ── */}
+            {activeTab === "ssiEvents" && (
+              <div className="admin-section">
+                <div className="admin-section-header">
+                  <h2>SSI Events</h2>
+                  <button
+                    className="approve-btn"
+                    onClick={() => {
+                      setEditingSsiEvent(null);
+                      setSsiEventForm({ title: "", description: "", type: "", location: "", rawDate: "", eventDate: "" });
+                      setShowSsiForm((prev) => !prev);
+                    }}
+                  >
+                    {showSsiForm && !editingSsiEvent ? "Cancel" : "+ New Event"}
+                  </button>
+                </div>
+
+                {showSsiForm && (
+                  <div className="admin-card" style={{ marginBottom: "1.5rem" }}>
+                    <h3 style={{ color: "#d4af37", marginBottom: "1rem" }}>
+                      Create New SSI Event
+                    </h3>
+                    <div className="opp-form-grid">
+                      <div className="opp-form-field">
+                        <label>Title</label>
+                        <input
+                          type="text"
+                          placeholder="Event title"
+                          value={ssiEventForm.title}
+                          onChange={(e) => setSsiEventForm({ ...ssiEventForm, title: e.target.value })}
+                          className="admin-search"
+                        />
+                      </div>
+                      <div className="opp-form-field">
+                        <label>Type</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Workshop, Seminar"
+                          value={ssiEventForm.type}
+                          onChange={(e) => setSsiEventForm({ ...ssiEventForm, type: e.target.value })}
+                          className="admin-search"
+                        />
+                      </div>
+                      <div className="opp-form-field">
+                        <label>Location</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Kitchener – Doon"
+                          value={ssiEventForm.location}
+                          onChange={(e) => setSsiEventForm({ ...ssiEventForm, location: e.target.value })}
+                          className="admin-search"
+                        />
+                      </div>
+                    </div>
+                    <div className="opp-form-field" style={{ marginTop: "0.8rem" }}>
+                      <label>Date</label>
+                      <input
+                        type="date"
+                        value={ssiEventForm.rawDate || ""}
+                        onChange={(e) => {
+                          const raw = e.target.value;
+                          if (!raw) return;
+                          setSsiEventForm({
+                            ...ssiEventForm,
+                            rawDate: raw,
+                            eventDate: new Date(raw + "T12:00:00").toISOString(),
+                          });
+                        }}
+                        className="admin-search"
+                        style={{ colorScheme: "dark" }}
+                      />
+                      {ssiEventForm.rawDate && (
+                        <span style={{ fontSize: "0.75rem", color: "#888", marginTop: "4px" }}>
+                          {new Date(ssiEventForm.rawDate + "T12:00:00").toLocaleDateString("en-US", {
+                            month: "long", day: "numeric", year: "numeric"
+                          })}
+                        </span>
+                      )}
+                    </div>
+                    <div className="opp-form-field" style={{ marginTop: "0.8rem" }}>
+                      <label>Description</label>
+                      <textarea
+                        placeholder="Describe the event..."
+                        value={ssiEventForm.description}
+                        onChange={(e) => setSsiEventForm({ ...ssiEventForm, description: e.target.value })}
+                        rows={3}
+                        style={textareaStyle}
+                      />
+                    </div>
+                    <div className="admin-actions" style={{ marginTop: "1rem" }}>
+                      <button className="approve-btn" onClick={handleCreateSsiEvent}>
+                        Create Event
+                      </button>
+                      <button
+                        className="reject-btn"
+                        onClick={() => {
+                          setShowSsiForm(false);
+                          setEditingSsiEvent(null);
+                          setSsiEventForm({ title: "", description: "", type: "", location: "", rawDate: "", eventDate: "" });
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {ssiEvents.length === 0 ? (
+                  <p className="admin-empty">
+                    No SSI events yet. Create one above.
+                    <br />
+                    <span style={{ fontSize: "0.78rem", color: "#555", marginTop: "6px", display: "block" }}>
+                      Make sure the Event Microservice is running on port 5237.
+                    </span>
+                  </p>
+                ) : (
+                  ssiEvents.map((event) => (
+                    <div key={event.id} className="admin-card">
+                      <div className="admin-card-header">
+                        <div>
+                          <h3>{event.title}</h3>
+                          <p className="admin-meta">
+                            📅 {formatDate(event.eventDate)}
+                            &nbsp;·&nbsp;
+                            📍 {event.location}
+                            {event.type && <>&nbsp;·&nbsp; 🏷️ {event.type}</>}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="admin-bio">{event.description}</p>
+                      <div className="admin-actions">
                         <button
                           className="reject-btn"
-                          onClick={() => handleDeleteOpportunity(opp.id)}
+                          onClick={() => handleDeleteSsiEvent(event.id)}
                         >
                           Delete
                         </button>
@@ -688,6 +902,7 @@ function AdminDashboard() {
                 )}
               </div>
             )}
+
           </>
         )}
       </div>
