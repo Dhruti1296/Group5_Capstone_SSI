@@ -16,7 +16,7 @@
 }
 
 .alumni-header p {
-  color: #ccc;
+  color: #060606;
   font-size: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -94,7 +94,7 @@
 }
 
 .alumni-detail {
-  color: #ccc;
+  color: #0d0d0d;
   font-size: 0.85rem;
   margin: 0 0 0.2rem;
 }
@@ -278,4 +278,16 @@
   color: #555;
   text-align: center;
   padding: 8px 0;
+}
+
+.profile-modal-link {
+  font-size: 0.85rem;
+  color: #d4af37;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.profile-modal-link:hover {
+  color: #fff;
+  text-decoration: underline;
 }

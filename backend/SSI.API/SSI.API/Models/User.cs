@@ -51,5 +51,14 @@ namespace SSI.API.Models
 
         [BsonElement("LockUntil")]
         public DateTime? LockUntil { get; set; } = null;
+
+        [BsonElement("CurrentJob")]
+public string? CurrentJob { get; set; }
+
+[BsonElement("Company")]
+public string? Company { get; set; }
+
+[BsonElement("LinkedIn")]
+public string? LinkedIn { get; set; }
     }
 }

@@ -66,7 +66,7 @@ html {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  z-index:0;
+  z-index: 0;
 }
 
 .background-video {
@@ -235,7 +235,7 @@ html {
   gap: 5rem;
   padding: 2rem 0;
   background: rgb(249, 248, 247);
-  
+
 }
 
 /* Base link style */
@@ -292,12 +292,14 @@ html {
 .side-menu {
   position: fixed;
   top: 0;
-  right: 0;              /* anchor to right side */
+  right: 0;
+  /* anchor to right side */
   width: 320px;
   height: 100%;
   background: #111;
   border-left: 2px solid #d4af37;
-  transform: translateX(100%);    /* start off-screen */
+  transform: translateX(100%);
+  /* start off-screen */
   transition: transform 0.4s ease;
   z-index: 1000;
   padding: 2rem;
@@ -305,7 +307,8 @@ html {
 }
 
 .side-menu.open {
-  transform: translateX(0);       /* slide into view */
+  transform: translateX(0);
+  /* slide into view */
 }
 
 .side-menu.closing {
@@ -313,8 +316,15 @@ html {
 }
 
 @keyframes slideOut {
-  from { transform: translateX(0); opacity: 1; }
-  to   { transform: translateX(100%); opacity: 0; }
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 .side-menu h2,
@@ -360,20 +370,15 @@ html {
 
 .community-section {
   background: linear-gradient(to bottom,
-      #deb169 0.2%,
-      /* golden start */
-      #111 40%,
-      /* transition into black */
-      #111 75%,
-      /* deep black middle */
-      #deb169 100%
-      /* golden finish */
-    );
+      #deb169 0%,
+      #1a1a1e 25%,
+      #111114 50%,
+      #1a1a1e 75%,
+      #deb169 100%);
   width: 100%;
   padding: 4rem 2rem;
   text-align: center;
   color: #fff;
-  /* readable text */
   font-family: 'Cinzel', serif;
   animation: fadeUp 1s ease forwards;
 }
@@ -489,7 +494,8 @@ html {
 .link-bar,
 .community-section {
   position: relative;
-  z-index: 10; /* ensures they sit above video + overlay */
+  z-index: 10;
+  /* ensures they sit above video + overlay */
 }
 
 .video-fade-overlay {
@@ -506,8 +512,13 @@ html {
 }
 
 @keyframes fadeOverlay {
-  from { opacity: 1; }
-  to   { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 .menu-card {
@@ -533,13 +544,27 @@ html {
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slideOut {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(100%); opacity: 0; }
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 .menu-overlay {
@@ -575,4 +600,34 @@ html {
   background: rgba(212, 175, 55, 0.15);
   border-color: #d4af37;
   color: #d4af37;
+}
+
+/* Flaticon base sizing */
+.fi {
+  font-size: 1rem;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Profile nav icons */
+.profile-nav-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Event/News detail meta icons */
+.event-meta-icon,
+.news-meta-icon {
+  font-size: 1rem;
+}
+
+/* Feature card icons in About page */
+.about-feature-icon .fi {
+  font-size: 2rem;
+}
+
+/* Social icons in Footer */
+.social-icon .fi {
+  font-size: 1.2rem;
 }

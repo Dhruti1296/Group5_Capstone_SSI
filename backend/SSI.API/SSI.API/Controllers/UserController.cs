@@ -40,7 +40,10 @@ namespace SSI.API.Controllers
                 user.CourseEndMonth,
                 user.CourseEndYear,
                 user.Department,
-                user.PassedOutYear
+                user.PassedOutYear,
+                user.CurrentJob,
+                user.Company,
+                user.LinkedIn
             });
         }
 
@@ -66,40 +69,59 @@ namespace SSI.API.Controllers
                 updatedUser.CourseEndMonth,
                 updatedUser.CourseEndYear,
                 updatedUser.Department,
-                updatedUser.PassedOutYear
+                updatedUser.PassedOutYear,
+                updatedUser.CurrentJob,
+                updatedUser.Company,
+                updatedUser.LinkedIn
             });
         }
 
-        // GET /api/user/list?role=Alumni
-      // GET /api/user/list?role=Alumni
-[AllowAnonymous]
-[HttpGet("list")]
-public async Task<IActionResult> GetByRole([FromQuery] string role)
-{
-    if (string.IsNullOrWhiteSpace(role))
-        return BadRequest("Role is required.");
+        // GET /api/user/list?role=Alumni or Student
+        [AllowAnonymous]
+        [HttpGet("list")]
+        public async Task<IActionResult> GetByRole([FromQuery] string role)
+        {
+            if (string.IsNullOrWhiteSpace(role))
+                return BadRequest("Role is required.");
 
-    var users = await _userServices.GetByRoleAsync(role);
+            var users = await _userServices.GetByRoleAsync(role);
 
-    var result = users.Select(u => new
-    {
-        u.UserName,
-        u.Name,
-        u.Surname,
-        u.ProfilePic,
-        u.PassedOutYear,
-        u.CourseName,
-        u.Department
-    });
+            var result = users.Select(u => new
+            {
+                u.UserName,
+                u.Name,
+                u.Surname,
+                u.ProfilePic,
+                u.PassedOutYear,
+                u.CourseName,
+                u.Department,
+                u.CurrentJob,
+                u.Company,
+                u.LinkedIn
+            });
 
-    return Ok(result);
-}
+            return Ok(result);
+        }
 
-        [HttpGet("ping")]
-[AllowAnonymous]
-public IActionResult Ping()
-{
-    return Ok("UserController is reachable");
-}
+        // TEMPORARY — delete after use
+        [HttpPatch("fix-profile-pics")]
+        [AllowAnonymous]
+        public async Task<IActionResult> FixProfilePics()
+        {
+            var users = await _userServices.GetAllAsync();
+            int count = 0;
+            foreach (var u in users)
+            {
+                if (u.ProfilePic == "string")
+                {
+                    u.ProfilePic = null;
+                    await _userServices.UpdateAsync(u);
+                    count++;
+                }
+            }
+            return Ok($"Fixed {count} users.");
+        }
+
+      
     }
 }

@@ -106,14 +106,10 @@ const Navbar = () => {
           {/* Notification Bell */}
           {user && user.role !== "Admin" && (
             <div className="notif-wrapper" ref={notifRef}>
-              <button
-                className="notif-bell"
-                onClick={() => setNotifOpen((prev) => !prev)}
-              >
-                🔔
-                {unreadCount > 0 && (
-                  <span className="notif-count">{unreadCount}</span>
-                )}
+
+              <button className="notif-bell" onClick={() => setNotifOpen((prev) => !prev)}>
+                <i className="fi fi-rr-bell"></i>
+                {unreadCount > 0 && <span className="notif-count">{unreadCount}</span>}
               </button>
 
               {notifOpen && (
@@ -121,29 +117,29 @@ const Navbar = () => {
                   <div className="notif-header">
                     <span>Notifications</span>
                     {unreadCount > 0 && (
-                      <button
-                        className="mark-read-btn"
-                        onClick={handleMarkAllRead}
-                      >
+                      <button className="mark-read-btn" onClick={handleMarkAllRead}>
                         Mark all read
                       </button>
                     )}
                   </div>
 
-                  {notifications.length === 0 ? (
-                    <p className="notif-empty">No notifications yet.</p>
-                  ) : (
-                    notifications.map((n) => (
-                      <div
-                        key={n.id}
-                        className={"notif-item " + (n.isRead ? "read" : "unread") + " " + n.type}
-                        onClick={() => handleNotifClick(n)}
-                      >
-                        <p className="notif-message">{n.message}</p>
-                        <span className="notif-time">{formatTime(n.createdAt)}</span>
-                      </div>
-                    ))
-                  )}
+                  {/* Scrollable content in its own div */}
+                  <div className="notif-scroll-body">
+                    {notifications.length === 0 ? (
+                      <p className="notif-empty">No notifications yet.</p>
+                    ) : (
+                      notifications.map((n) => (
+                        <div
+                          key={n.id}
+                          className={"notif-item " + (n.isRead ? "read" : "unread") + " " + n.type}
+                          onClick={() => handleNotifClick(n)}
+                        >
+                          <p className="notif-message">{n.message}</p>
+                          <span className="notif-time">{formatTime(n.createdAt)}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -203,18 +199,42 @@ const Navbar = () => {
               )}
               <li><Link to="/news" onClick={handleMenuClose}>News</Link></li>
               <li><Link to="/events" onClick={handleMenuClose}>Events</Link></li>
-              <li><Link to="/alumni" onClick={handleMenuClose}>Alumni</Link></li>
-              <li><Link to="/volunteer" onClick={handleMenuClose}>Volunteer</Link></li>
-              <li><Link to="/mentor" onClick={handleMenuClose}>Mentor</Link></li>
-              <li><Link to="/edit-profile" onClick={handleMenuClose}>Edit Profile</Link></li>
-              {user && user.userName !== "Guest" ? (
+              <li><Link to="/alumni" onClick={handleMenuClose}>Alumni Directory</Link></li>
+
+              {/* Role-based links */}
+              {user && user.userName !== "Guest" && (
+                <>
+                  <li><Link to="/volunteer" onClick={handleMenuClose}>Volunteer</Link></li>
+                  {user.role === "Alumni" ? (
+                    <>
+                      <li><Link to="/become-mentor" onClick={handleMenuClose}>Be a Mentor</Link></li>
+                      <li><Link to="/students" onClick={handleMenuClose}>Student Directory</Link></li>
+                    </>
+                  ) : user.role === "Student" ? (
+                    <>
+                      <li><Link to="/mentor" onClick={handleMenuClose}>Request Mentor</Link></li>
+                      <li><Link to="/students" onClick={handleMenuClose}>Student Directory</Link></li>
+                    </>
+                  ) : null}
+                  <li><Link to="/edit-profile" onClick={handleMenuClose}>Edit Profile</Link></li>
+                </>
+              )}
+
+              {/* Guest links */}
+              {(!user || user.userName === "Guest") && (
+                <>
+                  <li><Link to="/login" onClick={handleMenuClose}>Login</Link></li>
+                  <li><Link to="/register" onClick={handleMenuClose}>Register</Link></li>
+                </>
+              )}
+
+              {/* Logout */}
+              {user && user.userName !== "Guest" && (
                 <li>
                   <button onClick={handleLogout} className="menu-logout-btn">
                     Logout
                   </button>
                 </li>
-              ) : (
-                <li><Link to="/login" onClick={handleMenuClose}>Login</Link></li>
               )}
             </ul>
           </div>

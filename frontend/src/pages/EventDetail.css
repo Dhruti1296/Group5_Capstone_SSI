@@ -1,3 +1,4 @@
+/* ── Page ────────────────────────────────── */
 .event-detail-page {
   min-height: 100vh;
   background: linear-gradient(140deg, #000 40%, #deb169 85%);
@@ -5,20 +6,27 @@
 }
 
 /* ── Loading & Error ─────────────────────── */
-.event-detail-loading {
+.event-detail-loading,
+.event-detail-error {
   text-align: center;
-  color: #aaa;
-  font-size: 1rem;
   padding: 6rem 2rem;
   width: 100%;
+  font-size: 1rem;
+}
+
+.event-detail-loading {
+  color: #aaa;
 }
 
 .event-detail-error {
-  text-align: center;
   color: #e05c5c;
-  font-size: 1rem;
-  padding: 6rem 2rem;
-  width: 100%;
+}
+
+/* ── Container ───────────────────────────── */
+.event-detail-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 120px 2rem 4rem;
 }
 
 /* ── Card ────────────────────────────────── */
@@ -27,6 +35,35 @@
   border: 1px solid #333;
   border-radius: 16px;
   padding: 2rem;
+}
+
+/* ── Back Button ─────────────────────────── */
+.event-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  padding: 10px 22px;
+  background: transparent;
+  border: 1.5px solid #d4af37;
+  border-radius: 999px;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.event-back-btn:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+.event-back-btn:active {
+  transform: scale(0.96);
+  background: #b8942e;
+  color: #111;
 }
 
 /* ── Title ───────────────────────────────── */
@@ -118,9 +155,9 @@
 
 .event-register-btn:hover {
   background: #fff;
-  color: #111;
 }
 
+/* shared link style */
 .event-external-link {
   color: #d4af37;
   font-size: 0.88rem;
@@ -133,7 +170,7 @@
   text-decoration: underline;
 }
 
-/* ── Footer ──────────────────────────────── */
+/* ── Footer ─────────────────────────────── */
 .event-detail-footer {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
@@ -150,47 +187,10 @@
   text-decoration: none;
   font-size: 0.88rem;
   font-weight: 600;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .event-detail-source-btn:hover {
   background: #d4af37;
   color: #111;
-}
-
-.event-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 1.5rem;
-  padding: 10px 22px;
-  background: transparent;
-  border: 1.5px solid #d4af37;
-  border-radius: 999px;
-  color: #d4af37;
-  font-family: 'Cinzel', serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
-  position: relative;
-  z-index: 10;
-  margin-top: 0;
-}
-
-.event-back-btn:hover {
-  background: #d4af37;
-  color: #111;
-}
-
-.event-back-btn:active {
-  transform: scale(0.96);
-  background: #b8942e;
-  color: #111;
-}
-
-.event-detail-container {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 120px 2rem 4rem;
 }

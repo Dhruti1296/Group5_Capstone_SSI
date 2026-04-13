@@ -269,3 +269,12 @@
 .chat-read-receipt.read {
   color: #4FC3F7;
 }
+
+.icon-smile {
+  color: #d4af37;
+}
+
+.icon-smile:hover {
+  color: #ecefee;
+  transition: color 0.3s ease;
+}

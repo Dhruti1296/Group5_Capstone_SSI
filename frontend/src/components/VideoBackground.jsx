@@ -141,8 +141,7 @@ const VideoBackground = () => {
         <p>
           We support your academic success, personal growth, and overall well-being
           throughout your college journey. From guidance and campus resources to Alumni
-          Connect opportunities, we’re here to help you thrive during and beyond your
-          time on campus. Learn more about us at...{" "}
+          Connect opportunities, we’re here to help you. Learn more about us at...{" "}
           <a href="/about" className="circle-arrow">⮞⮞</a>
         </p>
       </div>

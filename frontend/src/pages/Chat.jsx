@@ -161,7 +161,7 @@ function Chat() {
         {/* Chat header */}
         <div className="chat-header">
           <button className="chat-back" onClick={() => navigate("/dashboard")}>
-            ← Back
+            <i className="fi fi-rr-arrow-left"></i> Back
           </button>
           <div className="chat-header-info">
             <div className="chat-avatar">{otherUser.charAt(0).toUpperCase()}</div>
@@ -236,7 +236,7 @@ function Chat() {
             onClick={() => setShowEmojiPicker((prev) => !prev)}
             title="Add emoji"
           >
-            😊
+            <i className="fi fi-rr-smile icon-smile"></i>
           </button>
           <input
             ref={inputRef}
@@ -252,7 +252,7 @@ function Chat() {
             onClick={handleSend}
             disabled={!connected || !input.trim()}
           >
-            Send
+            <i className="fi fi-rr-paper-plane"></i>
           </button>
         </div>
       </div>

@@ -71,7 +71,7 @@ function EventDetail() {
     navigate("/events");
   }}
 >
-  ← Back to Events
+   <i className="fi fi-rr-arrow-left"></i> Back to Events
 </button>
 
         {loading ? (
@@ -86,19 +86,19 @@ function EventDetail() {
             <div className="event-detail-meta">
               {event.date && (
                 <div className="event-meta-item">
-                  <span className="event-meta-icon">📅</span>
+                  <span className="event-meta-icon"> <i className="fi fi-rr-calendar event-meta-icon"></i></span>
                   <span>{event.date}</span>
                 </div>
               )}
               {event.time && (
                 <div className="event-meta-item">
-                  <span className="event-meta-icon">🕐</span>
+                  <span className="event-meta-icon"><i className="fi fi-rr-clock event-meta-icon"></i></span>
                   <span>{event.time}</span>
                 </div>
               )}
               {event.location && (
                 <div className="event-meta-item">
-                  <span className="event-meta-icon">📍</span>
+                  <span className="event-meta-icon"><i className="fi fi-rr-marker event-meta-icon"></i></span>
                   <span>{event.location}</span>
                 </div>
               )}

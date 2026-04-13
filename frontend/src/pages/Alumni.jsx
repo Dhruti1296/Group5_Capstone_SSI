@@ -28,9 +28,10 @@ function Alumni() {
     fetchAlumni();
   }, []);
 
-  const filtered = alumniList.filter((a) =>
-    a.userName.toLowerCase().includes(search.toLowerCase()) ||
-    (a.name && a.name.toLowerCase().includes(search.toLowerCase()))
+  const filtered = alumniList.filter(
+    (a) =>
+      a.userName.toLowerCase().includes(search.toLowerCase()) ||
+      (a.name && a.name.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
@@ -62,7 +63,7 @@ function Alumni() {
               onClick={() => setSelectedUser(a)}
             >
               <div className="alumni-avatar">
-                {a.profilePic ? (
+                {a.profilePic && a.profilePic.startsWith("data:image") ? (
                   <img src={a.profilePic} alt={a.userName} />
                 ) : (
                   <span>{a.userName.charAt(0).toUpperCase()}</span>
@@ -72,12 +73,6 @@ function Alumni() {
                 <h3 className="alumni-name">
                   {a.name && a.surname ? `${a.name} ${a.surname}` : a.userName}
                 </h3>
-                {a.passedOutYear && (
-                  <p className="alumni-detail">Class of {a.passedOutYear}</p>
-                )}
-                {a.courseName && (
-                  <p className="alumni-detail">{a.courseName}</p>
-                )}
                 <p className="alumni-username">@{a.userName}</p>
               </div>
               <span className="alumni-view-btn">View Profile →</span>
@@ -88,14 +83,29 @@ function Alumni() {
 
       {/* Profile Modal */}
       {selectedUser && (
-        <div className="profile-modal-overlay" onClick={() => setSelectedUser(null)}>
-          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="profile-modal-close" onClick={() => setSelectedUser(null)}>✕</button>
+        <div
+          className="profile-modal-overlay"
+          onClick={() => setSelectedUser(null)}
+        >
+          <div
+            className="profile-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="profile-modal-close"
+              onClick={() => setSelectedUser(null)}
+            >
+              ✕
+            </button>
 
             {/* Avatar */}
             <div className="profile-modal-avatar">
-              {selectedUser.profilePic ? (
-                <img src={selectedUser.profilePic} alt={selectedUser.userName} />
+              {selectedUser.profilePic &&
+                selectedUser.profilePic.startsWith("data:image") ? (
+                <img
+                  src={selectedUser.profilePic}
+                  alt={selectedUser.userName}
+                />
               ) : (
                 <span>{selectedUser.userName.charAt(0).toUpperCase()}</span>
               )}
@@ -114,36 +124,53 @@ function Alumni() {
 
             {/* Details */}
             <div className="profile-modal-details">
-              {selectedUser.courseName && (
-                <div className="profile-modal-row">
-                  <span className="profile-modal-label">🎓 Program</span>
-                  <span className="profile-modal-value">{selectedUser.courseName}</span>
-                </div>
-              )}
               {selectedUser.passedOutYear && (
                 <div className="profile-modal-row">
-                  <span className="profile-modal-label">📅 Graduated</span>
-                  <span className="profile-modal-value">{selectedUser.passedOutYear}</span>
-                </div>
-              )}
-              {selectedUser.department && (
-                <div className="profile-modal-row">
-                  <span className="profile-modal-label">🏫 Department</span>
-                  <span className="profile-modal-value">{selectedUser.department}</span>
-                </div>
-              )}
-              {selectedUser.courseEndYear && (
-                <div className="profile-modal-row">
-                  <span className="profile-modal-label">📆 Graduation Year</span>
+                  <span className="profile-modal-label">🎓 Class of</span>
                   <span className="profile-modal-value">
-                    {selectedUser.courseEndMonth} {selectedUser.courseEndYear}
+                    {selectedUser.passedOutYear}
                   </span>
                 </div>
               )}
-              {!selectedUser.courseName && !selectedUser.passedOutYear &&
-                !selectedUser.department && (
+              {selectedUser.currentJob && (
+                <div className="profile-modal-row">
+                  <span className="profile-modal-label">💼 Job Title</span>
+                  <span className="profile-modal-value">
+                    {selectedUser.currentJob}
+                  </span>
+                </div>
+              )}
+              {selectedUser.company && (
+                <div className="profile-modal-row">
+                  <span className="profile-modal-label">🏢 Company</span>
+                  <span className="profile-modal-value">
+                    {selectedUser.company}
+                  </span>
+                </div>
+              )}
+              {selectedUser.linkedIn && (
+                <div className="profile-modal-row">
+                  <span className="profile-modal-label">🔗 LinkedIn</span>
+                  <a
+                    href={
+                      selectedUser.linkedIn.startsWith("http")
+                        ? selectedUser.linkedIn
+                        : `https://${selectedUser.linkedIn}`
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="profile-modal-link"
+                  >
+                    View Profile ↗
+                  </a>
+                </div>
+              )}
+              {!selectedUser.passedOutYear &&
+                !selectedUser.currentJob &&
+                !selectedUser.company &&
+                !selectedUser.linkedIn && (
                   <p className="profile-modal-empty">
-                    This alumni hasn't filled in their profile details yet.
+                    Alumni profile — connect via the mentorship system.
                   </p>
                 )}
             </div>

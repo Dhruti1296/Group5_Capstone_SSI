@@ -20,7 +20,10 @@ const EditProfile = () => {
         courseEndMonth: "",
         courseEndYear: "",
         department: "",
-        passedOutYear: ""
+        passedOutYear: "",
+        currentJob: "",
+        company: "",
+        linkedIn: ""
     });
 
     const [notification, setNotification] = useState(null);
@@ -37,7 +40,11 @@ const EditProfile = () => {
                 courseEndMonth: user.courseEndMonth || "",
                 courseEndYear: user.courseEndYear || "",
                 department: user.department || "",
-                passedOutYear: user.passedOutYear || ""
+                passedOutYear: user.passedOutYear || "",
+                passedOutYear: user.passedOutYear || "",
+                currentJob: user.currentJob || "",
+                company: user.company || "",
+                linkedIn: user.linkedIn || "",
             });
         }
     }, [user]);
@@ -82,6 +89,10 @@ const EditProfile = () => {
                     courseEndYear: formData.courseEndYear || null,
                     department: formData.department || null,
                     passedOutYear: formData.passedOutYear || null,
+                    passedOutYear: formData.passedOutYear || null,
+                    currentJob: formData.currentJob || null,
+                    company: formData.company || null,
+                    linkedIn: formData.linkedIn || null,
                 }),
             });
 
@@ -99,6 +110,9 @@ const EditProfile = () => {
                     courseEndYear: updated.courseEndYear,
                     department: updated.department,
                     passedOutYear: updated.passedOutYear,
+                    currentJob: updated.currentJob,
+                    company: updated.company,
+                    linkedIn: updated.linkedIn,
                 }));
 
                 showNotification("Profile updated successfully!", "success");
@@ -203,19 +217,51 @@ const EditProfile = () => {
                         </>
                     )}
 
-                  
+
 
                     {user?.role === "Alumni" && (
-                        <label>
-                            Passed Out Year:
-                            <input
-                                type="text"
-                                name="passedOutYear"
-                                value={formData.passedOutYear}
-                                onChange={handleChange}
-                                placeholder="e.g. 2023"
-                            />
-                        </label>
+                        <>
+                            <label>
+                                Passed Out Year:
+                                <input
+                                    type="text"
+                                    name="passedOutYear"
+                                    value={formData.passedOutYear}
+                                    onChange={handleChange}
+                                    placeholder="e.g. 2023"
+                                />
+                            </label>
+                            <label>
+                                Current Job Title:
+                                <input
+                                    type="text"
+                                    name="currentJob"
+                                    value={formData.currentJob}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Software Developer"
+                                />
+                            </label>
+                            <label>
+                                Company:
+                                <input
+                                    type="text"
+                                    name="company"
+                                    value={formData.company}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Google"
+                                />
+                            </label>
+                            <label>
+                                LinkedIn URL:
+                                <input
+                                    type="text"
+                                    name="linkedIn"
+                                    value={formData.linkedIn}
+                                    onChange={handleChange}
+                                    placeholder="https://linkedin.com/in/yourname"
+                                />
+                            </label>
+                        </>
                     )}
 
                     <button

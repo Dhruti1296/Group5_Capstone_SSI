@@ -74,32 +74,32 @@ function About() {
                     <div className="about-features-grid">
                         {[
                             {
-                                icon: "🎓",
+                                icon: <i className="fi fi-rr-graduation-cap"></i>,
                                 title: "Mentorship",
                                 desc: "Alumni mentor current students through a structured request and chat system with real-time messaging.",
                             },
                             {
-                                icon: "🤝",
+                                icon: <i className="fi fi-rr-handshake"></i>,
                                 title: "Volunteering",
                                 desc: "Browse and apply for volunteer opportunities across Conestoga campuses. Track your application status.",
                             },
                             {
-                                icon: "📰",
+                                icon: <i className="fi fi-rr-newspaper"></i>,
                                 title: "Live News",
                                 desc: "Stay updated with news scraped directly from the official Conestoga College website — always current.",
                             },
                             {
-                                icon: "🗓️",
+                                icon: <i className="fi fi-rr-calendar"></i>,
                                 title: "Live Events",
                                 desc: "Discover upcoming college events with full details, registration links, and location information.",
                             },
                             {
-                                icon: "💬",
+                                icon: <i className="fi fi-rr-comments"></i>,
                                 title: "Community Feed",
                                 desc: "Post, like, comment, and connect with your peers in a shared community space.",
                             },
                             {
-                                icon: "🔔",
+                                icon: <i className="fi fi-rr-bell"></i>,
                                 title: "Notifications",
                                 desc: "Get notified when your mentor application or volunteer request is approved or rejected.",
                             },
@@ -148,11 +148,10 @@ function About() {
                     </p>
                     <div className="about-team-grid">
                         {[
-                            { name: "Member 1", role: "Auth & User Profiles" },
-                            { name: "Member 2", role: "Mentorship & Real-time Chat" },
-                            { name: "Member 3", role: "Admin Panel & Notifications" },
-                            { name: "Member 4", role: "News & Events Scraper" },
-                            { name: "Member 5", role: "Event Microservice & UI" },
+                            { name: "Aakash Nair", role: "Chief Bug Whisperer " },
+                            { name: "Christ Vijay", role: "Meme Distribution Officer" },
+                            { name: "Teena Maria Thomas", role: "Agile Cult Leader" },
+                            { name: "Dhruti Rathod", role: "UI Alignment Police" },
                         ].map((m, i) => (
                             <div className="about-team-card" key={i}>
                                 <div className="about-team-avatar">

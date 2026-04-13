@@ -801,7 +801,7 @@ function AdminDashboard() {
                         <div className="admin-card-header">
                           <div>
                             <h3>{opp.title}</h3>
-                            <p className="admin-meta">📅 {opp.date} &nbsp;·&nbsp; 📍 {opp.location}</p>
+                            <p className="admin-meta"><i className="fi fi-rr-calendar"></i> {opp.date} &nbsp;·&nbsp; 📍 {opp.location}</p>
                           </div>
                           <span className={"status-badge " + (opp.status?.toLowerCase() || "open")}>
                             {opp.status || "Open"}
@@ -951,7 +951,7 @@ function AdminDashboard() {
                           <div>
                             <h3>{event.title}</h3>
                             <p className="admin-meta">
-                              📅 {formatDate(event.eventDate)}
+                              <i className="fi fi-rr-calendar"></i> {formatDate(event.eventDate)}
                               &nbsp;·&nbsp;
                               📍 {event.location}
                               {event.type && <>&nbsp;·&nbsp; 🏷️ {event.type}</>}

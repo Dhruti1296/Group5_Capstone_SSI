@@ -69,7 +69,7 @@ function NewsDetail() {
           className="news-back-btn"
           onClick={() => navigate("/news")}
         >
-          ← Back to News
+          <i className="fi fi-rr-arrow-left"></i> Back to News
         </button>
 
         {loading ? (
@@ -79,7 +79,7 @@ function NewsDetail() {
         ) : news ? (
           <div className="news-detail-card">
             {news.date && (
-              <p className="news-detail-date">📅 {news.date}</p>
+              <p className="news-detail-date"><i className="fi fi-rr-calendar"></i> {news.date}</p>
             )}
             <h2 className="news-detail-title">{news.title}</h2>
 

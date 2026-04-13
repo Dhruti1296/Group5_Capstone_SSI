@@ -51,34 +51,40 @@ namespace SSI.API.Services
     await _users.ReplaceOneAsync(u => u.Id == user.Id, user);
 }
 
-        public async Task<User?> UpdateProfileAsync(string userName, UpdateProfileRequest req)
-        {
-            var updates = new List<UpdateDefinition<User>>();
+     public async Task<User?> UpdateProfileAsync(string userName, UpdateProfileRequest req)
+{
+    var updates = new List<UpdateDefinition<User>>();
 
-            if (req.Name != null)
-                updates.Add(Builders<User>.Update.Set(u => u.Name, req.Name));
-            if (req.Surname != null)
-                updates.Add(Builders<User>.Update.Set(u => u.Surname, req.Surname));
-            if (req.ProfilePic != null)
-                updates.Add(Builders<User>.Update.Set(u => u.ProfilePic, req.ProfilePic));
-            if (req.CourseName != null)
-                updates.Add(Builders<User>.Update.Set(u => u.CourseName, req.CourseName));
-            if (req.CourseEndMonth != null)
-                updates.Add(Builders<User>.Update.Set(u => u.CourseEndMonth, req.CourseEndMonth));
-            if (req.CourseEndYear != null)
-                updates.Add(Builders<User>.Update.Set(u => u.CourseEndYear, req.CourseEndYear));
-            if (req.Department != null)
-                updates.Add(Builders<User>.Update.Set(u => u.Department, req.Department));
-            if (req.PassedOutYear != null)
-                updates.Add(Builders<User>.Update.Set(u => u.PassedOutYear, req.PassedOutYear));
+    if (req.Name != null)
+        updates.Add(Builders<User>.Update.Set(u => u.Name, req.Name));
+    if (req.Surname != null)
+        updates.Add(Builders<User>.Update.Set(u => u.Surname, req.Surname));
+    if (req.ProfilePic != null)
+        updates.Add(Builders<User>.Update.Set(u => u.ProfilePic, req.ProfilePic));
+    if (req.CourseName != null)
+        updates.Add(Builders<User>.Update.Set(u => u.CourseName, req.CourseName));
+    if (req.CourseEndMonth != null)
+        updates.Add(Builders<User>.Update.Set(u => u.CourseEndMonth, req.CourseEndMonth));
+    if (req.CourseEndYear != null)
+        updates.Add(Builders<User>.Update.Set(u => u.CourseEndYear, req.CourseEndYear));
+    if (req.Department != null)
+        updates.Add(Builders<User>.Update.Set(u => u.Department, req.Department));
+    if (req.PassedOutYear != null)
+        updates.Add(Builders<User>.Update.Set(u => u.PassedOutYear, req.PassedOutYear));
+    if (req.CurrentJob != null)
+        updates.Add(Builders<User>.Update.Set(u => u.CurrentJob, req.CurrentJob));
+    if (req.Company != null)
+        updates.Add(Builders<User>.Update.Set(u => u.Company, req.Company));
+    if (req.LinkedIn != null)
+        updates.Add(Builders<User>.Update.Set(u => u.LinkedIn, req.LinkedIn));
 
-            if (updates.Count == 0)
-                return await GetByUserNameAsync(userName);
+    if (updates.Count == 0)
+        return await GetByUserNameAsync(userName);
 
-            var combined = Builders<User>.Update.Combine(updates);
-            await _users.UpdateOneAsync(u => u.UserName == userName, combined);
+    var combined = Builders<User>.Update.Combine(updates);
+    await _users.UpdateOneAsync(u => u.UserName == userName, combined);
 
-            return await GetByUserNameAsync(userName);
-        }
+    return await GetByUserNameAsync(userName);
+}
     }
 }

@@ -68,7 +68,7 @@ function Mentor() {
     if (!url) return null;
     return (
       <a href={url} target="_blank" rel="noreferrer" className="mentor-linkedin">
-        LinkedIn
+      <i className="fi fi-brands-linkedin"></i>  LinkedIn
       </a>
     );
   };

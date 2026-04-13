@@ -126,17 +126,17 @@ function Volunteer() {
                   <span className="volunteer-badge">Open</span>
                 </div>
                 <div className="volunteer-meta">
-                  <span>📅 {opp.date}</span>
-                  <span>📍 {opp.location}</span>
+                  <span><i className="fi fi-rr-calendar"></i> {opp.date}</span>
+<span><i className="fi fi-rr-marker"></i> {opp.location}</span>
                 </div>
                 <p className="volunteer-desc">{opp.description}</p>
 
                 {/* Status banner — shows after applying */}
                 {applied[oppId] && (
                   <div className={`volunteer-status-banner ${status?.toLowerCase() || "pending"}`}>
-                    {status === "Approved" && "🎉 Your application has been approved!"}
-                    {status === "Rejected" && "Your application was not selected this time."}
-                    {status === "Pending" && "⏳ Application submitted — awaiting review"}
+                   {status === "Approved" && <><i className="fi fi-rr-check-circle"></i> Your application has been approved!</>}
+{status === "Rejected" && <><i className="fi fi-rr-cross-circle"></i> Your application was not selected.</>}
+{status === "Pending" && <><i className="fi fi-rr-time-forward"></i> Application submitted — awaiting review</>}
                   </div>
                 )}
 

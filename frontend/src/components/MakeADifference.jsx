@@ -67,12 +67,6 @@ const MakeADifference = () => {
             <b className="slide-from-left">Make a Difference.</b>
             <b className="slide-from-right nice-big-serif">Give Back.</b>
           </h2>
-
-          <p className="section-intro-text animate-when-content-appears">
-            The community's annual support of College priorities is a crucial
-            component of what makes our education possible and exceptional.
-            Experience the joy and rewards of giving back.
-          </p>
         </div>
       </section>
 

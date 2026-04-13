@@ -191,7 +191,7 @@ function Events() {
                     <h3 className="custom-event-title">{event.title}</h3>
                     <p className="custom-event-desc">{event.description}</p>
                     <div className="custom-event-meta">
-                      <span>📅 {formatEventDate(event.eventDate)}</span>
+                      <span><i className="fi fi-rr-calendar"></i> {formatEventDate(event.eventDate)}</span>
                       {event.location && <span>📍 {event.location}</span>}
                     </div>
                   </div>

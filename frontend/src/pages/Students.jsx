@@ -131,7 +131,7 @@ function Students() {
               )}
               {selectedUser.courseEndYear && (
                 <div className="profile-modal-row">
-                  <span className="profile-modal-label">📅 Expected Graduation</span>
+                  <span className="profile-modal-label"><i className="fi fi-rr-calendar"></i> Expected Graduation</span>
                   <span className="profile-modal-value">
                     {selectedUser.courseEndMonth} {selectedUser.courseEndYear}
                   </span>

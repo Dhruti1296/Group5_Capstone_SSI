@@ -65,7 +65,8 @@ function PostCard({ post, onDelete, onUpdate }) {
         </div>
         {isOwner && (
           <button className="delete-btn" onClick={handleDelete} title="Delete post">
-            ✕
+            <i className="fi fi-rr-trash"></i>
+
           </button>
         )}
       </div>
@@ -79,13 +80,13 @@ function PostCard({ post, onDelete, onUpdate }) {
           className={`action-btn ${hasLiked ? "liked" : ""}`}
           onClick={handleLike}
         >
-          ♥ {post.likes?.length || 0}
+          <i className={`fi ${hasLiked ? "fi-sr-heart" : "fi-rr-heart"}`}></i> {post.likes?.length || 0}
         </button>
         <button
           className="action-btn"
           onClick={() => setShowComments((v) => !v)}
         >
-          💬 {post.comments?.length || 0}
+          <i className="fi fi-rr-comment"></i> {post.comments?.length || 0}
         </button>
       </div>
 

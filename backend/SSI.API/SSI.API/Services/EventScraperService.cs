@@ -1,4 +1,5 @@
 using HtmlAgilityPack;
+using System.Net;
 
 namespace SSI.API.Services
 {
@@ -11,38 +12,39 @@ namespace SSI.API.Services
         public string DetailUrl { get; set; } = null!;
     }
 
-   public class ScrapedEventLink
-{
-    public string Text { get; set; } = null!;
-    public string Url { get; set; } = null!;
-}
+    public class ScrapedEventLink
+    {
+        public string Text { get; set; } = null!;
+        public string Url { get; set; } = null!;
+    }
 
-public class ScrapedEventDetail
-{
-    public string Title { get; set; } = null!;
-    public string Date { get; set; } = null!;
-    public string Time { get; set; } = null!;
-    public string Location { get; set; } = null!;
-    public string Description { get; set; } = null!;
-    public List<ScrapedEventLink> Links { get; set; } = new();
-    public string DetailUrl { get; set; } = null!;
-}
-public class ScrapedNews
-{
-    public string Title { get; set; } = null!;
-    public string Date { get; set; } = null!;
-    public string Snippet { get; set; } = null!;
-    public string DetailUrl { get; set; } = null!;
-}
+    public class ScrapedEventDetail
+    {
+        public string Title { get; set; } = null!;
+        public string Date { get; set; } = null!;
+        public string Time { get; set; } = null!;
+        public string Location { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public List<ScrapedEventLink> Links { get; set; } = new();
+        public string DetailUrl { get; set; } = null!;
+    }
 
-public class ScrapedNewsDetail
-{
-    public string Title { get; set; } = null!;
-    public string Date { get; set; } = null!;
-    public string ImageUrl { get; set; } = null!;
-    public string Description { get; set; } = null!;
-    public string DetailUrl { get; set; } = null!;
-}
+    public class ScrapedNews
+    {
+        public string Title { get; set; } = null!;
+        public string Date { get; set; } = null!;
+        public string Snippet { get; set; } = null!;
+        public string DetailUrl { get; set; } = null!;
+    }
+
+    public class ScrapedNewsDetail
+    {
+        public string Title { get; set; } = null!;
+        public string Date { get; set; } = null!;
+        public string ImageUrl { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public string DetailUrl { get; set; } = null!;
+    }
 
     public class EventScraperService
     {
@@ -56,6 +58,19 @@ public class ScrapedNewsDetail
                 "Mozilla/5.0 (compatible; SSI-App/1.0)");
         }
 
+        // ✅ CENTRAL CLEAN METHOD
+        private static string Clean(string? text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return "";
+
+            var decoded = WebUtility.HtmlDecode(text).Trim();
+
+            while (decoded.Contains("  "))
+                decoded = decoded.Replace("  ", " ");
+
+            return decoded;
+        }
+
         public async Task<List<ScrapedEvent>> GetEventsAsync()
         {
             var events = new List<ScrapedEvent>();
@@ -66,7 +81,6 @@ public class ScrapedNewsDetail
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
 
-                // Events are in a table — find all rows
                 var tables = doc.DocumentNode.SelectNodes("//table");
                 if (tables == null) return events;
 
@@ -82,11 +96,11 @@ public class ScrapedNewsDetail
                         var cells = row.SelectNodes(".//td | .//th");
                         if (cells == null) continue;
 
-                        // Date row — has colspan and bold date text
                         if (cells.Count == 1 ||
                             (cells.Count >= 1 && row.SelectSingleNode(".//th") != null))
                         {
-                            var dateText = cells[0].InnerText.Trim();
+                            var dateText = Clean(cells[0].InnerText);
+
                             if (!string.IsNullOrEmpty(dateText) &&
                                 !dateText.Contains("Date/Time"))
                             {
@@ -95,22 +109,20 @@ public class ScrapedNewsDetail
                             continue;
                         }
 
-                        // Event row — has time, event link, location
                         if (cells.Count >= 3)
                         {
-                            var timeText = cells[0].InnerText.Trim();
+                            var timeText = Clean(cells[0].InnerText);
                             var eventCell = cells[1];
-                            var locationText = cells[2].InnerText.Trim();
+                            var locationText = Clean(cells[2].InnerText);
 
                             var link = eventCell.SelectSingleNode(".//a");
                             if (link == null) continue;
 
-                            var title = link.InnerText.Trim();
+                            var title = Clean(link.InnerText);
                             var href = link.GetAttributeValue("href", "");
 
                             if (string.IsNullOrEmpty(title)) continue;
 
-                            // Make absolute URL
                             if (!href.StartsWith("http"))
                                 href = "https://blogs1.conestogac.on.ca" + href;
 
@@ -133,352 +145,318 @@ public class ScrapedNewsDetail
 
             return events;
         }
-public async Task<ScrapedEventDetail?> GetEventDetailAsync(string url)
-{
-    try
-    {
-        var html = await _httpClient.GetStringAsync(url);
-        var doc = new HtmlDocument();
-        doc.LoadHtml(html);
 
-        // --- TITLE ---
-        // The title is in <h2> inside <div class="col-12">
-        string title = "";
-        var titleNode = doc.DocumentNode
-            .SelectSingleNode("//div[contains(@class,'col-12')]/h2");
-        if (titleNode != null)
-            title = titleNode.InnerText.Trim();
-
-        // --- META (date/time/location) ---
-        // It's in <div class="col-12" style="border-bottom:2px solid #ccc">
-        string date = "", time = "", location = "";
-        var metaNode = doc.DocumentNode
-            .SelectSingleNode("//div[@style='border-bottom:2px solid #ccc']");
-        if (metaNode != null)
+        public async Task<ScrapedEventDetail?> GetEventDetailAsync(string url)
         {
-            var metaText = metaNode.InnerText.Trim()
-                .Replace("\n", " ")
-                .Replace("\r", " ")
-                .Replace("\t", " ");
-            while (metaText.Contains("  "))
-                metaText = metaText.Replace("  ", " ");
-
-            var parts = metaText.Split('|')
-                .Select(p => p.Trim())
-                .Where(p => !string.IsNullOrEmpty(p))
-                .ToList();
-
-            if (parts.Count >= 1) date = parts[0];
-            if (parts.Count >= 2) time = parts[1];
-            if (parts.Count >= 3) location = parts[2];
-        }
-
-        // --- DESCRIPTION ---
-        // Content is in div.entry-body AND div#more.entry-more
-        var descParts = new List<string>();
-        var links = new List<ScrapedEventLink>();
-
-        var contentDivs = new[]
-        {
-            doc.DocumentNode.SelectSingleNode("//div[contains(@class,'entry-body')]"),
-            doc.DocumentNode.SelectSingleNode("//div[@id='more']")
-        };
-
-        foreach (var contentDiv in contentDivs)
-        {
-            if (contentDiv == null) continue;
-
-            foreach (var node in contentDiv.ChildNodes)
+            try
             {
-                if (node.NodeType == HtmlNodeType.Text) continue;
+                var html = await _httpClient.GetStringAsync(url);
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
 
-                var nodeText = node.InnerText.Trim();
-                if (string.IsNullOrEmpty(nodeText)) continue;
+                string title = "";
+                var titleNode = doc.DocumentNode
+                    .SelectSingleNode("//div[contains(@class,'col-12')]/h2");
 
-                // Extract useful links
-                var nodeLinks = node.SelectNodes(".//a[@href]");
-                if (nodeLinks != null)
+                if (titleNode != null)
+                    title = Clean(titleNode.InnerText);
+
+                string date = "", time = "", location = "";
+                var metaNode = doc.DocumentNode
+                    .SelectSingleNode("//div[@style='border-bottom:2px solid #ccc']");
+
+                if (metaNode != null)
                 {
-                    foreach (var a in nodeLinks)
+                    var metaText = Clean(metaNode.InnerText);
+
+                    var parts = metaText.Split('|')
+                        .Select(p => p.Trim())
+                        .Where(p => !string.IsNullOrEmpty(p))
+                        .ToList();
+
+                    if (parts.Count >= 1) date = parts[0];
+                    if (parts.Count >= 2) time = parts[1];
+                    if (parts.Count >= 3) location = parts[2];
+                }
+
+                var descParts = new List<string>();
+                var links = new List<ScrapedEventLink>();
+
+                var contentDivs = new[]
+                {
+                    doc.DocumentNode.SelectSingleNode("//div[contains(@class,'entry-body')]"),
+                    doc.DocumentNode.SelectSingleNode("//div[@id='more']")
+                };
+
+                foreach (var contentDiv in contentDivs)
+                {
+                    if (contentDiv == null) continue;
+
+                    foreach (var node in contentDiv.ChildNodes)
                     {
-                        var href = a.GetAttributeValue("href", "");
-                        var linkText = a.InnerText.Trim();
-                        if (string.IsNullOrEmpty(href) ||
-                            string.IsNullOrEmpty(linkText)) continue;
+                        if (node.NodeType == HtmlNodeType.Text) continue;
 
-                        bool isUseful =
-                            href.Contains("teams.microsoft.com") ||
-                            href.Contains("eventbrite") ||
-                            href.Contains("zoom.us") ||
-                            href.Contains("forms.office.com") ||
-                            href.Contains("forms.microsoft.com") ||
-                            href.StartsWith("mailto:");
+                        var nodeText = Clean(node.InnerText);
+                        if (string.IsNullOrEmpty(nodeText)) continue;
 
-                        if (isUseful && !links.Any(l => l.Url == href))
+                        var nodeLinks = node.SelectNodes(".//a[@href]");
+                        if (nodeLinks != null)
                         {
-                            links.Add(new ScrapedEventLink
+                            foreach (var a in nodeLinks)
                             {
-                                Text = linkText,
-                                Url = href
-                            });
-                        }
-                    }
-                }
+                                var href = a.GetAttributeValue("href", "");
+                                var linkText = Clean(a.InnerText);
 
-                // Format by node type
-                if (node.Name == "h4" || node.Name == "h3")
-                {
-                    descParts.Add($"**{nodeText}**");
-                }
-                else if (node.Name == "ul" || node.Name == "ol")
-                {
-                    var items = node.SelectNodes(".//li");
-                    if (items != null)
-                    {
-                        foreach (var item in items)
+                                bool isUseful =
+                                    href.Contains("teams.microsoft.com") ||
+                                    href.Contains("eventbrite") ||
+                                    href.Contains("zoom.us") ||
+                                    href.Contains("forms.office.com") ||
+                                    href.Contains("forms.microsoft.com") ||
+                                    href.StartsWith("mailto:");
+
+                                if (isUseful && !links.Any(l => l.Url == href))
+                                {
+                                    links.Add(new ScrapedEventLink
+                                    {
+                                        Text = linkText,
+                                        Url = href
+                                    });
+                                }
+                            }
+                        }
+
+                        if (node.Name == "h4" || node.Name == "h3")
                         {
-                            var itemText = item.InnerText.Trim();
-                            if (!string.IsNullOrEmpty(itemText))
-                                descParts.Add($"• {itemText}");
+                            descParts.Add($"**{nodeText}**");
+                        }
+                        else if (node.Name == "ul" || node.Name == "ol")
+                        {
+                            var items = node.SelectNodes(".//li");
+                            if (items != null)
+                            {
+                                foreach (var item in items)
+                                {
+                                    var itemText = Clean(item.InnerText);
+                                    if (!string.IsNullOrEmpty(itemText))
+                                        descParts.Add($"• {itemText}");
+                                }
+                            }
+                        }
+                        else if (node.Name == "p")
+                        {
+                            descParts.Add(nodeText);
                         }
                     }
                 }
-                else if (node.Name == "p")
-                {
-                    descParts.Add(nodeText);
-                }
-            }
-        }
 
-        return new ScrapedEventDetail
-        {
-            Title = title,
-            Date = date,
-            Time = time,
-            Location = location,
-            Description = string.Join("\n\n", descParts),
-            Links = links,
-            DetailUrl = url
-        };
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Detail scraping error: {ex.Message}");
-        return null;
-    }
-}
-public async Task<List<ScrapedNews>> GetNewsAsync()
-{
-    var newsList = new List<ScrapedNews>();
-
-    try
-    {
-        // Use trailing slash — important for this site
-        var html = await _httpClient.GetStringAsync("https://blogs1.conestogac.on.ca/news/");
-        var doc = new HtmlDocument();
-        doc.LoadHtml(html);
-
-        // Strategy: find all links pointing to news articles
-        // They follow the pattern: /news/2025/ or /news/2026/
-        var allLinks = doc.DocumentNode.SelectNodes(
-            "//a[contains(@href,'blogs1.conestogac.on.ca/news/202')]"
-        );
-
-        if (allLinks == null) return newsList;
-
-        foreach (var link in allLinks)
-        {
-            var href = link.GetAttributeValue("href", "");
-            var title = link.InnerText.Trim();
-
-            // Skip archive/category links (they end in / or don't have .php)
-            if (!href.EndsWith(".php")) continue;
-            if (string.IsNullOrEmpty(title)) continue;
-
-            // Get the date — it's in the previous sibling text node
-            // or the parent's previous sibling
-            string date = "";
-            string snippet = "";
-
-            // Walk up to find the parent paragraph
-            var parent = link.ParentNode;
-
-            // Date is usually in a preceding text node or sibling
-            var prevSibling = parent?.PreviousSibling;
-            while (prevSibling != null)
-            {
-                var t = prevSibling.InnerText.Trim();
-                if (!string.IsNullOrEmpty(t) &&
-                    (t.Contains("2025") || t.Contains("2026")) &&
-                    t.Length < 40)
-                {
-                    date = t;
-                    break;
-                }
-                prevSibling = prevSibling.PreviousSibling;
-            }
-
-            // Snippet is the text after the link in the same parent
-            var nextSibling = link.NextSibling;
-            while (nextSibling != null)
-            {
-                var t = nextSibling.InnerText.Trim();
-                if (!string.IsNullOrEmpty(t))
-                {
-                    snippet = t.TrimStart('-', ' ');
-                    break;
-                }
-                nextSibling = nextSibling.NextSibling;
-            }
-
-            // Avoid duplicates
-            if (!newsList.Any(n => n.DetailUrl == href))
-            {
-                newsList.Add(new ScrapedNews
+                return new ScrapedEventDetail
                 {
                     Title = title,
                     Date = date,
-                    Snippet = snippet,
-                    DetailUrl = href
-                });
+                    Time = time,
+                    Location = location,
+                    Description = string.Join("\n\n", descParts),
+                    Links = links,
+                    DetailUrl = url
+                };
             }
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"News scraping error: {ex.Message}");
-    }
-
-    return newsList;
-}
-
-public async Task<ScrapedNewsDetail?> GetNewsDetailAsync(string url)
-{
-    try
-    {
-        var html = await _httpClient.GetStringAsync(url);
-        var doc = new HtmlDocument();
-        doc.LoadHtml(html);
-
-        // --- DATE ---
-        // <p style="font-size:11px;">April 1, 2026 3:00 PM</p>
-        string date = "";
-        var dateNode = doc.DocumentNode.SelectSingleNode(
-            "//p[@style='font-size:11px;']"
-        );
-        if (dateNode != null)
-            date = dateNode.InnerText.Trim();
-
-        // --- TITLE ---
-        // <h2> immediately after the date paragraph
-        string title = "";
-        var titleNode = doc.DocumentNode.SelectSingleNode(
-            "//p[@style='font-size:11px;']/following-sibling::h2[1]"
-        );
-        if (titleNode != null)
-            title = titleNode.InnerText.Trim();
-
-        // --- IMAGE ---
-        // Inside div#more, skip caption images
-        string imageUrl = "";
-        var moreDiv = doc.DocumentNode.SelectSingleNode("//div[@id='more']");
-        if (moreDiv != null)
-        {
-            var img = moreDiv.SelectSingleNode(".//img");
-            if (img != null)
+            catch (Exception ex)
             {
-                var src = img.GetAttributeValue("src", "");
-                if (!string.IsNullOrEmpty(src))
-                {
-                    imageUrl = src.StartsWith("http") ? src
-                        : "https://blogs1.conestogac.on.ca" + src;
-                }
+                Console.WriteLine($"Detail scraping error: {ex.Message}");
+                return null;
             }
         }
 
-        // --- DESCRIPTION ---
-        // Content is in div.entry-body AND div#more.entry-more
-        // Same pattern as events
-        var descParts = new List<string>();
-
-        var contentDivs = new[]
+        public async Task<List<ScrapedNews>> GetNewsAsync()
         {
-            doc.DocumentNode.SelectSingleNode("//div[contains(@class,'entry-body')]"),
-            doc.DocumentNode.SelectSingleNode("//div[@id='more']")
-        };
+            var newsList = new List<ScrapedNews>();
 
-        foreach (var contentDiv in contentDivs)
-        {
-            if (contentDiv == null) continue;
-
-            foreach (var node in contentDiv.ChildNodes)
+            try
             {
-                if (node.NodeType == HtmlNodeType.Text) continue;
+                var html = await _httpClient.GetStringAsync("https://blogs1.conestogac.on.ca/news/");
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
 
-                var nodeText = node.InnerText.Trim();
-                if (string.IsNullOrEmpty(nodeText)) continue;
+                var allLinks = doc.DocumentNode.SelectNodes(
+                    "//a[contains(@href,'blogs1.conestogac.on.ca/news/202')]"
+                );
 
-                // Stop at footer
-                if (nodeText.StartsWith("Posted")) break;
+                if (allLinks == null) return newsList;
 
-                if (node.Name == "h3" || node.Name == "h4")
+                foreach (var link in allLinks)
                 {
-                    descParts.Add($"**{nodeText}**");
-                }
-                else if (node.Name == "ul" || node.Name == "ol")
-                {
-                    var items = node.SelectNodes(".//li");
-                    if (items != null)
+                    var href = link.GetAttributeValue("href", "");
+                    var title = Clean(link.InnerText);
+
+                    if (!href.EndsWith(".php")) continue;
+                    if (string.IsNullOrEmpty(title)) continue;
+
+                    string date = "";
+                    string snippet = "";
+
+                    var parent = link.ParentNode;
+
+                    var prevSibling = parent?.PreviousSibling;
+                    while (prevSibling != null)
                     {
-                        foreach (var item in items)
+                        var t = Clean(prevSibling.InnerText);
+
+                        if (!string.IsNullOrEmpty(t) &&
+                            (t.Contains("2025") || t.Contains("2026")) &&
+                            t.Length < 40)
                         {
-                            var itemText = item.InnerText.Trim();
-                            if (!string.IsNullOrEmpty(itemText))
-                                descParts.Add($"• {itemText}");
+                            date = t;
+                            break;
                         }
+
+                        prevSibling = prevSibling.PreviousSibling;
                     }
-                }
-                else if (node.Name == "p")
-                {
-                    // Skip very short text (image captions)
-                    if (nodeText.Length > 15)
-                        descParts.Add(nodeText);
-                }
-                // Skip div.float-right (image wrapper) — only extract text from it
-                else if (node.Name == "div" &&
-                         !node.GetAttributeValue("class", "").Contains("float"))
-                {
-                    // Recursively get paragraphs from nested divs
-                    var innerParas = node.SelectNodes(".//p");
-                    if (innerParas != null)
+
+                    var nextSibling = link.NextSibling;
+                    while (nextSibling != null)
                     {
-                        foreach (var p in innerParas)
+                        var t = Clean(nextSibling.InnerText);
+
+                        if (!string.IsNullOrEmpty(t))
                         {
-                            var t = p.InnerText.Trim();
-                            if (t.Length > 15 && !t.StartsWith("Posted"))
-                                descParts.Add(t);
+                            snippet = t.TrimStart('-', ' ');
+                            break;
                         }
+
+                        nextSibling = nextSibling.NextSibling;
+                    }
+
+                    if (!newsList.Any(n => n.DetailUrl == href))
+                    {
+                        newsList.Add(new ScrapedNews
+                        {
+                            Title = title,
+                            Date = date,
+                            Snippet = snippet,
+                            DetailUrl = href
+                        });
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"News scraping error: {ex.Message}");
+            }
+
+            return newsList;
         }
 
-        return new ScrapedNewsDetail
+        public async Task<ScrapedNewsDetail?> GetNewsDetailAsync(string url)
         {
-            Title = title,
-            Date = date,
-            ImageUrl = imageUrl,
-            Description = string.Join("\n\n", descParts),
-            DetailUrl = url
-        };
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"News detail scraping error: {ex.Message}");
-        return null;
-    }
-}
-}
-       
+            try
+            {
+                var html = await _httpClient.GetStringAsync(url);
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
 
+                string date = "";
+                var dateNode = doc.DocumentNode.SelectSingleNode("//p[@style='font-size:11px;']");
+                if (dateNode != null)
+                    date = Clean(dateNode.InnerText);
+
+                string title = "";
+                var titleNode = doc.DocumentNode.SelectSingleNode(
+                    "//p[@style='font-size:11px;']/following-sibling::h2[1]");
+                if (titleNode != null)
+                    title = Clean(titleNode.InnerText);
+
+                string imageUrl = "";
+                var moreDiv = doc.DocumentNode.SelectSingleNode("//div[@id='more']");
+                if (moreDiv != null)
+                {
+                    var img = moreDiv.SelectSingleNode(".//img");
+                    if (img != null)
+                    {
+                        var src = img.GetAttributeValue("src", "");
+                        if (!string.IsNullOrEmpty(src))
+                        {
+                            imageUrl = src.StartsWith("http")
+                                ? src
+                                : "https://blogs1.conestogac.on.ca" + src;
+                        }
+                    }
+                }
+
+                var descParts = new List<string>();
+
+                var contentDivs = new[]
+                {
+                    doc.DocumentNode.SelectSingleNode("//div[contains(@class,'entry-body')]"),
+                    doc.DocumentNode.SelectSingleNode("//div[@id='more']")
+                };
+
+                foreach (var contentDiv in contentDivs)
+                {
+                    if (contentDiv == null) continue;
+
+                    foreach (var node in contentDiv.ChildNodes)
+                    {
+                        if (node.NodeType == HtmlNodeType.Text) continue;
+
+                        var nodeText = Clean(node.InnerText);
+                        if (string.IsNullOrEmpty(nodeText)) continue;
+
+                        if (nodeText.StartsWith("Posted")) break;
+
+                        if (node.Name == "h3" || node.Name == "h4")
+                        {
+                            descParts.Add($"**{nodeText}**");
+                        }
+                        else if (node.Name == "ul" || node.Name == "ol")
+                        {
+                            var items = node.SelectNodes(".//li");
+                            if (items != null)
+                            {
+                                foreach (var item in items)
+                                {
+                                    var itemText = Clean(item.InnerText);
+                                    if (!string.IsNullOrEmpty(itemText))
+                                        descParts.Add($"• {itemText}");
+                                }
+                            }
+                        }
+                        else if (node.Name == "p")
+                        {
+                            if (nodeText.Length > 15)
+                                descParts.Add(nodeText);
+                        }
+                        else if (node.Name == "div" &&
+                                 !node.GetAttributeValue("class", "").Contains("float"))
+                        {
+                            var innerParas = node.SelectNodes(".//p");
+                            if (innerParas != null)
+                            {
+                                foreach (var p in innerParas)
+                                {
+                                    var t = Clean(p.InnerText);
+                                    if (t.Length > 15 && !t.StartsWith("Posted"))
+                                        descParts.Add(t);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return new ScrapedNewsDetail
+                {
+                    Title = title,
+                    Date = date,
+                    ImageUrl = imageUrl,
+                    Description = string.Join("\n\n", descParts),
+                    DetailUrl = url
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"News detail scraping error: {ex.Message}");
+                return null;
+            }
+        }
+    }
 }

@@ -167,80 +167,80 @@ function Dashboard() {
       </div>
 
       {/* Post modal */}
-   {showModal && (
-  <div className="modal-overlay" onClick={(e) => {
-    if (e.target.classList.contains("modal-overlay")) {
-      setShowModal(false);
-      setPostText("");
-      setShowEmojiPicker(false);
-    }
-  }}>
-    <div className="modal-card">
-      <h3>Create Post</h3>
-
-      <div className="post-input-wrapper">
-        <textarea
-          ref={postInputRef}
-          value={postText}
-          onChange={(e) => setPostText(e.target.value)}
-          placeholder="Share your thoughts..."
-          autoFocus
-        />
-        <button
-          className="post-emoji-btn"
-          onClick={() => setShowEmojiPicker((prev) => !prev)}
-          title="Add emoji"
-          type="button"
-        >
-          😊
-        </button>
-      </div>
-
-      {showEmojiPicker && (
-        <div className="post-emoji-picker-wrapper">
-          <EmojiPicker
-            onEmojiClick={(emojiData) => {
-              const emoji = emojiData.emoji;
-              const textarea = postInputRef.current;
-              if (!textarea) return;
-              const start = textarea.selectionStart;
-              const end = textarea.selectionEnd;
-              const newText =
-                postText.slice(0, start) + emoji + postText.slice(end);
-              setPostText(newText);
-              // Restore cursor position after emoji
-              setTimeout(() => {
-                textarea.focus();
-                const newPos = start + emoji.length;
-                textarea.setSelectionRange(newPos, newPos);
-              }, 10);
-            }}
-            theme="dark"
-            skinTonesDisabled
-            height={320}
-            width="100%"
-          />
-        </div>
-      )}
-
-      <div className="modal-actions">
-        <button
-          className="cancel-btn"
-          onClick={() => {
+      {showModal && (
+        <div className="modal-overlay" onClick={(e) => {
+          if (e.target.classList.contains("modal-overlay")) {
             setShowModal(false);
             setPostText("");
             setShowEmojiPicker(false);
-          }}
-        >
-          Cancel
-        </button>
-        <button className="post-btn" onClick={handlePost}>
-          Post
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+          }
+        }}>
+          <div className="modal-card">
+            <h3>Create Post</h3>
+
+            <div className="post-input-wrapper">
+              <textarea
+                ref={postInputRef}
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
+                placeholder="Share your thoughts..."
+                autoFocus
+              />
+              <button
+                className="post-emoji-btn"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+                title="Add emoji"
+                type="button"
+              >
+                😊
+              </button>
+            </div>
+
+            {showEmojiPicker && (
+              <div className="post-emoji-picker-wrapper">
+                <EmojiPicker
+                  onEmojiClick={(emojiData) => {
+                    const emoji = emojiData.emoji;
+                    const textarea = postInputRef.current;
+                    if (!textarea) return;
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    const newText =
+                      postText.slice(0, start) + emoji + postText.slice(end);
+                    setPostText(newText);
+                    // Restore cursor position after emoji
+                    setTimeout(() => {
+                      textarea.focus();
+                      const newPos = start + emoji.length;
+                      textarea.setSelectionRange(newPos, newPos);
+                    }, 10);
+                  }}
+                  theme="dark"
+                  skinTonesDisabled
+                  height={320}
+                  width="100%"
+                />
+              </div>
+            )}
+
+            <div className="modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowModal(false);
+                  setPostText("");
+                  setShowEmojiPicker(false);
+                }}
+              >
+                Cancel
+              </button>
+              <button className="post-btn" onClick={handlePost}>
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="dashboard-layout">
 
@@ -265,14 +265,24 @@ function Dashboard() {
           <h3 className="user-name">{user.userName}</h3>
 
           <nav className="profile-links">
-            <a href="/news">News</a>
-            <a href="/events">Events</a>
+            <Link to="/news" className="profile-nav-item">
+              <i className="fi fi-rr-newspaper profile-nav-icon"></i> News
+            </Link>
+            <Link to="/events" className="profile-nav-item">
+              <i className="fi fi-rr-calendar profile-nav-icon"></i> Events
+            </Link>
 
-            <a href="/volunteer">Volunteer</a>
+            <Link to="/volunteer" className="profile-nav-item">
+              <i className="fi fi-rr-handshake profile-nav-icon"></i> Volunteer
+            </Link>
             {user.role === "Alumni" ? (
-              <a href="/become-mentor">Be a Mentor</a>
+              <Link to="/become-mentor" className="profile-nav-item highlight">
+                <i className="fi fi-rr-star profile-nav-icon"></i> Be a Mentor
+              </Link>
             ) : (
-              <a href="/mentor">Request Mentor</a>
+              <Link to="/mentor" className="profile-nav-item">
+                <i className="fi fi-rr-graduation-cap profile-nav-icon"></i> Request Mentor
+              </Link>
             )}
           </nav>
         </div>
@@ -300,7 +310,7 @@ function Dashboard() {
         </div>
 
         {/* Column 3 — Right sidebar */}
-<div className="dashboard-column lists-column">
+        <div className="dashboard-column lists-column">
 
           {/* Student — show active mentor with chat */}
           {user.role === "Student" && myMentor && (
@@ -322,7 +332,7 @@ function Dashboard() {
                     )
                   }
                 >
-                  💬
+                  <i className="fi fi-rr-comment"></i>
                   {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`] > 0 && (
                     <span className="chat-unread-badge">
                       {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`]}
@@ -355,13 +365,13 @@ function Dashboard() {
                         className="accept-btn"
                         onClick={() => handleAcceptRequest(req.id)}
                       >
-                        ✓
+                        <i className="fi fi-rr-check"></i>
                       </button>
                       <button
                         className="decline-btn"
                         onClick={() => handleDeclineRequest(req.id)}
                       >
-                        ✕
+                        <i className="fi fi-rr-cross"></i>
                       </button>
                     </div>
                   </div>
@@ -409,8 +419,8 @@ function Dashboard() {
           {/* Directory links */}
           <div className="lists-column-links">
             <h3>Directory</h3>
-            <Link to="/alumni">View Alumni</Link>
-            <Link to="/students">View Students</Link>
+            <Link to="/alumni"><i className="fi fi-rr-users"></i> View Alumni</Link>
+            <Link to="/students"><i className="fi fi-rr-user-graduate"></i> View Students</Link>
           </div>
 
 
