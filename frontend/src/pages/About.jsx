@@ -20,7 +20,7 @@ function About() {
           </h1>
           <p className="about-hero-sub">
             The SSI Portal is a unified digital platform built to bridge the gap
-            between students, alumni, and staff at Conestoga College.
+            between students andalumni at Conestoga College.
           </p>
           <div className="about-hero-btns">
             <button
