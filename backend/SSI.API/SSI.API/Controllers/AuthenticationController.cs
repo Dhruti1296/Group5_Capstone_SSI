@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using MongoDB.Driver;
 using SSI.API.Data;
 using SSI.API.Models;
@@ -14,11 +13,13 @@ namespace SSI.API.Controllers
     {
         private readonly MongoDbContext _context;
         private readonly TokenService _tokenService;
+        private readonly UserServices _userServices;
 
-        public AuthController(MongoDbContext context, TokenService tokenService)
+        public AuthController(MongoDbContext context, TokenService tokenService, UserServices userServices)
         {
             _context = context;
             _tokenService = tokenService;
+            _userServices = userServices;
         }
 
         [HttpPost("register")]
@@ -48,25 +49,7 @@ namespace SSI.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
-            // Check regular users
-            var user = await _context.Users
-                .Find(u => u.UserName == login.UserName)
-                .FirstOrDefaultAsync();
-
-            if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
-            {
-                var token = _tokenService.GenerateToken(user.UserName, user.Role);
-                return Ok(new
-                {
-                    message = "Login successful",
-                    token,
-                    userName = user.UserName,
-                    email = user.Email,
-                    role = user.Role
-                });
-            }
-
-            // Check admins
+            // Check admins first — no lockout for admins
             var admin = await _context.Admins
                 .Find(a => a.UserName == login.UserName)
                 .FirstOrDefaultAsync();
@@ -84,7 +67,53 @@ namespace SSI.API.Controllers
                 });
             }
 
-            return Unauthorized("Invalid username or password.");
+            // Check regular users
+            var user = await _context.Users
+                .Find(u => u.UserName == login.UserName)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+                return Unauthorized("Invalid username or password.");
+
+            // Check if account is locked
+            if (user.LockUntil.HasValue && DateTime.UtcNow < user.LockUntil.Value)
+            {
+                TimeZoneInfo easternTime = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                var lockUntilLocal = TimeZoneInfo.ConvertTimeFromUtc(user.LockUntil.Value, easternTime);
+                return Unauthorized($"Account is locked until {lockUntilLocal:MMM dd, yyyy h:mm tt} EST.");
+            }
+
+            // Wrong password
+            if (!BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
+            {
+                user.FailedLoginAttempts++;
+
+                if (user.FailedLoginAttempts >= 3)
+                {
+                    user.LockUntil = DateTime.UtcNow.AddHours(5);
+                    user.FailedLoginAttempts = 0;
+                    await _userServices.UpdateAsync(user);
+                    return Unauthorized("Too many failed attempts. Account locked for 5 hours.");
+                }
+
+                await _userServices.UpdateAsync(user);
+                return Unauthorized($"Invalid password. {3 - user.FailedLoginAttempts} attempt(s) remaining.");
+            }
+
+            // Successful login — reset counters
+            user.FailedLoginAttempts = 0;
+            user.LockUntil = null;
+            await _userServices.UpdateAsync(user);
+
+            var userToken = _tokenService.GenerateToken(user.UserName, user.Role);
+            return Ok(new
+            {
+                message = "Login successful",
+                token = userToken,
+                userName = user.UserName,
+                email = user.Email,
+                role = user.Role
+            });
         }
 
         [HttpDelete("clear-users")]

@@ -10,6 +10,7 @@ function Students() {
   const [studentList, setStudentList] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -56,7 +57,11 @@ function Students() {
           <p className="students-empty">No students found.</p>
         ) : (
           filtered.map((s) => (
-            <div key={s.userName} className="students-card">
+            <div
+              key={s.userName}
+              className="students-card"
+              onClick={() => setSelectedUser(s)}
+            >
               <div className="students-avatar">
                 {s.profilePic ? (
                   <img src={s.profilePic} alt={s.userName} />
@@ -78,10 +83,70 @@ function Students() {
                 )}
                 <p className="students-username">@{s.userName}</p>
               </div>
+              <span className="students-view-btn">View Profile →</span>
             </div>
           ))
         )}
       </div>
+
+      {/* Profile Modal */}
+      {selectedUser && (
+        <div className="profile-modal-overlay" onClick={() => setSelectedUser(null)}>
+          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="profile-modal-close" onClick={() => setSelectedUser(null)}>✕</button>
+
+            {/* Avatar */}
+            <div className="profile-modal-avatar">
+              {selectedUser.profilePic ? (
+                <img src={selectedUser.profilePic} alt={selectedUser.userName} />
+              ) : (
+                <span>{selectedUser.userName.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+
+            {/* Name */}
+            <h3 className="profile-modal-name">
+              {selectedUser.name && selectedUser.surname
+                ? `${selectedUser.name} ${selectedUser.surname}`
+                : selectedUser.userName}
+            </h3>
+            <p className="profile-modal-username">@{selectedUser.userName}</p>
+
+            {/* Role badge */}
+            <span className="profile-modal-badge student-badge">Student</span>
+
+            {/* Details */}
+            <div className="profile-modal-details">
+              {selectedUser.courseName && (
+                <div className="profile-modal-row">
+                  <span className="profile-modal-label">🎓 Program</span>
+                  <span className="profile-modal-value">{selectedUser.courseName}</span>
+                </div>
+              )}
+              {selectedUser.department && (
+                <div className="profile-modal-row">
+                  <span className="profile-modal-label">🏫 Department</span>
+                  <span className="profile-modal-value">{selectedUser.department}</span>
+                </div>
+              )}
+              {selectedUser.courseEndYear && (
+                <div className="profile-modal-row">
+                  <span className="profile-modal-label">📅 Expected Graduation</span>
+                  <span className="profile-modal-value">
+                    {selectedUser.courseEndMonth} {selectedUser.courseEndYear}
+                  </span>
+                </div>
+              )}
+              {!selectedUser.courseName && !selectedUser.department &&
+                !selectedUser.courseEndYear && (
+                  <p className="profile-modal-empty">
+                    This student hasn't filled in their profile details yet.
+                  </p>
+                )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

@@ -46,6 +46,11 @@ namespace SSI.API.Services
             return result.DeletedCount > 0;
         }
 
+        public async Task UpdateAsync(User user)
+{
+    await _users.ReplaceOneAsync(u => u.Id == user.Id, user);
+}
+
         public async Task<User?> UpdateProfileAsync(string userName, UpdateProfileRequest req)
         {
             var updates = new List<UpdateDefinition<User>>();

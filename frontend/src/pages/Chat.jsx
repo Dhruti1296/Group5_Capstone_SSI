@@ -71,7 +71,7 @@ function Chat() {
       setMessages((prev) => [...prev, message]);
       authFetch(`${API}/api/mentorship/chat/${roomId}/mark-read`, {
         method: "PATCH",
-      }).catch(() => {});
+      }).catch(() => { });
     });
 
     newConnection.start()
@@ -84,7 +84,7 @@ function Chat() {
     setConnection(newConnection);
 
     return () => {
-      newConnection.invoke("LeaveRoom", roomId).catch(() => {});
+      newConnection.invoke("LeaveRoom", roomId).catch(() => { });
       newConnection.stop();
     };
   }, [roomId]);
@@ -193,7 +193,14 @@ function Chat() {
                     )}
                     <div className="chat-bubble">
                       <p>{msg.message}</p>
-                      <span className="chat-time">{formatTime(msg.sentAt)}</span>
+                      <div className="chat-bubble-footer">
+                        <span className="chat-time">{formatTime(msg.sentAt)}</span>
+                        {isOwn && (
+                          <span className={`chat-read-receipt ${msg.isRead ? "read" : "sent"}`}>
+                            {msg.isRead ? "✓✓" : "✓"}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );

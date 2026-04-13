@@ -45,5 +45,11 @@ namespace SSI.API.Models
 
         [BsonElement("PassedOutYear")]
         public string? PassedOutYear { get; set; }
+
+        [BsonElement("FailedLoginAttempts")]
+        public int FailedLoginAttempts { get; set; } = 0;
+
+        [BsonElement("LockUntil")]
+        public DateTime? LockUntil { get; set; } = null;
     }
 }

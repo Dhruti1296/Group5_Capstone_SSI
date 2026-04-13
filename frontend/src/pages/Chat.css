@@ -11,7 +11,8 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 60px);
-  position: relative; /* add this */
+  position: relative;
+  /* add this */
 }
 
 .chat-header {
@@ -107,8 +108,13 @@
   background: #222;
 }
 
-.chat-date-divider::before { left: 0; }
-.chat-date-divider::after { right: 0; }
+.chat-date-divider::before {
+  left: 0;
+}
+
+.chat-date-divider::after {
+  right: 0;
+}
 
 .chat-message {
   display: flex;
@@ -240,4 +246,26 @@
 .emoji-toggle-btn:hover {
   border-color: #d4af37;
   background: rgba(212, 175, 55, 0.1);
+}
+
+.chat-bubble-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.chat-read-receipt {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.chat-read-receipt.sent {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.chat-read-receipt.read {
+  color: #4FC3F7;
 }
