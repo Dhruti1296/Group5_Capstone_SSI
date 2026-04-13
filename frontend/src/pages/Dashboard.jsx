@@ -26,7 +26,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await authFetch(`${API}/api/posts`);
+        const res = await authFetch(`${API}/api/posts`); //this api will fetch posts
         if (res.ok) {
           const data = await res.json();
           setPosts(data);
@@ -98,7 +98,7 @@ function Dashboard() {
 
   const handlePost = async () => {
     if (!postText.trim()) return;
-    try {
+    try { // this api will create the post
       const res = await authFetch(`${API}/api/posts`, {
         method: "POST",
         body: JSON.stringify({ content: postText }),

@@ -1,62 +1,113 @@
-.page-container {
-padding: 40px;
+/* BACKGROUND */
+.contact-wrapper {
+    padding: 40px;
+    background: radial-gradient(circle, #000000, #c89b3c);
+    min-height: 100vh;
 }
 
-.page-title {
-text-align: center;
-margin-bottom: 30px;
+/* TITLE */
+.contact-title {
+    text-align: center;
+    color: #d4af37;
+    margin-bottom: 30px;
+    font-size: 28px;
 }
 
-/* Card */
-.contact-card {
-display: flex;
-background: #f4f4f4;
-border-radius: 10px;
-overflow: hidden;
+/* MAIN BOX */
+.contact-box {
+    display: flex;
+    max-width: 900px;
+    margin: auto;
+    background: #000;
+    border-radius: 15px;
+    border: 2px solid #d4af37;
+    overflow: hidden;
+    min-height: 400px;
+    /* ensures full height */
 }
 
-/* Left side */
+/* LEFT IMAGE */
 .contact-left {
-flex: 1;
-background: #8a7b7b;
-border-radius: 0 100px 100px 0;
+    flex: 0.45;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Form */
+/* IMAGE FULL COVER */
+.contact-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* fills entire area */
+    display: block;
+}
+
+/* OPTIONAL OVERLAY */
+.contact-left::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* FORM */
 .contact-form {
-flex: 1;
-padding: 30px;
-display: flex;
-flex-direction: column;
-gap: 15px;
+    flex: 0.55;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* Inputs */
+/* INPUTS */
 .contact-form input,
 .contact-form textarea {
-padding: 10px;
-border-radius: 5px;
-border: none;
-background: #b22222;
-color: white;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: none;
+    background: #e5e5e5;
+    font-size: 14px;
 }
 
+/* TEXTAREA */
 .contact-form textarea {
-height: 100px;
+    height: 100px;
+    resize: none;
 }
 
-/* Button */
+/* BUTTON */
 .contact-form button {
-background: #8b0000;
-color: white;
-padding: 10px;
-border: none;
-border-radius: 5px;
+    padding: 12px;
+    background: #d4af37;
+    color: black;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-.contact-card {
-flex-direction: column;
+.contact-form button:hover {
+    background: #c89b3c;
 }
+
+/* STATUS MESSAGE */
+.form-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #d4af37;
+    text-align: center;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+    .contact-box {
+        flex-direction: column;
+    }
+
+    .contact-left {
+        height: 200px;
+    }
 }
