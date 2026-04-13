@@ -18,7 +18,7 @@ const MakeADifference = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     document
@@ -75,9 +75,9 @@ const MakeADifference = () => {
         <div className="cards-intro-text">
           <p>
             Our comprehensive range of programming meets the needs of a variety
-            of learners, providing multiple entry points and established pathways
-            to ensure that individuals across our community can access the
-            education they need for their chosen careers.
+            of learners, providing multiple entry points and established
+            pathways to ensure that individuals across our community can access
+            the education they need for their chosen careers.
           </p>
         </div>
 
@@ -104,7 +104,7 @@ const MakeADifference = () => {
 
           {/* Be a Mentor */}
           <div className="card animation-item">
-            <a href="#" className="card-link" onClick={handleBecomeMentor}>
+            <button className="card-link" onClick={handleBecomeMentor}>
               <img src="/images/card2.jpg" alt="Card 2" />
               <div className="card-body">
                 <h3 className="card-title">Be a Mentor</h3>
@@ -117,12 +117,12 @@ const MakeADifference = () => {
                 </p>
                 <span className="card-arrow">⮞⮞</span>
               </div>
-            </a>
+            </button>
           </div>
 
           {/* Volunteer */}
           <div className="card animation-item">
-            <a href="#" className="card-link" onClick={handleVolunteer}>
+            <button className="card-link" onClick={handleVolunteer}>
               <img src="/images/card3.jpg" alt="Card 3" />
               <div className="card-body">
                 <h3 className="card-title">Volunteer</h3>
@@ -133,7 +133,7 @@ const MakeADifference = () => {
                 </p>
                 <span className="card-arrow">⮞⮞</span>
               </div>
-            </a>
+            </button>
           </div>
         </div>
       </section>

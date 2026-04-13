@@ -88,7 +88,9 @@ function Events() {
       {/* Tab switcher — always visible */}
       <div className="events-tabs">
         <button
-          className={"events-tab " + (activeTab === "conestoga" ? "active" : "")}
+          className={
+            "events-tab " + (activeTab === "conestoga" ? "active" : "")
+          }
           onClick={() => setActiveTab("conestoga")}
         >
           🌐 Live from Conestoga
@@ -191,7 +193,10 @@ function Events() {
                     <h3 className="custom-event-title">{event.title}</h3>
                     <p className="custom-event-desc">{event.description}</p>
                     <div className="custom-event-meta">
-                      <span><i className="fi fi-rr-calendar"></i> {formatEventDate(event.eventDate)}</span>
+                      <span>
+                        <i className="fi fi-rr-calendar"></i>{" "}
+                        {formatEventDate(event.eventDate)}
+                      </span>
                       {event.location && <span>📍 {event.location}</span>}
                     </div>
                   </div>

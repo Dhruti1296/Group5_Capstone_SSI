@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: linear-gradient(140deg, #000 40%, #deb169 85%);
   color: #fff;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .become-mentor-page {
@@ -46,7 +46,7 @@
   padding: 10px 14px;
   color: #fff;
   font-size: 0.95rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   outline: none;
   transition: border-color 0.3s ease;
   resize: vertical;
@@ -99,7 +99,7 @@
   border-radius: 20px;
   padding: 6px 14px;
   font-size: 0.8rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -124,7 +124,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 1rem;
   transition: all 0.3s ease;
   align-self: flex-start;

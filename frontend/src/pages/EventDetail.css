@@ -48,7 +48,7 @@
   border: 1.5px solid #d4af37;
   border-radius: 999px;
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -68,7 +68,7 @@
 
 /* ── Title ───────────────────────────────── */
 .event-detail-title {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 1.6rem;
   color: #d4af37;
   margin-bottom: 1.2rem;
@@ -105,7 +105,7 @@
 .event-detail-subheading {
   color: #d4af37;
   font-size: 0.95rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   margin: 1.2rem 0 0.5rem;
 }
 

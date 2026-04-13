@@ -71,10 +71,11 @@ function Chat() {
       setMessages((prev) => [...prev, message]);
       authFetch(`${API}/api/mentorship/chat/${roomId}/mark-read`, {
         method: "PATCH",
-      }).catch(() => { });
+      }).catch(() => {});
     });
 
-    newConnection.start()
+    newConnection
+      .start()
       .then(() => {
         setConnected(true);
         newConnection.invoke("JoinRoom", roomId);
@@ -84,7 +85,7 @@ function Chat() {
     setConnection(newConnection);
 
     return () => {
-      newConnection.invoke("LeaveRoom", roomId).catch(() => { });
+      newConnection.invoke("LeaveRoom", roomId).catch(() => {});
       newConnection.stop();
     };
   }, [roomId]);
@@ -111,8 +112,7 @@ function Chat() {
   const handleEmojiClick = (emojiData) => {
     const emoji = emojiData.emoji;
     const cursorPos = inputRef.current?.selectionStart ?? input.length;
-    const newInput =
-      input.slice(0, cursorPos) + emoji + input.slice(cursorPos);
+    const newInput = input.slice(0, cursorPos) + emoji + input.slice(cursorPos);
     setInput(newInput);
     // Keep focus on input after selecting emoji
     setTimeout(() => {
@@ -136,13 +136,15 @@ function Chat() {
   const formatTime = (iso) => {
     const d = new Date(iso);
     return d.toLocaleTimeString("en-US", {
-      hour: "2-digit", minute: "2-digit"
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const formatDate = (iso) => {
     return new Date(iso).toLocaleDateString("en-US", {
-      month: "short", day: "numeric"
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -164,10 +166,14 @@ function Chat() {
             <i className="fi fi-rr-arrow-left"></i> Back
           </button>
           <div className="chat-header-info">
-            <div className="chat-avatar">{otherUser.charAt(0).toUpperCase()}</div>
+            <div className="chat-avatar">
+              {otherUser.charAt(0).toUpperCase()}
+            </div>
             <div>
               <h3>{otherUser}</h3>
-              <span className={connected ? "chat-status online" : "chat-status"}>
+              <span
+                className={connected ? "chat-status online" : "chat-status"}
+              >
                 {connected ? "Connected" : "Connecting..."}
               </span>
             </div>
@@ -194,9 +200,13 @@ function Chat() {
                     <div className="chat-bubble">
                       <p>{msg.message}</p>
                       <div className="chat-bubble-footer">
-                        <span className="chat-time">{formatTime(msg.sentAt)}</span>
+                        <span className="chat-time">
+                          {formatTime(msg.sentAt)}
+                        </span>
                         {isOwn && (
-                          <span className={`chat-read-receipt ${msg.isRead ? "read" : "sent"}`}>
+                          <span
+                            className={`chat-read-receipt ${msg.isRead ? "read" : "sent"}`}
+                          >
                             {msg.isRead ? "✓✓" : "✓"}
                           </span>
                         )}

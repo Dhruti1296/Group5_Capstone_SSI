@@ -18,7 +18,7 @@ const VideoBackground = () => {
             modestbranding: 1,
             rel: 0,
             showinfo: 0,
-            start: 0
+            start: 0,
           },
           events: {
             onReady: (event) => {
@@ -51,8 +51,8 @@ const VideoBackground = () => {
                   checkInterval = null;
                 }
               }
-            }
-          }
+            },
+          },
         });
       }
     };
@@ -89,7 +89,7 @@ const VideoBackground = () => {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     if (linkBar) observer.observe(linkBar);
@@ -108,7 +108,11 @@ const VideoBackground = () => {
             <button onClick={() => navigate("/alumni")}>
               Explore <span>Alumni</span>
             </button>
-            <button onClick={() => window.open("https://www.conestogac.on.ca/", "_blank")}>
+            <button
+              onClick={() =>
+                window.open("https://www.conestogac.on.ca/", "_blank")
+              }
+            >
               Student <span>Services</span>
             </button>
             <button onClick={() => navigate("/login")}>
@@ -121,9 +125,15 @@ const VideoBackground = () => {
 
       {/*  Link bar animates on scroll */}
       <div className="link-bar animation-group animation-zoom-in">
-        <a href="/about" className="nav-link animation-item">About</a>
-        <a href="/news" className="nav-link animation-item">News</a>
-        <a href="/events" className="nav-link animation-item">Events</a>
+        <a href="/about" className="nav-link animation-item">
+          About
+        </a>
+        <a href="/news" className="nav-link animation-item">
+          News
+        </a>
+        <a href="/events" className="nav-link animation-item">
+          Events
+        </a>
         <a
           href="#contact-footer"
           className="nav-link animation-item"
@@ -139,10 +149,13 @@ const VideoBackground = () => {
 
       <div className="community-section">
         <p>
-          We support your academic success, personal growth, and overall well-being
-          throughout your college journey. From guidance and campus resources to Alumni
-          Connect opportunities, we’re here to help you. Learn more about us at...{" "}
-          <a href="/about" className="circle-arrow">⮞⮞</a>
+          We support your academic success, personal growth, and overall
+          well-being throughout your college journey. From guidance and campus
+          resources to Alumni Connect opportunities, we’re here to help you.
+          Learn more about us at...{" "}
+          <a href="/about" className="circle-arrow">
+            ⮞⮞
+          </a>
         </p>
       </div>
     </>

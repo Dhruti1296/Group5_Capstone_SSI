@@ -27,7 +27,9 @@ function Pagination({ page, totalPages, setPage }) {
       >
         ← Prev
       </button>
-      <span className="page-info">Page {page} of {totalPages}</span>
+      <span className="page-info">
+        Page {page} of {totalPages}
+      </span>
       <button
         className="page-btn"
         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
@@ -58,13 +60,22 @@ function AdminDashboard() {
   const [expandedPosts, setExpandedPosts] = useState({});
 
   const [oppForm, setOppForm] = useState({
-    title: "", description: "", date: "", location: "", rawDate: ""
+    title: "",
+    description: "",
+    date: "",
+    location: "",
+    rawDate: "",
   });
   const [showOppForm, setShowOppForm] = useState(false);
   const [editingOpp, setEditingOpp] = useState(null);
 
   const [ssiEventForm, setSsiEventForm] = useState({
-    title: "", description: "", type: "", location: "", rawDate: "", eventDate: ""
+    title: "",
+    description: "",
+    type: "",
+    location: "",
+    rawDate: "",
+    eventDate: "",
   });
   const [showSsiForm, setShowSsiForm] = useState(false);
   const [editingSsiEvent, setEditingSsiEvent] = useState(null);
@@ -134,20 +145,28 @@ function AdminDashboard() {
 
   // ── Mentor handlers ───────────────────────────
   const handleApproveMentor = async (id) => {
-    const res = await authFetch(`${API}/api/mentor/${id}/approve`, { method: "PATCH" });
+    const res = await authFetch(`${API}/api/mentor/${id}/approve`, {
+      method: "PATCH",
+    });
     if (res.ok) {
       setMentors((prev) =>
-        prev.map((m) => m.id === id ? { ...m, approved: true, status: "Approved" } : m)
+        prev.map((m) =>
+          m.id === id ? { ...m, approved: true, status: "Approved" } : m,
+        ),
       );
       showNotification("Mentor approved!", "success");
     }
   };
 
   const handleRejectMentor = async (id) => {
-    const res = await authFetch(`${API}/api/mentor/${id}/reject`, { method: "PATCH" });
+    const res = await authFetch(`${API}/api/mentor/${id}/reject`, {
+      method: "PATCH",
+    });
     if (res.ok) {
       setMentors((prev) =>
-        prev.map((m) => m.id === id ? { ...m, approved: false, status: "Rejected" } : m)
+        prev.map((m) =>
+          m.id === id ? { ...m, approved: false, status: "Rejected" } : m,
+        ),
       );
       showNotification("Mentor rejected.", "success");
     }
@@ -157,21 +176,26 @@ function AdminDashboard() {
   const handleDeleteComment = async (postId, commentIndex) => {
     const res = await authFetch(
       `${API}/api/admin/posts/${postId}/comments/${commentIndex}`,
-      { method: "DELETE" }
+      { method: "DELETE" },
     );
     if (res.ok) {
       setPosts((prev) =>
         prev.map((p) => {
           if (p.id !== postId) return p;
-          return { ...p, comments: p.comments.filter((_, i) => i !== commentIndex) };
-        })
+          return {
+            ...p,
+            comments: p.comments.filter((_, i) => i !== commentIndex),
+          };
+        }),
       );
       showNotification("Comment deleted.", "success");
     }
   };
 
   const handleDeletePost = async (id) => {
-    const res = await authFetch(`${API}/api/admin/posts/${id}`, { method: "DELETE" });
+    const res = await authFetch(`${API}/api/admin/posts/${id}`, {
+      method: "DELETE",
+    });
     if (res.ok) {
       setPosts((prev) => prev.filter((p) => p.id !== id));
       showNotification("Post deleted.", "success");
@@ -180,7 +204,9 @@ function AdminDashboard() {
 
   // ── User handlers ─────────────────────────────
   const handleDeleteUser = async (userName) => {
-    const res = await authFetch(`${API}/api/admin/users/${userName}`, { method: "DELETE" });
+    const res = await authFetch(`${API}/api/admin/users/${userName}`, {
+      method: "DELETE",
+    });
     if (res.ok) {
       setUsers((prev) => prev.filter((u) => u.userName !== userName));
       showNotification("User deleted.", "success");
@@ -191,11 +217,11 @@ function AdminDashboard() {
   const handleVolunteerStatus = async (id, status) => {
     const res = await authFetch(
       `${API}/api/admin/volunteer-applications/${id}/status`,
-      { method: "PATCH", body: JSON.stringify({ status }) }
+      { method: "PATCH", body: JSON.stringify({ status }) },
     );
     if (res.ok) {
       setVolunteers((prev) =>
-        prev.map((v) => (v.id === id ? { ...v, status } : v))
+        prev.map((v) => (v.id === id ? { ...v, status } : v)),
       );
       showNotification("Status updated.", "success");
     }
@@ -203,7 +229,12 @@ function AdminDashboard() {
 
   // ── Opportunity handlers ──────────────────────
   const handleCreateOpportunity = async () => {
-    if (!oppForm.title || !oppForm.description || !oppForm.date || !oppForm.location) {
+    if (
+      !oppForm.title ||
+      !oppForm.description ||
+      !oppForm.date ||
+      !oppForm.location
+    ) {
       showNotification("All fields are required.", "error");
       return;
     }
@@ -214,28 +245,45 @@ function AdminDashboard() {
     if (res.ok) {
       const created = await res.json();
       setOpportunities((prev) => [...prev, created]);
-      setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+      setOppForm({
+        title: "",
+        description: "",
+        date: "",
+        location: "",
+        rawDate: "",
+      });
       setShowOppForm(false);
       showNotification("Opportunity created!", "success");
     }
   };
 
   const handleUpdateOpportunity = async () => {
-    if (!oppForm.title || !oppForm.description || !oppForm.date || !oppForm.location) {
+    if (
+      !oppForm.title ||
+      !oppForm.description ||
+      !oppForm.date ||
+      !oppForm.location
+    ) {
       showNotification("All fields are required.", "error");
       return;
     }
     const res = await authFetch(
       `${API}/api/admin/volunteer-opportunities/${editingOpp.id}`,
-      { method: "PUT", body: JSON.stringify(oppForm) }
+      { method: "PUT", body: JSON.stringify(oppForm) },
     );
     if (res.ok) {
       setOpportunities((prev) =>
-        prev.map((o) => o.id === editingOpp.id ? { ...o, ...oppForm } : o)
+        prev.map((o) => (o.id === editingOpp.id ? { ...o, ...oppForm } : o)),
       );
       setEditingOpp(null);
       setShowOppForm(false);
-      setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+      setOppForm({
+        title: "",
+        description: "",
+        date: "",
+        location: "",
+        rawDate: "",
+      });
       showNotification("Opportunity updated!", "success");
     }
   };
@@ -243,7 +291,7 @@ function AdminDashboard() {
   const handleDeleteOpportunity = async (id) => {
     const res = await authFetch(
       `${API}/api/admin/volunteer-opportunities/${id}`,
-      { method: "DELETE" }
+      { method: "DELETE" },
     );
     if (res.ok) {
       setOpportunities((prev) => prev.filter((o) => o.id !== id));
@@ -265,8 +313,12 @@ function AdminDashboard() {
 
   // ── SSI Event handlers ────────────────────────
   const handleCreateSsiEvent = async () => {
-    if (!ssiEventForm.title || !ssiEventForm.description ||
-        !ssiEventForm.eventDate || !ssiEventForm.location) {
+    if (
+      !ssiEventForm.title ||
+      !ssiEventForm.description ||
+      !ssiEventForm.eventDate ||
+      !ssiEventForm.location
+    ) {
       showNotification("All fields are required.", "error");
       return;
     }
@@ -280,13 +332,20 @@ function AdminDashboard() {
     try {
       const res = await fetch(`${EVENT_SERVICE}/api/events`, {
         method: "POST",
-        headers: { "adminUserName": user?.userName },
+        headers: { adminUserName: user?.userName },
         body: formData,
       });
       if (res.ok) {
         const updated = await fetch(`${EVENT_SERVICE}/api/events`);
         if (updated.ok) setSsiEvents(await updated.json());
-        setSsiEventForm({ title: "", description: "", type: "", location: "", rawDate: "", eventDate: "" });
+        setSsiEventForm({
+          title: "",
+          description: "",
+          type: "",
+          location: "",
+          rawDate: "",
+          eventDate: "",
+        });
         setShowSsiForm(false);
         showNotification("SSI Event created!", "success");
       } else {
@@ -302,7 +361,7 @@ function AdminDashboard() {
     try {
       const res = await fetch(`${EVENT_SERVICE}/api/events/${id}`, {
         method: "DELETE",
-        headers: { "adminUserName": user?.userName },
+        headers: { adminUserName: user?.userName },
       });
       if (res.ok) {
         setSsiEvents((prev) => prev.filter((e) => e.id !== id));
@@ -320,7 +379,9 @@ function AdminDashboard() {
 
   const formatDate = (iso) =>
     new Date(iso).toLocaleDateString("en-US", {
-      month: "short", day: "numeric", year: "numeric",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
 
   const textareaStyle = {
@@ -338,7 +399,6 @@ function AdminDashboard() {
 
   return (
     <div className="admin-dashboard">
-
       {/* Sidebar */}
       <div className="admin-sidebar">
         <h2 className="admin-logo">Admin Panel</h2>
@@ -351,7 +411,10 @@ function AdminDashboard() {
           >
             Mentor Applications
             <span className="badge">
-              {mentors.filter((m) => (m.status || "Pending") === "Pending").length}
+              {
+                mentors.filter((m) => (m.status || "Pending") === "Pending")
+                  .length
+              }
             </span>
           </button>
           <button
@@ -416,20 +479,25 @@ function AdminDashboard() {
                   {["All", "Pending", "Approved", "Rejected"].map((f) => (
                     <button
                       key={f}
-                      className={"filter-tab " + (mentorFilter === f ? "active" : "")}
+                      className={
+                        "filter-tab " + (mentorFilter === f ? "active" : "")
+                      }
                       onClick={() => setMentorFilter(f)}
                     >
                       {f}
                       <span className="badge">
                         {f === "All"
                           ? mentors.length
-                          : mentors.filter((m) => (m.status || "Pending") === f).length}
+                          : mentors.filter((m) => (m.status || "Pending") === f)
+                              .length}
                       </span>
                     </button>
                   ))}
                 </div>
                 {filteredMentors.length === 0 ? (
-                  <p className="admin-empty">No applications in this category.</p>
+                  <p className="admin-empty">
+                    No applications in this category.
+                  </p>
                 ) : (
                   <>
                     {mentorPagination.paginated.map((m) => (
@@ -439,28 +507,45 @@ function AdminDashboard() {
                             <h3>{m.name}</h3>
                             <p className="admin-meta">{m.role}</p>
                             {m.passedOutYear && (
-                              <p className="admin-meta">Class of {m.passedOutYear}</p>
+                              <p className="admin-meta">
+                                Class of {m.passedOutYear}
+                              </p>
                             )}
                             <p className="admin-meta">@{m.userName}</p>
                           </div>
-                          <span className={"status-badge " + (m.status || "pending").toLowerCase()}>
+                          <span
+                            className={
+                              "status-badge " +
+                              (m.status || "pending").toLowerCase()
+                            }
+                          >
                             {m.status || "Pending"}
                           </span>
                         </div>
                         <p className="admin-bio">{m.bio}</p>
                         <div className="admin-tags">
                           {m.expertise?.map((tag) => (
-                            <span key={tag} className="admin-tag">{tag}</span>
+                            <span key={tag} className="admin-tag">
+                              {tag}
+                            </span>
                           ))}
                         </div>
                         <p className="admin-meta">Email: {m.email}</p>
                         {m.linkedin && (
                           <p className="admin-meta">
                             LinkedIn:{" "}
-                            <a href={m.linkedin} target="_blank" rel="noreferrer">{m.linkedin}</a>
+                            <a
+                              href={m.linkedin}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {m.linkedin}
+                            </a>
                           </p>
                         )}
-                        <p className="admin-meta">Applied: {formatDate(m.appliedAt)}</p>
+                        <p className="admin-meta">
+                          Applied: {formatDate(m.appliedAt)}
+                        </p>
                         <div className="admin-actions">
                           <button
                             className="approve-btn"
@@ -502,24 +587,37 @@ function AdminDashboard() {
                         <div className="admin-card-header">
                           <div>
                             <h3>{v.opportunityTitle}</h3>
-                            <p className="admin-meta">Applied by: @{v.userName}</p>
-                            <p className="admin-meta">Date: {formatDate(v.appliedAt)}</p>
+                            <p className="admin-meta">
+                              Applied by: @{v.userName}
+                            </p>
+                            <p className="admin-meta">
+                              Date: {formatDate(v.appliedAt)}
+                            </p>
                           </div>
-                          <span className={"status-badge " + (v.status?.toLowerCase() || "pending")}>
+                          <span
+                            className={
+                              "status-badge " +
+                              (v.status?.toLowerCase() || "pending")
+                            }
+                          >
                             {v.status || "Pending"}
                           </span>
                         </div>
                         <div className="admin-actions">
                           <button
                             className="approve-btn"
-                            onClick={() => handleVolunteerStatus(v.id, "Approved")}
+                            onClick={() =>
+                              handleVolunteerStatus(v.id, "Approved")
+                            }
                             disabled={v.status === "Approved"}
                           >
                             {v.status === "Approved" ? "✓ Approved" : "Approve"}
                           </button>
                           <button
                             className="reject-btn"
-                            onClick={() => handleVolunteerStatus(v.id, "Rejected")}
+                            onClick={() =>
+                              handleVolunteerStatus(v.id, "Rejected")
+                            }
                             disabled={v.status === "Rejected"}
                           >
                             {v.status === "Rejected" ? "✗ Rejected" : "Reject"}
@@ -553,7 +651,9 @@ function AdminDashboard() {
                     {["All", "Student", "Alumni"].map((r) => (
                       <button
                         key={r}
-                        className={"filter-tab " + (userRoleFilter === r ? "active" : "")}
+                        className={
+                          "filter-tab " + (userRoleFilter === r ? "active" : "")
+                        }
                         onClick={() => setUserRoleFilter(r)}
                       >
                         {r}
@@ -571,7 +671,9 @@ function AdminDashboard() {
                 ) : (
                   <>
                     <p className="results-count">
-                      Showing {Math.min(userPagination.page * 15, filteredUsers.length)} of {filteredUsers.length} users
+                      Showing{" "}
+                      {Math.min(userPagination.page * 15, filteredUsers.length)}{" "}
+                      of {filteredUsers.length} users
                     </p>
                     {userPagination.paginated.map((u) => (
                       <div key={u.userName} className="admin-card">
@@ -579,16 +681,33 @@ function AdminDashboard() {
                           <div>
                             <h3>@{u.userName}</h3>
                             {u.name && (
-                              <p className="admin-meta">{u.name} {u.surname}</p>
+                              <p className="admin-meta">
+                                {u.name} {u.surname}
+                              </p>
                             )}
                             <p className="admin-meta">{u.email}</p>
                           </div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", alignItems: "flex-end" }}>
-                            <span className={"status-badge " + u.role?.toLowerCase()}>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "0.4rem",
+                              alignItems: "flex-end",
+                            }}
+                          >
+                            <span
+                              className={
+                                "status-badge " + u.role?.toLowerCase()
+                              }
+                            >
                               {u.role}
                             </span>
                             {u.mentorStatus && (
-                              <span className={"status-badge " + u.mentorStatus.toLowerCase()}>
+                              <span
+                                className={
+                                  "status-badge " + u.mentorStatus.toLowerCase()
+                                }
+                              >
                                 Mentor: {u.mentorStatus}
                               </span>
                             )}
@@ -627,7 +746,9 @@ function AdminDashboard() {
                         <div className="admin-card-header">
                           <div>
                             <h3>@{p.userName}</h3>
-                            <p className="admin-meta">{formatDate(p.createdAt)}</p>
+                            <p className="admin-meta">
+                              {formatDate(p.createdAt)}
+                            </p>
                           </div>
                           <div className="admin-post-stats">
                             <span>♥ {p.likes?.length || 0}</span>
@@ -655,13 +776,21 @@ function AdminDashboard() {
                                 {p.comments.map((c, i) => (
                                   <div key={i} className="admin-comment-row">
                                     <div className="admin-comment-content">
-                                      <span className="admin-comment-author">@{c.userName}</span>
-                                      <span className="admin-comment-text">{c.text}</span>
-                                      <span className="admin-comment-time">{formatDate(c.createdAt)}</span>
+                                      <span className="admin-comment-author">
+                                        @{c.userName}
+                                      </span>
+                                      <span className="admin-comment-text">
+                                        {c.text}
+                                      </span>
+                                      <span className="admin-comment-time">
+                                        {formatDate(c.createdAt)}
+                                      </span>
                                     </div>
                                     <button
                                       className="delete-comment-btn"
-                                      onClick={() => handleDeleteComment(p.id, i)}
+                                      onClick={() =>
+                                        handleDeleteComment(p.id, i)
+                                      }
                                       title="Delete comment"
                                     >
                                       ✕
@@ -701,18 +830,31 @@ function AdminDashboard() {
                     className="approve-btn"
                     onClick={() => {
                       setEditingOpp(null);
-                      setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+                      setOppForm({
+                        title: "",
+                        description: "",
+                        date: "",
+                        location: "",
+                        rawDate: "",
+                      });
                       setShowOppForm((prev) => !prev);
                     }}
                   >
-                    {showOppForm && !editingOpp ? "Cancel" : "+ New Opportunity"}
+                    {showOppForm && !editingOpp
+                      ? "Cancel"
+                      : "+ New Opportunity"}
                   </button>
                 </div>
 
                 {showOppForm && (
-                  <div className="admin-card" style={{ marginBottom: "1.5rem" }}>
+                  <div
+                    className="admin-card"
+                    style={{ marginBottom: "1.5rem" }}
+                  >
                     <h3 style={{ color: "#d4af37", marginBottom: "1rem" }}>
-                      {editingOpp ? "Edit Opportunity" : "Create New Opportunity"}
+                      {editingOpp
+                        ? "Edit Opportunity"
+                        : "Create New Opportunity"}
                     </h3>
                     <div className="opp-form-grid">
                       <div className="opp-form-field">
@@ -721,7 +863,9 @@ function AdminDashboard() {
                           type="text"
                           placeholder="e.g. Campus Open House Helper"
                           value={oppForm.title}
-                          onChange={(e) => setOppForm({ ...oppForm, title: e.target.value })}
+                          onChange={(e) =>
+                            setOppForm({ ...oppForm, title: e.target.value })
+                          }
                           className="admin-search"
                         />
                       </div>
@@ -735,17 +879,31 @@ function AdminDashboard() {
                             if (!raw) return;
                             const [year, month, day] = raw.split("-");
                             const formatted = new Date(
-                              parseInt(year), parseInt(month) - 1, parseInt(day)
+                              parseInt(year),
+                              parseInt(month) - 1,
+                              parseInt(day),
                             ).toLocaleDateString("en-US", {
-                              month: "long", day: "numeric", year: "numeric"
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
                             });
-                            setOppForm({ ...oppForm, rawDate: raw, date: formatted });
+                            setOppForm({
+                              ...oppForm,
+                              rawDate: raw,
+                              date: formatted,
+                            });
                           }}
                           className="admin-search"
                           style={{ colorScheme: "dark" }}
                         />
                         {oppForm.date && (
-                          <span style={{ fontSize: "0.75rem", color: "#888", marginTop: "4px" }}>
+                          <span
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "#888",
+                              marginTop: "4px",
+                            }}
+                          >
                             {oppForm.date}
                           </span>
                         )}
@@ -756,25 +914,42 @@ function AdminDashboard() {
                           type="text"
                           placeholder="e.g. Kitchener – Doon"
                           value={oppForm.location}
-                          onChange={(e) => setOppForm({ ...oppForm, location: e.target.value })}
+                          onChange={(e) =>
+                            setOppForm({ ...oppForm, location: e.target.value })
+                          }
                           className="admin-search"
                         />
                       </div>
                     </div>
-                    <div className="opp-form-field" style={{ marginTop: "0.8rem" }}>
+                    <div
+                      className="opp-form-field"
+                      style={{ marginTop: "0.8rem" }}
+                    >
                       <label>Description</label>
                       <textarea
                         placeholder="Describe the volunteer opportunity..."
                         value={oppForm.description}
-                        onChange={(e) => setOppForm({ ...oppForm, description: e.target.value })}
+                        onChange={(e) =>
+                          setOppForm({
+                            ...oppForm,
+                            description: e.target.value,
+                          })
+                        }
                         rows={3}
                         style={textareaStyle}
                       />
                     </div>
-                    <div className="admin-actions" style={{ marginTop: "1rem" }}>
+                    <div
+                      className="admin-actions"
+                      style={{ marginTop: "1rem" }}
+                    >
                       <button
                         className="approve-btn"
-                        onClick={editingOpp ? handleUpdateOpportunity : handleCreateOpportunity}
+                        onClick={
+                          editingOpp
+                            ? handleUpdateOpportunity
+                            : handleCreateOpportunity
+                        }
                       >
                         {editingOpp ? "Save Changes" : "Create Opportunity"}
                       </button>
@@ -783,7 +958,13 @@ function AdminDashboard() {
                         onClick={() => {
                           setShowOppForm(false);
                           setEditingOpp(null);
-                          setOppForm({ title: "", description: "", date: "", location: "", rawDate: "" });
+                          setOppForm({
+                            title: "",
+                            description: "",
+                            date: "",
+                            location: "",
+                            rawDate: "",
+                          });
                         }}
                       >
                         Cancel
@@ -793,7 +974,9 @@ function AdminDashboard() {
                 )}
 
                 {opportunities.length === 0 ? (
-                  <p className="admin-empty">No opportunities yet. Create one above.</p>
+                  <p className="admin-empty">
+                    No opportunities yet. Create one above.
+                  </p>
                 ) : (
                   <>
                     {oppPagination.paginated.map((opp) => (
@@ -801,18 +984,32 @@ function AdminDashboard() {
                         <div className="admin-card-header">
                           <div>
                             <h3>{opp.title}</h3>
-                            <p className="admin-meta"><i className="fi fi-rr-calendar"></i> {opp.date} &nbsp;·&nbsp; 📍 {opp.location}</p>
+                            <p className="admin-meta">
+                              <i className="fi fi-rr-calendar"></i> {opp.date}{" "}
+                              &nbsp;·&nbsp; 📍 {opp.location}
+                            </p>
                           </div>
-                          <span className={"status-badge " + (opp.status?.toLowerCase() || "open")}>
+                          <span
+                            className={
+                              "status-badge " +
+                              (opp.status?.toLowerCase() || "open")
+                            }
+                          >
                             {opp.status || "Open"}
                           </span>
                         </div>
                         <p className="admin-bio">{opp.description}</p>
                         <div className="admin-actions">
-                          <button className="approve-btn" onClick={() => handleEditOpportunity(opp)}>
+                          <button
+                            className="approve-btn"
+                            onClick={() => handleEditOpportunity(opp)}
+                          >
                             Edit
                           </button>
-                          <button className="reject-btn" onClick={() => handleDeleteOpportunity(opp.id)}>
+                          <button
+                            className="reject-btn"
+                            onClick={() => handleDeleteOpportunity(opp.id)}
+                          >
                             Delete
                           </button>
                         </div>
@@ -837,7 +1034,14 @@ function AdminDashboard() {
                     className="approve-btn"
                     onClick={() => {
                       setEditingSsiEvent(null);
-                      setSsiEventForm({ title: "", description: "", type: "", location: "", rawDate: "", eventDate: "" });
+                      setSsiEventForm({
+                        title: "",
+                        description: "",
+                        type: "",
+                        location: "",
+                        rawDate: "",
+                        eventDate: "",
+                      });
                       setShowSsiForm((prev) => !prev);
                     }}
                   >
@@ -846,7 +1050,10 @@ function AdminDashboard() {
                 </div>
 
                 {showSsiForm && (
-                  <div className="admin-card" style={{ marginBottom: "1.5rem" }}>
+                  <div
+                    className="admin-card"
+                    style={{ marginBottom: "1.5rem" }}
+                  >
                     <h3 style={{ color: "#d4af37", marginBottom: "1rem" }}>
                       Create New SSI Event
                     </h3>
@@ -857,7 +1064,12 @@ function AdminDashboard() {
                           type="text"
                           placeholder="Event title"
                           value={ssiEventForm.title}
-                          onChange={(e) => setSsiEventForm({ ...ssiEventForm, title: e.target.value })}
+                          onChange={(e) =>
+                            setSsiEventForm({
+                              ...ssiEventForm,
+                              title: e.target.value,
+                            })
+                          }
                           className="admin-search"
                         />
                       </div>
@@ -867,7 +1079,12 @@ function AdminDashboard() {
                           type="text"
                           placeholder="e.g. Workshop, Seminar"
                           value={ssiEventForm.type}
-                          onChange={(e) => setSsiEventForm({ ...ssiEventForm, type: e.target.value })}
+                          onChange={(e) =>
+                            setSsiEventForm({
+                              ...ssiEventForm,
+                              type: e.target.value,
+                            })
+                          }
                           className="admin-search"
                         />
                       </div>
@@ -877,12 +1094,20 @@ function AdminDashboard() {
                           type="text"
                           placeholder="e.g. Kitchener – Doon"
                           value={ssiEventForm.location}
-                          onChange={(e) => setSsiEventForm({ ...ssiEventForm, location: e.target.value })}
+                          onChange={(e) =>
+                            setSsiEventForm({
+                              ...ssiEventForm,
+                              location: e.target.value,
+                            })
+                          }
                           className="admin-search"
                         />
                       </div>
                     </div>
-                    <div className="opp-form-field" style={{ marginTop: "0.8rem" }}>
+                    <div
+                      className="opp-form-field"
+                      style={{ marginTop: "0.8rem" }}
+                    >
                       <label>Date</label>
                       <input
                         type="date"
@@ -893,32 +1118,58 @@ function AdminDashboard() {
                           setSsiEventForm({
                             ...ssiEventForm,
                             rawDate: raw,
-                            eventDate: new Date(raw + "T12:00:00").toISOString(),
+                            eventDate: new Date(
+                              raw + "T12:00:00",
+                            ).toISOString(),
                           });
                         }}
                         className="admin-search"
                         style={{ colorScheme: "dark" }}
                       />
                       {ssiEventForm.rawDate && (
-                        <span style={{ fontSize: "0.75rem", color: "#888", marginTop: "4px" }}>
-                          {new Date(ssiEventForm.rawDate + "T12:00:00").toLocaleDateString("en-US", {
-                            month: "long", day: "numeric", year: "numeric"
+                        <span
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "#888",
+                            marginTop: "4px",
+                          }}
+                        >
+                          {new Date(
+                            ssiEventForm.rawDate + "T12:00:00",
+                          ).toLocaleDateString("en-US", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
                           })}
                         </span>
                       )}
                     </div>
-                    <div className="opp-form-field" style={{ marginTop: "0.8rem" }}>
+                    <div
+                      className="opp-form-field"
+                      style={{ marginTop: "0.8rem" }}
+                    >
                       <label>Description</label>
                       <textarea
                         placeholder="Describe the event..."
                         value={ssiEventForm.description}
-                        onChange={(e) => setSsiEventForm({ ...ssiEventForm, description: e.target.value })}
+                        onChange={(e) =>
+                          setSsiEventForm({
+                            ...ssiEventForm,
+                            description: e.target.value,
+                          })
+                        }
                         rows={3}
                         style={textareaStyle}
                       />
                     </div>
-                    <div className="admin-actions" style={{ marginTop: "1rem" }}>
-                      <button className="approve-btn" onClick={handleCreateSsiEvent}>
+                    <div
+                      className="admin-actions"
+                      style={{ marginTop: "1rem" }}
+                    >
+                      <button
+                        className="approve-btn"
+                        onClick={handleCreateSsiEvent}
+                      >
                         Create Event
                       </button>
                       <button
@@ -926,7 +1177,14 @@ function AdminDashboard() {
                         onClick={() => {
                           setShowSsiForm(false);
                           setEditingSsiEvent(null);
-                          setSsiEventForm({ title: "", description: "", type: "", location: "", rawDate: "", eventDate: "" });
+                          setSsiEventForm({
+                            title: "",
+                            description: "",
+                            type: "",
+                            location: "",
+                            rawDate: "",
+                            eventDate: "",
+                          });
                         }}
                       >
                         Cancel
@@ -939,7 +1197,14 @@ function AdminDashboard() {
                   <p className="admin-empty">
                     No SSI events yet. Create one above.
                     <br />
-                    <span style={{ fontSize: "0.78rem", color: "#555", marginTop: "6px", display: "block" }}>
+                    <span
+                      style={{
+                        fontSize: "0.78rem",
+                        color: "#555",
+                        marginTop: "6px",
+                        display: "block",
+                      }}
+                    >
                       Make sure the Event Microservice is running on port 5237.
                     </span>
                   </p>
@@ -951,9 +1216,9 @@ function AdminDashboard() {
                           <div>
                             <h3>{event.title}</h3>
                             <p className="admin-meta">
-                              <i className="fi fi-rr-calendar"></i> {formatDate(event.eventDate)}
-                              &nbsp;·&nbsp;
-                              📍 {event.location}
+                              <i className="fi fi-rr-calendar"></i>{" "}
+                              {formatDate(event.eventDate)}
+                              &nbsp;·&nbsp; 📍 {event.location}
                               {event.type && <>&nbsp;·&nbsp; 🏷️ {event.type}</>}
                             </p>
                           </div>

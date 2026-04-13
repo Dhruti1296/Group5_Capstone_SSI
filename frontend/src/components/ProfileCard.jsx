@@ -15,7 +15,9 @@ function ProfileCard({ user }) {
       )}
       <h4>{user.userName}</h4>
       <p>{user.email}</p>
-      <Link to="/edit-profile" className="edit-link">Edit Profile</Link>
+      <Link to="/edit-profile" className="edit-link">
+        Edit Profile
+      </Link>
     </div>
   );
 }

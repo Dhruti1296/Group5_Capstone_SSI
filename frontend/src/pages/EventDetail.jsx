@@ -17,10 +17,14 @@ function EventDetail() {
 
   useEffect(() => {
     const fetchDetail = async () => {
-      if (!url) { setError("No event URL provided."); setLoading(false); return; }
+      if (!url) {
+        setError("No event URL provided.");
+        setLoading(false);
+        return;
+      }
       try {
         const res = await fetch(
-          `${API}/api/events/detail?url=${encodeURIComponent(url)}`
+          `${API}/api/events/detail?url=${encodeURIComponent(url)}`,
         );
         if (res.ok) {
           const data = await res.json();
@@ -56,23 +60,27 @@ function EventDetail() {
       );
     }
     // Regular paragraph
-    return <p key={index} className="event-detail-para">{line}</p>;
+    return (
+      <p key={index} className="event-detail-para">
+        {line}
+      </p>
+    );
   };
 
   return (
     <div className="event-detail-page">
       <Navbar />
 
-     <div className="event-detail-container">
-<button
-  className="event-back-btn"
-  onClick={() => {
-    console.log("back clicked");
-    navigate("/events");
-  }}
->
-   <i className="fi fi-rr-arrow-left"></i> Back to Events
-</button>
+      <div className="event-detail-container">
+        <button
+          className="event-back-btn"
+          onClick={() => {
+            console.log("back clicked");
+            navigate("/events");
+          }}
+        >
+          <i className="fi fi-rr-arrow-left"></i> Back to Events
+        </button>
 
         {loading ? (
           <p className="event-detail-loading">Loading event details...</p>
@@ -86,19 +94,26 @@ function EventDetail() {
             <div className="event-detail-meta">
               {event.date && (
                 <div className="event-meta-item">
-                  <span className="event-meta-icon"> <i className="fi fi-rr-calendar event-meta-icon"></i></span>
+                  <span className="event-meta-icon">
+                    {" "}
+                    <i className="fi fi-rr-calendar event-meta-icon"></i>
+                  </span>
                   <span>{event.date}</span>
                 </div>
               )}
               {event.time && (
                 <div className="event-meta-item">
-                  <span className="event-meta-icon"><i className="fi fi-rr-clock event-meta-icon"></i></span>
+                  <span className="event-meta-icon">
+                    <i className="fi fi-rr-clock event-meta-icon"></i>
+                  </span>
                   <span>{event.time}</span>
                 </div>
               )}
               {event.location && (
                 <div className="event-meta-item">
-                  <span className="event-meta-icon"><i className="fi fi-rr-marker event-meta-icon"></i></span>
+                  <span className="event-meta-icon">
+                    <i className="fi fi-rr-marker event-meta-icon"></i>
+                  </span>
                   <span>{event.location}</span>
                 </div>
               )}
@@ -109,7 +124,7 @@ function EventDetail() {
               <div className="event-detail-description">
                 {event.description
                   .split("\n\n")
-                  .filter(line => line.trim())
+                  .filter((line) => line.trim())
                   .map((line, i) => renderDescriptionLine(line.trim(), i))}
               </div>
             )}
@@ -126,8 +141,8 @@ function EventDetail() {
                     rel="noreferrer"
                     className={
                       link.url.includes("teams.microsoft") ||
-                        link.url.includes("forms") ||
-                        link.url.includes("zoom")
+                      link.url.includes("forms") ||
+                      link.url.includes("zoom")
                         ? "event-register-btn"
                         : "event-external-link"
                     }

@@ -6,13 +6,29 @@
 
   /* Golden spotlight background */
   background:
-    radial-gradient(90% 70% at bottom center, rgba(212,175,55,0.65), transparent 75%),
-    radial-gradient(70% 70% at left center, rgba(212,175,55,0.35), transparent 70%),
-    radial-gradient(70% 70% at right center, rgba(212,175,55,0.35), transparent 70%),
-    radial-gradient(50% 40% at top center, rgba(212,175,55,0.25), transparent 70%),
+    radial-gradient(
+      90% 70% at bottom center,
+      rgba(212, 175, 55, 0.65),
+      transparent 75%
+    ),
+    radial-gradient(
+      70% 70% at left center,
+      rgba(212, 175, 55, 0.35),
+      transparent 70%
+    ),
+    radial-gradient(
+      70% 70% at right center,
+      rgba(212, 175, 55, 0.35),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 40% at top center,
+      rgba(212, 175, 55, 0.25),
+      transparent 70%
+    ),
     linear-gradient(to bottom, #000, #0a0a0a, #000);
 
-  box-shadow: inset 0 0 280px rgba(212,175,55,0.28);
+  box-shadow: inset 0 0 280px rgba(212, 175, 55, 0.28);
   position: relative;
 }
 
@@ -37,7 +53,7 @@
   border-radius: 20px;
   text-align: center;
   color: #fff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 
   /* Zoom-in animation */
   animation: zoom-in 1s ease forwards;
@@ -72,7 +88,6 @@
 .register-select {
   width: 50.5vw;
 }
-
 
 .register-input:focus,
 .register-select:focus {
@@ -121,32 +136,66 @@
 
 /* Animations */
 @keyframes zoom-in {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Sequential field animations */
-.register-input:nth-of-type(1) { animation: slideIn 0.6s ease forwards; animation-delay: 0.3s; }
-.register-input:nth-of-type(2) { animation: slideIn 0.6s ease forwards; animation-delay: 0.6s; }
-.register-input:nth-of-type(3) { animation: slideIn 0.6s ease forwards; animation-delay: 0.9s; }
-.register-select { animation: slideIn 0.6s ease forwards; animation-delay: 1.2s; }
-.register-button { animation: slideIn 0.6s ease forwards; animation-delay: 1.5s; }
+.register-input:nth-of-type(1) {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 0.3s;
+}
+.register-input:nth-of-type(2) {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 0.6s;
+}
+.register-input:nth-of-type(3) {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 0.9s;
+}
+.register-select {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 1.2s;
+}
+.register-button {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 1.5s;
+}
 
 /* Notification banner */
 
-
 @keyframes slideDown {
-  from { opacity: 0; transform: translate(-50%, -20px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 @keyframes fadeOut {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 
 .notification {
@@ -160,7 +209,9 @@
   font-size: 1rem;
   z-index: 1000;
   text-align: center;
-  animation: slideDown 0.5s ease, fadeOut 0.5s ease 3s forwards;
+  animation:
+    slideDown 0.5s ease,
+    fadeOut 0.5s ease 3s forwards;
 }
 
 /*  Success glow */
@@ -168,8 +219,12 @@
   background: #111;
   border: 2px solid #d4af37;
   color: #d4af37;
-  box-shadow: 0 0 15px rgba(212,175,55,0.8), 0 0 30px rgba(212,175,55,0.6);
-  animation: glowPulse 2s infinite alternate, slideDown 0.5s ease;
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.8),
+    0 0 30px rgba(212, 175, 55, 0.6);
+  animation:
+    glowPulse 2s infinite alternate,
+    slideDown 0.5s ease;
 }
 
 /*  Error style */
@@ -177,24 +232,42 @@
   background: #111;
   border: 2px solid #d4af37;
   color: #ff4d4d;
-  box-shadow: 0 0 15px rgba(255,77,77,0.8), 0 0 30px rgba(255,77,77,0.6);
+  box-shadow:
+    0 0 15px rgba(255, 77, 77, 0.8),
+    0 0 30px rgba(255, 77, 77, 0.6);
 }
 
 /* Slide down animation */
 @keyframes slideDown {
-  from { opacity: 0; transform: translate(-50%, -20px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 /* Fade out after delay */
 @keyframes fadeOut {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 
 /* Glowing pulse effect */
 @keyframes glowPulse {
-  from { box-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4); }
-  to   { box-shadow: 0 0 20px rgba(212,175,55,1), 0 0 40px rgba(212,175,55,0.8); }
+  from {
+    box-shadow:
+      0 0 10px rgba(212, 175, 55, 0.6),
+      0 0 20px rgba(212, 175, 55, 0.4);
+  }
+  to {
+    box-shadow:
+      0 0 20px rgba(212, 175, 55, 1),
+      0 0 40px rgba(212, 175, 55, 0.8);
+  }
 }
 
 /* Smooth fade-out animation */
@@ -203,8 +276,14 @@
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.95); }
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }
 
 /* Optional: slide-in for login page */
@@ -213,8 +292,14 @@
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Press down effect */
@@ -222,4 +307,3 @@
   transform: scale(0.96);
   box-shadow: 0 0 8px #d4af37;
 }
-

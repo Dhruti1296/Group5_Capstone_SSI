@@ -54,7 +54,10 @@ function Mentor() {
       });
       if (res.ok) {
         setRequested((prev) => ({ ...prev, [mentor.id]: true }));
-        showNotification(`Mentorship request sent to ${mentor.name}!`, "success");
+        showNotification(
+          `Mentorship request sent to ${mentor.name}!`,
+          "success",
+        );
       } else {
         const err = await res.text();
         showNotification(err || "Failed to send request.", "error");
@@ -67,8 +70,13 @@ function Mentor() {
   const renderLinkedIn = (url) => {
     if (!url) return null;
     return (
-      <a href={url} target="_blank" rel="noreferrer" className="mentor-linkedin">
-      <i className="fi fi-brands-linkedin"></i>  LinkedIn
+      <a
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        className="mentor-linkedin"
+      >
+        <i className="fi fi-brands-linkedin"></i> LinkedIn
       </a>
     );
   };
@@ -105,9 +113,7 @@ function Mentor() {
         ) : (
           mentors.map((mentor) => (
             <div key={mentor.id} className="mentor-card">
-              <div className="mentor-avatar">
-                {mentor.name.charAt(0)}
-              </div>
+              <div className="mentor-avatar">{mentor.name.charAt(0)}</div>
               <div className="mentor-info">
                 <h3 className="mentor-name">{mentor.name}</h3>
                 <p className="mentor-role">{mentor.role}</p>
@@ -117,16 +123,22 @@ function Mentor() {
                 <p className="mentor-bio">{mentor.bio}</p>
                 <div className="mentor-tags">
                   {mentor.expertise?.map((tag) => (
-                    <span key={tag} className="mentor-tag">{tag}</span>
+                    <span key={tag} className="mentor-tag">
+                      {tag}
+                    </span>
                   ))}
                 </div>
                 {renderLinkedIn(mentor.linkedin)}
                 <button
-                  className={"mentor-btn " + (requested[mentor.id] ? "requested" : "")}
+                  className={
+                    "mentor-btn " + (requested[mentor.id] ? "requested" : "")
+                  }
                   onClick={() => handleRequest(mentor)}
                   disabled={requested[mentor.id] || hasActiveMentor}
                 >
-                  {requested[mentor.id] ? "✓ Request Sent" : "Request Mentorship"}
+                  {requested[mentor.id]
+                    ? "✓ Request Sent"
+                    : "Request Mentorship"}
                 </button>
               </div>
             </div>

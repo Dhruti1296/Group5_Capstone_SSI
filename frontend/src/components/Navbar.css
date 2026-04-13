@@ -154,7 +154,7 @@
   background: transparent;
   border: none;
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 1rem;
   cursor: pointer;
   padding: 0;
@@ -235,7 +235,7 @@
   color: #888;
   font-size: 0.75rem;
   cursor: pointer;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   transition: color 0.2s ease;
 }
 
@@ -303,7 +303,9 @@
   padding: 6px 14px;
   border: 1.5px solid #d4af37;
   border-radius: 20px;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .guest-link:hover {
@@ -375,22 +377,22 @@
 
 /* ── Message colors — fixed contrast ─────── */
 .notif-item.success .notif-message {
-  color: #86EFAC;
+  color: #86efac;
   /* soft green — readable on dark */
 }
 
 .notif-item.info .notif-message {
-  color: #E2E8F0;
+  color: #e2e8f0;
   /* off white — easy to read */
 }
 
 .notif-item.warning .notif-message {
-  color: #FCD34D;
+  color: #fcd34d;
   /* amber — visible on dark */
 }
 
 .notif-item.error .notif-message {
-  color: #FCA5A5;
+  color: #fca5a5;
   /* soft red — readable on dark */
 }
 

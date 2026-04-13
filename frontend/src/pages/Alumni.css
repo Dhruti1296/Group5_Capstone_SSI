@@ -30,7 +30,7 @@
   border-radius: 30px;
   color: #fff;
   font-size: 1rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   outline: none;
   transition: border-color 0.3s ease;
 }
@@ -56,7 +56,9 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .alumni-card:hover {
@@ -115,7 +117,9 @@
 /* ── View Profile hint ───────────────────── */
 .alumni-card {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   position: relative;
 }
 
@@ -130,7 +134,7 @@
   margin-top: 10px;
   font-size: 0.78rem;
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -179,7 +183,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 
 .profile-modal-close:hover {
@@ -191,7 +197,7 @@
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7A6228, #C9A84C);
+  background: linear-gradient(135deg, #7a6228, #c9a84c);
   color: #fff;
   font-size: 2.2rem;
   font-weight: 700;
@@ -210,7 +216,7 @@
 }
 
 .profile-modal-name {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 1.2rem;
   color: #d4af37;
   margin-bottom: 4px;

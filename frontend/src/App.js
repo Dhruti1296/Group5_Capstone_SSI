@@ -36,14 +36,17 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={
-              <>
-                <Navbar />
-                <VideoBackground />
-                <MakeADifference />
-                <Footer />
-              </>
-            } />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Navbar />
+                  <VideoBackground />
+                  <MakeADifference />
+                  <Footer />
+                </>
+              }
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/about" element={<About />} />
@@ -52,32 +55,72 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/events/detail" element={<EventDetail />} />
             <Route path="/alumni" element={<Alumni />} />
-            <Route path="/students" element={
-              <ProtectedRoute><Students /></ProtectedRoute>
-            } />
-            <Route path="/dashboard" element={
-              <ProtectedRoute><Dashboard /></ProtectedRoute>
-            } />
-            <Route path="/edit-profile" element={
-              <ProtectedRoute><EditProfile /></ProtectedRoute>
-            } />
-            <Route path="/volunteer" element={
-              <ProtectedRoute><Volunteer /></ProtectedRoute>
-            } />
-            <Route path="/mentor" element={
-              <ProtectedRoute><Mentor /></ProtectedRoute>
-            } />
-            <Route path="/become-mentor" element={
-              <ProtectedRoute><BecomeMentor /></ProtectedRoute>
-            } />
-            <Route path="/chat/:roomId" element={
-              <ProtectedRoute><Chat /></ProtectedRoute>
-            } />
+            <Route
+              path="/students"
+              element={
+                <ProtectedRoute>
+                  <Students />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-profile"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/volunteer"
+              element={
+                <ProtectedRoute>
+                  <Volunteer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mentor"
+              element={
+                <ProtectedRoute>
+                  <Mentor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/become-mentor"
+              element={
+                <ProtectedRoute>
+                  <BecomeMentor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat/:roomId"
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              }
+            />
             {/* Admin routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={
-              <AdminRoute><AdminDashboard /></AdminRoute>
-            } />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
           </Routes>
         </div>
       </Router>

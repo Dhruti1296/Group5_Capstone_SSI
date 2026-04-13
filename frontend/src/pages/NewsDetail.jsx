@@ -24,7 +24,7 @@ function NewsDetail() {
       }
       try {
         const res = await fetch(
-          `${API}/api/news/detail?url=${encodeURIComponent(url)}`
+          `${API}/api/news/detail?url=${encodeURIComponent(url)}`,
         );
         if (res.ok) {
           const data = await res.json();
@@ -57,7 +57,11 @@ function NewsDetail() {
         </div>
       );
     }
-    return <p key={index} className="news-detail-para">{line}</p>;
+    return (
+      <p key={index} className="news-detail-para">
+        {line}
+      </p>
+    );
   };
 
   return (
@@ -65,10 +69,7 @@ function NewsDetail() {
       <Navbar />
 
       <div className="news-detail-container">
-        <button
-          className="news-back-btn"
-          onClick={() => navigate("/news")}
-        >
+        <button className="news-back-btn" onClick={() => navigate("/news")}>
           <i className="fi fi-rr-arrow-left"></i> Back to News
         </button>
 
@@ -79,7 +80,9 @@ function NewsDetail() {
         ) : news ? (
           <div className="news-detail-card">
             {news.date && (
-              <p className="news-detail-date"><i className="fi fi-rr-calendar"></i> {news.date}</p>
+              <p className="news-detail-date">
+                <i className="fi fi-rr-calendar"></i> {news.date}
+              </p>
             )}
             <h2 className="news-detail-title">{news.title}</h2>
 
@@ -97,7 +100,7 @@ function NewsDetail() {
               <div className="news-detail-body">
                 {news.description
                   .split("\n\n")
-                  .filter(line => line.trim())
+                  .filter((line) => line.trim())
                   .map((line, i) => renderLine(line.trim(), i))}
               </div>
             )}

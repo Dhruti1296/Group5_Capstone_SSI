@@ -3,9 +3,8 @@
   grid-template-columns: 1fr 2fr 1fr; /* three columns */
   gap: 2rem;
   padding: 2rem;
- 
-      /* white text for contrast */
-   
+
+  /* white text for contrast */
 }
 
 /* Column 1: Profile */
@@ -15,15 +14,13 @@
   border: 2px solid black;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(212,175,55,0.4);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
   transition: transform 0.3s ease;
 }
 
-
-
 .profile-pic-wrapper {
   display: flex;
-  justify-content: center;   /* centers horizontally */
+  justify-content: center; /* centers horizontally */
   margin-bottom: 1rem;
 }
 
@@ -78,22 +75,19 @@
 
 /* Column 2: Feed */
 .feed-column {
- 
   padding: 1rem;
   border-radius: 12px;
   border: 2px solid black;
-  box-shadow: 0 4px 12px rgba(212,175,55,0.4);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
   transition: transform 0.3s ease;
 }
 
-
 /* Column 3: Lists */
 .lists-column {
-
   border: 2px solid black;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(212,175,55,0.4);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
   transition: transform 0.3s ease;
 }
 
@@ -124,38 +118,38 @@
 }
 
 .post-box {
-    width: 70vw;
-    margin: 20px auto;
-   
-    background: #000;
-    border: 2px solid #d4af37;
-    border-radius: 20px;
-    padding: 12px 20px;
-    color: #d4af37;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    bottom: 15px;
-    left: -22px;
+  width: 70vw;
+  margin: 20px auto;
+
+  background: #000;
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  padding: 12px 20px;
+  color: #d4af37;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  bottom: 15px;
+  left: -22px;
 }
 
 .post-box:hover {
   background: #deb169;
   color: #111;
-  border:2px solid black
+  border: 2px solid black;
 }
 .post-box-inner {
-  display: flex;              /* put children side by side */
-  align-items: center;        /* vertically center them */
-  gap: 12px;                  /* space between circle and text */
+  display: flex; /* put children side by side */
+  align-items: center; /* vertically center them */
+  gap: 12px; /* space between circle and text */
 }
 
 /* Modal overlay */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.8); /* dark overlay */
+  background: rgba(0, 0, 0, 0.8); /* dark overlay */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -195,7 +189,8 @@
   margin-top: 12px;
 }
 
-.cancel-btn, .post-btn {
+.cancel-btn,
+.post-btn {
   padding: 8px 16px;
   border-radius: 20px;
   border: 2px solid #d4af37;
@@ -222,22 +217,20 @@
 }
 
 .dashboard-page {
-  
-    background-color: #323232; 
-    min-height: 100vh;
-    padding-top: 140px;
+  background-color: #323232;
+  min-height: 100vh;
+  padding-top: 140px;
 }
 
 .profile-pic {
-  display: block;              /* make it a block element */
-  margin: 0 auto;              /* center horizontally */
+  display: block; /* make it a block element */
+  margin: 0 auto; /* center horizontally */
 }
 
 .profile-pic.clickable,
 .profile-pic.initials.clickable {
   cursor: pointer;
   transition: transform 0.2s ease;
- 
 }
 
 a {
@@ -301,7 +294,7 @@ a {
   border: none;
   border-radius: 20px;
   padding: 6px 16px;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.82rem;
   font-weight: bold;
   cursor: pointer;
@@ -342,7 +335,7 @@ a {
   border: none;
   border-radius: 6px;
   padding: 6px 14px;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.78rem;
   font-weight: bold;
   cursor: pointer;
@@ -359,7 +352,7 @@ a {
   border: 1px solid #e05c5c;
   border-radius: 6px;
   padding: 6px 14px;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.78rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -459,7 +452,7 @@ a {
   border: none;
   border-radius: 6px;
   padding: 4px 10px;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
@@ -524,7 +517,6 @@ a {
 }
 
 .lists-column-links {
- 
   border: 2px solid #d4af37;
   border-radius: 12px;
   padding: 1rem;

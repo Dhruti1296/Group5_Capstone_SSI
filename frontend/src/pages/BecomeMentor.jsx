@@ -100,19 +100,24 @@ function BecomeMentor() {
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      showNotification("Name is required.", "error"); return;
+      showNotification("Name is required.", "error");
+      return;
     }
     if (!formData.role.trim()) {
-      showNotification("Your role/field is required.", "error"); return;
+      showNotification("Your role/field is required.", "error");
+      return;
     }
     if (!formData.bio.trim() || formData.bio.length < 30) {
-      showNotification("Bio must be at least 30 characters.", "error"); return;
+      showNotification("Bio must be at least 30 characters.", "error");
+      return;
     }
     if (formData.expertise.length === 0) {
-      showNotification("Select at least one area of expertise.", "error"); return;
+      showNotification("Select at least one area of expertise.", "error");
+      return;
     }
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      showNotification("Enter a valid email address.", "error"); return;
+      showNotification("Enter a valid email address.", "error");
+      return;
     }
 
     setSaving(true);
@@ -135,7 +140,7 @@ function BecomeMentor() {
         setApplication(data);
         showNotification(
           "Application submitted! You will be notified once reviewed.",
-          "success"
+          "success",
         );
       } else {
         const err = await res.text();
@@ -153,19 +158,21 @@ function BecomeMentor() {
     const status = application?.status || "Pending";
 
     const config = {
-    Approved: {
-  icon: "✓",
-  title: "Application Approved!",
-  message: "Congratulations! You are now listed in the mentor directory. Students will be able to find and reach out to you.",
-  color: "#3fb950",
-  borderColor: "#3fb950",
-  btnLabel: "Back to Dashboard",
-  btnAction: () => navigate("/dashboard"),
-},
+      Approved: {
+        icon: "✓",
+        title: "Application Approved!",
+        message:
+          "Congratulations! You are now listed in the mentor directory. Students will be able to find and reach out to you.",
+        color: "#3fb950",
+        borderColor: "#3fb950",
+        btnLabel: "Back to Dashboard",
+        btnAction: () => navigate("/dashboard"),
+      },
       Rejected: {
         icon: "✗",
         title: "Application Not Approved",
-        message: "Unfortunately your application was not approved at this time. Please contact the admin for more details.",
+        message:
+          "Unfortunately your application was not approved at this time. Please contact the admin for more details.",
         color: "#e05c5c",
         borderColor: "#e05c5c",
         btnLabel: "Back to Dashboard",
@@ -174,7 +181,8 @@ function BecomeMentor() {
       Pending: {
         icon: "⏳",
         title: "Application Under Review",
-        message: "Your application has been submitted and is currently being reviewed by the admin. You will be notified once a decision is made.",
+        message:
+          "Your application has been submitted and is currently being reviewed by the admin. You will be notified once a decision is made.",
         color: "#d4af37",
         borderColor: "#d4af37",
         btnLabel: "Back to Dashboard",
@@ -186,7 +194,10 @@ function BecomeMentor() {
 
     return (
       <div className="already-applied" style={{ borderColor: c.borderColor }}>
-        <div className="status-icon" style={{ color: c.color, fontSize: "2.5rem" }}>
+        <div
+          className="status-icon"
+          style={{ color: c.color, fontSize: "2.5rem" }}
+        >
           {c.icon}
         </div>
         <h3 style={{ color: c.color }}>{c.title}</h3>
@@ -196,15 +207,25 @@ function BecomeMentor() {
         {application && (
           <div className="submitted-details">
             <h4>Your Submitted Details</h4>
-            <p><strong>Name:</strong> {application.name}</p>
-            <p><strong>Role:</strong> {application.role}</p>
+            <p>
+              <strong>Name:</strong> {application.name}
+            </p>
+            <p>
+              <strong>Role:</strong> {application.role}
+            </p>
             {application.passedOutYear && (
-              <p><strong>Graduation Year:</strong> {application.passedOutYear}</p>
+              <p>
+                <strong>Graduation Year:</strong> {application.passedOutYear}
+              </p>
             )}
-            <p><strong>Bio:</strong> {application.bio}</p>
+            <p>
+              <strong>Bio:</strong> {application.bio}
+            </p>
             <div className="submitted-tags">
               {application.expertise?.map((tag) => (
-                <span key={tag} className="expertise-tag selected">{tag}</span>
+                <span key={tag} className="expertise-tag selected">
+                  {tag}
+                </span>
               ))}
             </div>
           </div>
@@ -222,12 +243,14 @@ function BecomeMentor() {
     return (
       <div className="become-mentor-body">
         <Navbar />
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "60vh"
-        }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "60vh",
+          }}
+        >
           <p style={{ color: "#d4af37", fontSize: "1.2rem" }}>Loading...</p>
         </div>
         <Footer />
@@ -253,9 +276,10 @@ function BecomeMentor() {
         </p>
 
         {/* Show status screen if application exists, form otherwise */}
-        {application ? renderStatusScreen() : (
+        {application ? (
+          renderStatusScreen()
+        ) : (
           <form className="become-mentor-form" onSubmit={handleSubmit}>
-
             <label>
               Full Name <span className="required">*</span>
               <input
@@ -320,7 +344,9 @@ function BecomeMentor() {
                 placeholder="Tell students about your journey, your current work, and what kind of mentorship you can offer. (min. 30 characters)"
                 rows={5}
               />
-              <span className="char-count">{formData.bio.length} characters</span>
+              <span className="char-count">
+                {formData.bio.length} characters
+              </span>
             </label>
 
             <div className="expertise-section">

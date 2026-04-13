@@ -15,8 +15,6 @@ export const authFetch = (url, options = {}) => {
   });
 };
 
-
-
 // ### How it all fits together
 // ```
 // Login → backend returns { token, userName, role, email }

@@ -10,14 +10,14 @@
   padding-top: 100px;
   padding-bottom: 2rem;
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   margin-bottom: 2rem;
 }
 
 .news-header h2 {
   text-align: center;
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
@@ -36,23 +36,26 @@
 .news-card {
   display: flex;
   align-items: stretch;
-  background: #1A1A1E;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: #1a1a1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 3px solid #d4af37;
   border-radius: 14px;
   overflow: hidden;
   text-decoration: none;
   color: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease,
-              border-color 0.2s ease, background 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .news-card:hover {
   transform: translateY(-3px);
   background: #202026;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
-  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.15);
   border-left-color: #e8c97a;
 }
 
@@ -81,7 +84,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  border-left: 1px solid rgba(255,255,255,0.05);
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* ── Date ────────────────────────────────── */
@@ -89,7 +92,7 @@
   display: block;
   font-size: 0.72rem;
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 4px;
@@ -99,8 +102,8 @@
 .news-title {
   display: block;
   font-size: 1.02rem;
-  font-family: 'Cinzel', serif;
-  color: #F5F4F0;
+  font-family: "Cinzel", serif;
+  color: #f5f4f0;
   margin: 0;
   line-height: 1.45;
   position: relative;
@@ -172,7 +175,7 @@
 
 .news-error {
   text-align: center;
-  color: #FCA5A5;
+  color: #fca5a5;
   padding: 6rem 2rem;
 }
 

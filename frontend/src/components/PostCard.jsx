@@ -47,8 +47,11 @@ function PostCard({ post, onDelete, onUpdate }) {
   const formatDate = (iso) => {
     const d = new Date(iso);
     return d.toLocaleDateString("en-US", {
-      month: "short", day: "numeric", year: "numeric",
-      hour: "2-digit", minute: "2-digit",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -64,9 +67,12 @@ function PostCard({ post, onDelete, onUpdate }) {
           <span className="post-date">{formatDate(post.createdAt)}</span>
         </div>
         {isOwner && (
-          <button className="delete-btn" onClick={handleDelete} title="Delete post">
+          <button
+            className="delete-btn"
+            onClick={handleDelete}
+            title="Delete post"
+          >
             <i className="fi fi-rr-trash"></i>
-
           </button>
         )}
       </div>
@@ -80,7 +86,8 @@ function PostCard({ post, onDelete, onUpdate }) {
           className={`action-btn ${hasLiked ? "liked" : ""}`}
           onClick={handleLike}
         >
-          <i className={`fi ${hasLiked ? "fi-sr-heart" : "fi-rr-heart"}`}></i> {post.likes?.length || 0}
+          <i className={`fi ${hasLiked ? "fi-sr-heart" : "fi-rr-heart"}`}></i>{" "}
+          {post.likes?.length || 0}
         </button>
         <button
           className="action-btn"

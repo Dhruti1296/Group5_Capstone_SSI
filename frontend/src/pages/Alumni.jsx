@@ -31,7 +31,7 @@ function Alumni() {
   const filtered = alumniList.filter(
     (a) =>
       a.userName.toLowerCase().includes(search.toLowerCase()) ||
-      (a.name && a.name.toLowerCase().includes(search.toLowerCase()))
+      (a.name && a.name.toLowerCase().includes(search.toLowerCase())),
   );
 
   return (
@@ -87,10 +87,7 @@ function Alumni() {
           className="profile-modal-overlay"
           onClick={() => setSelectedUser(null)}
         >
-          <div
-            className="profile-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
             <button
               className="profile-modal-close"
               onClick={() => setSelectedUser(null)}
@@ -101,7 +98,7 @@ function Alumni() {
             {/* Avatar */}
             <div className="profile-modal-avatar">
               {selectedUser.profilePic &&
-                selectedUser.profilePic.startsWith("data:image") ? (
+              selectedUser.profilePic.startsWith("data:image") ? (
                 <img
                   src={selectedUser.profilePic}
                   alt={selectedUser.userName}

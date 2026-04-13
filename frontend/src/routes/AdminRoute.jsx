@@ -4,7 +4,7 @@ import { UserContext } from "../context/UserContext";
 
 function AdminRoute({ children }) {
   const { user, authReady } = useContext(UserContext);
-console.log("AdminRoute — authReady:", authReady, "| user:", user);
+  console.log("AdminRoute — authReady:", authReady, "| user:", user);
   if (!authReady) return null;
 
   if (!user) return <Navigate to="/admin/login" replace />;

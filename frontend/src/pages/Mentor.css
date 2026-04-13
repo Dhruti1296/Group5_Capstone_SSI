@@ -36,7 +36,9 @@
   padding: 1.5rem;
   display: flex;
   gap: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .mentor-card:hover {
@@ -115,7 +117,7 @@
   border: none;
   border-radius: 8px;
   font-weight: bold;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   cursor: pointer;
   transition: all 0.3s ease;
 }

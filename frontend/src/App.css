@@ -3,7 +3,7 @@ html {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .logo {
@@ -146,8 +146,6 @@ html {
   z-index: 1000;
 }
 
-
-
 .close-button {
   position: absolute;
   top: 10px;
@@ -191,8 +189,6 @@ html {
   }
 }
 
-
-
 .bottom-buttons {
   position: absolute;
   bottom: -71px;
@@ -235,12 +231,11 @@ html {
   gap: 5rem;
   padding: 2rem 0;
   background: rgb(249, 248, 247);
-
 }
 
 /* Base link style */
 .link-bar a {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 1.5rem;
   font-weight: 525;
   text-decoration: none;
@@ -303,7 +298,7 @@ html {
   transition: transform 0.4s ease;
   z-index: 1000;
   padding: 2rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .side-menu.open {
@@ -329,7 +324,7 @@ html {
 
 .side-menu h2,
 .side-menu ul li a {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   /* 👈 ensure headings & links match */
 }
 
@@ -338,7 +333,7 @@ html {
 .community-section p,
 .community-section a,
 .community-section button {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .down-arrow-link {
@@ -350,7 +345,6 @@ html {
 }
 
 @keyframes bounce {
-
   0%,
   20%,
   50%,
@@ -369,20 +363,21 @@ html {
 }
 
 .community-section {
-  background: linear-gradient(to bottom,
-      #deb169 0%,
-      #1a1a1e 25%,
-      #111114 50%,
-      #1a1a1e 75%,
-      #deb169 100%);
+  background: linear-gradient(
+    to bottom,
+    #deb169 0%,
+    #1a1a1e 25%,
+    #111114 50%,
+    #1a1a1e 75%,
+    #deb169 100%
+  );
   width: 100%;
   padding: 4rem 2rem;
   text-align: center;
   color: #fff;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   animation: fadeUp 1s ease forwards;
 }
-
 
 .community-section p {
   font-size: 1.5rem;
@@ -391,8 +386,6 @@ html {
   margin: 0 auto;
   font-style: italic;
 }
-
-
 
 .circle-arrow {
   transform: translateX(-50%);
@@ -463,7 +456,9 @@ html {
 .social-icon {
   font-size: 1.5rem;
   color: #deb169;
-  transition: transform 0.3s ease, color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
   opacity: 1;
   transform: translateY(20px);
 }
@@ -531,7 +526,7 @@ html {
   border-left: 2px solid #d4af37;
   padding: 2rem;
   z-index: 1001;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   overflow-y: auto;
 }
 

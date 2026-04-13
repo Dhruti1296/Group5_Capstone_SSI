@@ -1,7 +1,7 @@
 .chat-page {
   min-height: 100vh;
   background: linear-gradient(140deg, #000 40%, #deb169 85%);
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .chat-container {
@@ -32,7 +32,7 @@
   border-radius: 8px;
   padding: 6px 12px;
   cursor: pointer;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.82rem;
   transition: all 0.2s ease;
   flex-shrink: 0;
@@ -192,7 +192,7 @@
   padding: 10px 16px;
   color: #fff;
   font-size: 0.9rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   outline: none;
   transition: border-color 0.2s ease;
 }
@@ -208,7 +208,7 @@
   border-radius: 20px;
   padding: 10px 24px;
   font-weight: bold;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   cursor: pointer;
   transition: background 0.2s ease;
 }
@@ -267,7 +267,7 @@
 }
 
 .chat-read-receipt.read {
-  color: #4FC3F7;
+  color: #4fc3f7;
 }
 
 .icon-smile {

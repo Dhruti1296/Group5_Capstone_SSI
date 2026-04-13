@@ -19,9 +19,7 @@ const Navbar = () => {
   const notifRef = useRef(null);
   const navigate = useNavigate();
 
-  const initials = user?.userName
-    ? user.userName.charAt(0).toUpperCase()
-    : "G";
+  const initials = user?.userName ? user.userName.charAt(0).toUpperCase() : "G";
 
   useEffect(() => {
     if (!user || user.role === "Admin") return;
@@ -58,16 +56,20 @@ const Navbar = () => {
   }, []);
 
   const handleMarkAllRead = async () => {
-    await authFetch(`${API}/api/notifications/mark-all-read`, { method: "PATCH" });
+    await authFetch(`${API}/api/notifications/mark-all-read`, {
+      method: "PATCH",
+    });
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     setUnreadCount(0);
   };
 
   const handleNotifClick = async (notif) => {
     if (!notif.isRead) {
-      await authFetch(`${API}/api/notifications/${notif.id}/read`, { method: "PATCH" });
+      await authFetch(`${API}/api/notifications/${notif.id}/read`, {
+        method: "PATCH",
+      });
       setNotifications((prev) =>
-        prev.map((n) => n.id === notif.id ? { ...n, isRead: true } : n)
+        prev.map((n) => (n.id === notif.id ? { ...n, isRead: true } : n)),
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
     }
@@ -90,7 +92,10 @@ const Navbar = () => {
   const formatTime = (iso) => {
     const d = new Date(iso);
     return d.toLocaleDateString("en-US", {
-      month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -102,14 +107,17 @@ const Navbar = () => {
         </Link>
 
         <div className="corner-controls">
-
           {/* Notification Bell */}
           {user && user.role !== "Admin" && (
             <div className="notif-wrapper" ref={notifRef}>
-
-              <button className="notif-bell" onClick={() => setNotifOpen((prev) => !prev)}>
+              <button
+                className="notif-bell"
+                onClick={() => setNotifOpen((prev) => !prev)}
+              >
                 <i className="fi fi-rr-bell"></i>
-                {unreadCount > 0 && <span className="notif-count">{unreadCount}</span>}
+                {unreadCount > 0 && (
+                  <span className="notif-count">{unreadCount}</span>
+                )}
               </button>
 
               {notifOpen && (
@@ -117,7 +125,10 @@ const Navbar = () => {
                   <div className="notif-header">
                     <span>Notifications</span>
                     {unreadCount > 0 && (
-                      <button className="mark-read-btn" onClick={handleMarkAllRead}>
+                      <button
+                        className="mark-read-btn"
+                        onClick={handleMarkAllRead}
+                      >
                         Mark all read
                       </button>
                     )}
@@ -131,11 +142,18 @@ const Navbar = () => {
                       notifications.map((n) => (
                         <div
                           key={n.id}
-                          className={"notif-item " + (n.isRead ? "read" : "unread") + " " + n.type}
+                          className={
+                            "notif-item " +
+                            (n.isRead ? "read" : "unread") +
+                            " " +
+                            n.type
+                          }
                           onClick={() => handleNotifClick(n)}
                         >
                           <p className="notif-message">{n.message}</p>
-                          <span className="notif-time">{formatTime(n.createdAt)}</span>
+                          <span className="notif-time">
+                            {formatTime(n.createdAt)}
+                          </span>
                         </div>
                       ))
                     )}
@@ -165,7 +183,10 @@ const Navbar = () => {
                 </button>
                 {dropdownOpen && (
                   <div className="dropdown-content">
-                    <Link to="/edit-profile" onClick={() => setDropdownOpen(false)}>
+                    <Link
+                      to="/edit-profile"
+                      onClick={() => setDropdownOpen(false)}
+                    >
                       Edit Profile
                     </Link>
                     <button onClick={handleLogout}>Logout</button>
@@ -192,39 +213,89 @@ const Navbar = () => {
             className={"menu-card drop-in " + (closing ? "closing" : "")}
             onClick={(e) => e.stopPropagation()}
           >
-            <button className="close-button" onClick={handleMenuClose}>✕</button>
+            <button className="close-button" onClick={handleMenuClose}>
+              ✕
+            </button>
             <ul className="menu-links">
               {user && user.userName !== "Guest" && (
-                <li><Link to="/dashboard" onClick={handleMenuClose}>Dashboard</Link></li>
+                <li>
+                  <Link to="/dashboard" onClick={handleMenuClose}>
+                    Dashboard
+                  </Link>
+                </li>
               )}
-              <li><Link to="/news" onClick={handleMenuClose}>News</Link></li>
-              <li><Link to="/events" onClick={handleMenuClose}>Events</Link></li>
-              <li><Link to="/alumni" onClick={handleMenuClose}>Alumni Directory</Link></li>
+              <li>
+                <Link to="/news" onClick={handleMenuClose}>
+                  News
+                </Link>
+              </li>
+              <li>
+                <Link to="/events" onClick={handleMenuClose}>
+                  Events
+                </Link>
+              </li>
+              <li>
+                <Link to="/alumni" onClick={handleMenuClose}>
+                  Alumni Directory
+                </Link>
+              </li>
 
               {/* Role-based links */}
               {user && user.userName !== "Guest" && (
                 <>
-                  <li><Link to="/volunteer" onClick={handleMenuClose}>Volunteer</Link></li>
+                  <li>
+                    <Link to="/volunteer" onClick={handleMenuClose}>
+                      Volunteer
+                    </Link>
+                  </li>
                   {user.role === "Alumni" ? (
                     <>
-                      <li><Link to="/become-mentor" onClick={handleMenuClose}>Be a Mentor</Link></li>
-                      <li><Link to="/students" onClick={handleMenuClose}>Student Directory</Link></li>
+                      <li>
+                        <Link to="/become-mentor" onClick={handleMenuClose}>
+                          Be a Mentor
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/students" onClick={handleMenuClose}>
+                          Student Directory
+                        </Link>
+                      </li>
                     </>
                   ) : user.role === "Student" ? (
                     <>
-                      <li><Link to="/mentor" onClick={handleMenuClose}>Request Mentor</Link></li>
-                      <li><Link to="/students" onClick={handleMenuClose}>Student Directory</Link></li>
+                      <li>
+                        <Link to="/mentor" onClick={handleMenuClose}>
+                          Request Mentor
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/students" onClick={handleMenuClose}>
+                          Student Directory
+                        </Link>
+                      </li>
                     </>
                   ) : null}
-                  <li><Link to="/edit-profile" onClick={handleMenuClose}>Edit Profile</Link></li>
+                  <li>
+                    <Link to="/edit-profile" onClick={handleMenuClose}>
+                      Edit Profile
+                    </Link>
+                  </li>
                 </>
               )}
 
               {/* Guest links */}
               {(!user || user.userName === "Guest") && (
                 <>
-                  <li><Link to="/login" onClick={handleMenuClose}>Login</Link></li>
-                  <li><Link to="/register" onClick={handleMenuClose}>Register</Link></li>
+                  <li>
+                    <Link to="/login" onClick={handleMenuClose}>
+                      Login
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/register" onClick={handleMenuClose}>
+                      Register
+                    </Link>
+                  </li>
                 </>
               )}
 

@@ -105,7 +105,9 @@ function Register() {
 
           <p className="register-text">
             Already a member?{" "}
-            <Link to="/login" className="register-link">Login here</Link>
+            <Link to="/login" className="register-link">
+              Login here
+            </Link>
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: linear-gradient(140deg, #000 40%, #deb169 85%);
   color: #fff;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .students-header {
@@ -31,7 +31,7 @@
   border-radius: 30px;
   color: #fff;
   font-size: 1rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   outline: none;
   transition: border-color 0.3s ease;
 }
@@ -57,7 +57,9 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .students-card:hover {
@@ -71,7 +73,7 @@
   min-width: 56px;
   min-height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7A6228, #C9A84C);
+  background: linear-gradient(135deg, #7a6228, #c9a84c);
   color: #fff;
   font-size: 1.4rem;
   font-weight: 700;
@@ -131,7 +133,9 @@
 
 .students-card {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   position: relative;
 }
 
@@ -146,7 +150,7 @@
   margin-top: 10px;
   font-size: 0.78rem;
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -195,7 +199,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 
 .profile-modal-close:hover {
@@ -207,7 +213,7 @@
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7A6228, #C9A84C);
+  background: linear-gradient(135deg, #7a6228, #c9a84c);
   color: #fff;
   font-size: 2.2rem;
   font-weight: 700;
@@ -226,7 +232,7 @@
 }
 
 .profile-modal-name {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 1.2rem;
   color: #d4af37;
   margin-bottom: 4px;
@@ -254,8 +260,8 @@
 
 .student-badge {
   background: rgba(29, 78, 216, 0.12);
-  border-color: #3B82F6;
-  color: #93C5FD;
+  border-color: #3b82f6;
+  color: #93c5fd;
 }
 
 .profile-modal-details {

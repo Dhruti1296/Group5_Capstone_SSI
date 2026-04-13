@@ -10,13 +10,13 @@
 .events-header {
   text-align: center;
   padding: 1rem 0 0.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   margin-bottom: 1.5rem;
 }
 
 .events-header h2 {
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 2rem;
   margin: 1rem 0 0.5rem;
 }
@@ -43,7 +43,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .events-tab:hover {
@@ -98,36 +98,36 @@
 .events-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   color: #fff;
 }
 
 .events-table th,
 .events-table td {
   padding: 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .date-row th {
-  background: #1A1A1E;
+  background: #1a1a1e;
   color: #d4af37;
   text-align: left;
   font-size: 0.88rem;
   letter-spacing: 0.04em;
-  border-bottom: 1px solid rgba(212,175,55,0.3);
-  border-top: 1px solid rgba(212,175,55,0.3);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .event-row:hover {
-  background: #1A1A1E;
+  background: #1a1a1e;
 }
 
 /* ── Event Link ─────────────────────────── */
 .event-link-btn {
   background: transparent;
   border: none;
-  color: #E8DDBE; /* slightly brighter for contrast */
-  font-family: 'Cinzel', serif;
+  color: #e8ddbe; /* slightly brighter for contrast */
+  font-family: "Cinzel", serif;
   cursor: pointer;
   padding: 0;
   text-align: left;
@@ -172,8 +172,8 @@
 }
 
 .custom-event-card {
-  background: #1A1A1E;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: #1a1a1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 3px solid #d4af37;
   border-radius: 14px;
   overflow: hidden;
@@ -182,8 +182,8 @@
 
 .custom-event-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
-  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.15);
   border-left-color: #e8c97a;
 }
 
@@ -212,9 +212,9 @@
 .custom-event-type {
   display: inline-block;
   padding: 3px 12px;
-  background: rgba(212,175,55,0.1);
-  color: #E8C97A;
-  border: 1px solid rgba(212,175,55,0.3);
+  background: rgba(212, 175, 55, 0.1);
+  color: #e8c97a;
+  border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 999px;
   font-size: 0.7rem;
   font-weight: 700;
@@ -223,16 +223,16 @@
 }
 
 .custom-event-title {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #F5F4F0;
+  color: #f5f4f0;
   margin-bottom: 8px;
 }
 
 .custom-event-desc {
   font-size: 0.86rem;
-  color: #B0B0BB; /* improved readability */
+  color: #b0b0bb; /* improved readability */
   line-height: 1.65;
   margin-bottom: 14px;
 }
@@ -240,7 +240,7 @@
 .custom-event-meta {
   font-size: 0.8rem;
   color: #efefef;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding-top: 12px;
 }
 
@@ -254,6 +254,6 @@
 
 .events-error {
   text-align: center;
-  color: #FCA5A5;
+  color: #fca5a5;
   padding: 4rem;
 }

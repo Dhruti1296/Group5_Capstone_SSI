@@ -10,10 +10,6 @@
   align-items: center;
 }
 
-
-
-
-
 .section-title.content-appeared {
   opacity: 1;
 }
@@ -115,8 +111,6 @@
   z-index: 0;
 }
 
-
-
 .section-title {
   font-size: 3rem;
   font-weight: 800;
@@ -140,7 +134,6 @@
 .slide-from-right {
   transform: translateX(100px);
 }
-
 
 .section-bg-image {
   width: 100%;
@@ -177,14 +170,14 @@
   align-items: center;
 }
 
-
-
 .section-intro-text {
   font-size: 1.5rem;
   margin-top: 1.5rem;
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 1s ease, transform 1s ease;
+  transition:
+    opacity 1s ease,
+    transform 1s ease;
   color: #fff;
   /* ✅ visible text color */
 }
@@ -299,4 +292,17 @@
   100% {
     opacity: 0.4;
   }
+}
+
+button.card-link {
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  display: block;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
 }

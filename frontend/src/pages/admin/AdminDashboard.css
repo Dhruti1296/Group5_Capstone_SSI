@@ -1,7 +1,7 @@
 .admin-dashboard {
   display: flex;
   min-height: 100vh;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   background: #000;
   color: #fff;
 }
@@ -48,7 +48,7 @@
   padding: 10px 12px;
   text-align: left;
   cursor: pointer;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.85rem;
   transition: all 0.2s ease;
   display: flex;
@@ -84,7 +84,7 @@
   color: #e05c5c;
   padding: 10px;
   cursor: pointer;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.85rem;
   transition: all 0.2s ease;
   margin-top: auto;
@@ -200,7 +200,7 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.82rem;
   font-weight: bold;
   transition: background 0.2s ease;
@@ -222,7 +222,7 @@
   border: 1px solid #e05c5c;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.82rem;
   transition: all 0.2s ease;
 }
@@ -327,7 +327,7 @@
   color: #888;
   padding: 6px 16px;
   cursor: pointer;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.8rem;
   display: flex;
   align-items: center;
@@ -361,7 +361,7 @@
   border-radius: 8px;
   color: #fff;
   font-size: 0.9rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   outline: none;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
@@ -390,7 +390,7 @@
   border-radius: 6px;
   padding: 4px 12px;
   font-size: 0.78rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: 0.8rem;
@@ -511,11 +511,13 @@
   border: 1.5px solid #d4af37;
   border-radius: 999px;
   color: #d4af37;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .page-btn:hover:not(:disabled) {
@@ -531,5 +533,5 @@
 .page-info {
   font-size: 0.82rem;
   color: #888;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }

@@ -1,10 +1,10 @@
 body {
   margin: 0;
-  font-family: 'Cinzel', sans-serif;
-  color: #1C1C1F;
+  font-family: "Cinzel", sans-serif;
+  color: #1c1c1f;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }

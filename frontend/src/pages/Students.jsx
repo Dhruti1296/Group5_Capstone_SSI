@@ -29,9 +29,10 @@ function Students() {
     fetchStudents();
   }, []);
 
-  const filtered = studentList.filter((s) =>
-    s.userName.toLowerCase().includes(search.toLowerCase()) ||
-    (s.name && s.name.toLowerCase().includes(search.toLowerCase()))
+  const filtered = studentList.filter(
+    (s) =>
+      s.userName.toLowerCase().includes(search.toLowerCase()) ||
+      (s.name && s.name.toLowerCase().includes(search.toLowerCase())),
   );
 
   return (
@@ -79,7 +80,9 @@ function Students() {
                   <p className="students-detail">{s.courseName}</p>
                 )}
                 {s.courseEndYear && (
-                  <p className="students-detail">Graduating {s.courseEndYear}</p>
+                  <p className="students-detail">
+                    Graduating {s.courseEndYear}
+                  </p>
                 )}
                 <p className="students-username">@{s.userName}</p>
               </div>
@@ -91,14 +94,25 @@ function Students() {
 
       {/* Profile Modal */}
       {selectedUser && (
-        <div className="profile-modal-overlay" onClick={() => setSelectedUser(null)}>
+        <div
+          className="profile-modal-overlay"
+          onClick={() => setSelectedUser(null)}
+        >
           <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="profile-modal-close" onClick={() => setSelectedUser(null)}>✕</button>
+            <button
+              className="profile-modal-close"
+              onClick={() => setSelectedUser(null)}
+            >
+              ✕
+            </button>
 
             {/* Avatar */}
             <div className="profile-modal-avatar">
               {selectedUser.profilePic ? (
-                <img src={selectedUser.profilePic} alt={selectedUser.userName} />
+                <img
+                  src={selectedUser.profilePic}
+                  alt={selectedUser.userName}
+                />
               ) : (
                 <span>{selectedUser.userName.charAt(0).toUpperCase()}</span>
               )}
@@ -120,24 +134,31 @@ function Students() {
               {selectedUser.courseName && (
                 <div className="profile-modal-row">
                   <span className="profile-modal-label">🎓 Program</span>
-                  <span className="profile-modal-value">{selectedUser.courseName}</span>
+                  <span className="profile-modal-value">
+                    {selectedUser.courseName}
+                  </span>
                 </div>
               )}
               {selectedUser.department && (
                 <div className="profile-modal-row">
                   <span className="profile-modal-label">🏫 Department</span>
-                  <span className="profile-modal-value">{selectedUser.department}</span>
+                  <span className="profile-modal-value">
+                    {selectedUser.department}
+                  </span>
                 </div>
               )}
               {selectedUser.courseEndYear && (
                 <div className="profile-modal-row">
-                  <span className="profile-modal-label"><i className="fi fi-rr-calendar"></i> Expected Graduation</span>
+                  <span className="profile-modal-label">
+                    <i className="fi fi-rr-calendar"></i> Expected Graduation
+                  </span>
                   <span className="profile-modal-value">
                     {selectedUser.courseEndMonth} {selectedUser.courseEndYear}
                   </span>
                 </div>
               )}
-              {!selectedUser.courseName && !selectedUser.department &&
+              {!selectedUser.courseName &&
+                !selectedUser.department &&
                 !selectedUser.courseEndYear && (
                   <p className="profile-modal-empty">
                     This student hasn't filled in their profile details yet.

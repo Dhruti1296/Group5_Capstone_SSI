@@ -37,7 +37,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .volunteer-card:hover {
@@ -91,7 +93,7 @@
   border: none;
   border-radius: 8px;
   font-weight: bold;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: auto;
@@ -140,21 +142,21 @@
 }
 
 .volunteer-status-banner.pending {
-  background: #FEF3C7;
-  color: #92400E;
-  border: 1px solid #FCD34D;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
 }
 
 .volunteer-status-banner.approved {
-  background: #D1FAE5;
-  color: #065F46;
-  border: 1px solid #6EE7B7;
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
 }
 
 .volunteer-status-banner.rejected {
-  background: #FEE2E2;
-  color: #991B1B;
-  border: 1px solid #FECACA;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
 }
 
 .volunteer-btn {
@@ -167,12 +169,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
-  background: #C9A84C;
+  background: #c9a84c;
   color: #111;
 }
 
 .volunteer-btn:hover:not(:disabled) {
-  background: #E8C97A;
+  background: #e8c97a;
   transform: scale(1.01);
 }
 
@@ -182,16 +184,16 @@
 }
 
 .volunteer-btn.applied {
-  background: #E8E2D6;
-  color: #6B7280;
+  background: #e8e2d6;
+  color: #6b7280;
 }
 
 .volunteer-btn.approved {
-  background: #D1FAE5;
-  color: #065F46;
+  background: #d1fae5;
+  color: #065f46;
 }
 
 .volunteer-btn.rejected {
-  background: #FEE2E2;
-  color: #991B1B;
+  background: #fee2e2;
+  color: #991b1b;
 }

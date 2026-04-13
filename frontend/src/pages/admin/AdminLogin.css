@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .admin-login-card {
@@ -41,7 +41,7 @@
   border-radius: 6px;
   color: #fff;
   font-size: 0.95rem;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
@@ -61,7 +61,7 @@
   border-radius: 6px;
   font-size: 1rem;
   font-weight: bold;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   cursor: pointer;
   transition: background 0.3s ease;
 }
@@ -108,7 +108,7 @@
   font-size: 0.82rem;
   text-align: center;
   transition: color 0.2s ease;
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 .admin-back-link:hover {

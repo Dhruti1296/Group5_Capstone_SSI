@@ -6,18 +6,31 @@
 
   background:
     /* strong bottom spotlight */
-    radial-gradient(90% 70% at bottom center, rgba(212,175,55,0.65), transparent 75%),
-
+    radial-gradient(
+      90% 70% at bottom center,
+      rgba(212, 175, 55, 0.65),
+      transparent 75%
+    ),
     /* side gold glow */
-    radial-gradient(70% 70% at left center, rgba(212,175,55,0.35), transparent 70%),
-    radial-gradient(70% 70% at right center, rgba(212,175,55,0.35), transparent 70%),
-
+    radial-gradient(
+        70% 70% at left center,
+        rgba(212, 175, 55, 0.35),
+        transparent 70%
+      ),
+    radial-gradient(
+      70% 70% at right center,
+      rgba(212, 175, 55, 0.35),
+      transparent 70%
+    ),
     /* subtle top shimmer */
-    radial-gradient(50% 40% at top center, rgba(212,175,55,0.25), transparent 70%),
-
+    radial-gradient(
+        50% 40% at top center,
+        rgba(212, 175, 55, 0.25),
+        transparent 70%
+      ),
     linear-gradient(to bottom, #000, #0a0a0a, #000);
 
-  box-shadow: inset 0 0 280px rgba(212,175,55,0.28);
+  box-shadow: inset 0 0 280px rgba(212, 175, 55, 0.28);
 }
 .login-section {
   flex: 1;
@@ -85,13 +98,11 @@
   background: #000; /* solid black curtain */
   width: 100%;
   padding: 1rem 2rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
   position: sticky; /* stays at top */
   top: 0;
   z-index: 10;
 }
-
-
 
 .login-container h2 {
   font-size: 1.6rem; /* ✅ smaller heading */
@@ -99,13 +110,13 @@
 }
 
 .section-intro-text {
-  font-size: 1rem;   /* ✅ toned down */
+  font-size: 1rem; /* ✅ toned down */
   margin-bottom: 20px;
   color: #ccc;
 }
 
 .login-container {
-  width: 70%;       /* ✅ wider card */
+  width: 70%; /* ✅ wider card */
   max-width: 800px; /* ✅ fills space better */
   padding: 40px;
   background: rgba(17, 17, 17, 0.9);
@@ -113,7 +124,7 @@
   border-radius: 12px;
   text-align: center;
   color: #fff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .login-container h2 {
@@ -122,7 +133,7 @@
 }
 
 .section-intro-text {
-  font-size: 1rem;   /* ✅ toned down */
+  font-size: 1rem; /* ✅ toned down */
   margin-bottom: 20px;
   color: #ccc;
 }
@@ -131,7 +142,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start; /* ✅ align to top */
-  padding-top: 120px;      /* ✅ push card lower */
+  padding-top: 120px; /* ✅ push card lower */
 }
 
 /* ✅ Toast notification */
@@ -156,8 +167,14 @@
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Faster fade-out with pulse */
@@ -166,9 +183,18 @@
 }
 
 @keyframes successPulse {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.05); } /* quick pulse */
-  100% { opacity: 0; transform: scale(0.95); } /* fade out */
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  } /* quick pulse */
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  } /* fade out */
 }
 
 /* Press down effect */

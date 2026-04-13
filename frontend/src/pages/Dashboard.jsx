@@ -60,22 +60,26 @@ function Dashboard() {
             const menteesData = await menteesRes.json();
             setMyMentees(
               menteesData.filter(
-                (m) => m !== null && m.studentUserName && m.status === "Accepted"
-              )
+                (m) =>
+                  m !== null && m.studentUserName && m.status === "Accepted",
+              ),
             );
           }
           if (requestsRes.ok) {
             const requestsData = await requestsRes.json();
             setPendingRequests(
               requestsData.filter(
-                (r) => r !== null && r.studentUserName && r.status === "Pending"
-              )
+                (r) =>
+                  r !== null && r.studentUserName && r.status === "Pending",
+              ),
             );
           }
         }
 
         // Fetch unread message counts
-        const unreadRes = await authFetch(`${API}/api/mentorship/unread-counts`);
+        const unreadRes = await authFetch(
+          `${API}/api/mentorship/unread-counts`,
+        );
         if (unreadRes.ok) {
           const counts = await unreadRes.json();
           setUnreadCounts(counts);
@@ -122,7 +126,7 @@ function Dashboard() {
 
   const handleUpdate = (updatedPost) => {
     setPosts((prev) =>
-      prev.map((p) => (p.id === updatedPost.id ? updatedPost : p))
+      prev.map((p) => (p.id === updatedPost.id ? updatedPost : p)),
     );
   };
 
@@ -168,13 +172,16 @@ function Dashboard() {
 
       {/* Post modal */}
       {showModal && (
-        <div className="modal-overlay" onClick={(e) => {
-          if (e.target.classList.contains("modal-overlay")) {
-            setShowModal(false);
-            setPostText("");
-            setShowEmojiPicker(false);
-          }
-        }}>
+        <div
+          className="modal-overlay"
+          onClick={(e) => {
+            if (e.target.classList.contains("modal-overlay")) {
+              setShowModal(false);
+              setPostText("");
+              setShowEmojiPicker(false);
+            }
+          }}
+        >
           <div className="modal-card">
             <h3>Create Post</h3>
 
@@ -243,7 +250,6 @@ function Dashboard() {
       )}
 
       <div className="dashboard-layout">
-
         {/* Column 1 — Profile */}
         <div className="dashboard-column profile-column">
           {user.profilePic ? (
@@ -281,7 +287,8 @@ function Dashboard() {
               </Link>
             ) : (
               <Link to="/mentor" className="profile-nav-item">
-                <i className="fi fi-rr-graduation-cap profile-nav-icon"></i> Request Mentor
+                <i className="fi fi-rr-graduation-cap profile-nav-icon"></i>{" "}
+                Request Mentor
               </Link>
             )}
           </nav>
@@ -311,7 +318,6 @@ function Dashboard() {
 
         {/* Column 3 — Right sidebar */}
         <div className="dashboard-column lists-column">
-
           {/* Student — show active mentor with chat */}
           {user.role === "Student" && myMentor && (
             <div className="side-connection-card">
@@ -328,14 +334,20 @@ function Dashboard() {
                   className="chat-btn"
                   onClick={() =>
                     navigate(
-                      `/chat/${myMentor.studentUserName}_${myMentor.mentorUserName}`
+                      `/chat/${myMentor.studentUserName}_${myMentor.mentorUserName}`,
                     )
                   }
                 >
                   <i className="fi fi-rr-comment"></i>
-                  {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`] > 0 && (
+                  {unreadCounts[
+                    `${myMentor.studentUserName}_${myMentor.mentorUserName}`
+                  ] > 0 && (
                     <span className="chat-unread-badge">
-                      {unreadCounts[`${myMentor.studentUserName}_${myMentor.mentorUserName}`]}
+                      {
+                        unreadCounts[
+                          `${myMentor.studentUserName}_${myMentor.mentorUserName}`
+                        ]
+                      }
                     </span>
                   )}
                 </button>
@@ -400,14 +412,20 @@ function Dashboard() {
                       className="chat-btn"
                       onClick={() =>
                         navigate(
-                          `/chat/${mentee.studentUserName}_${mentee.mentorUserName}`
+                          `/chat/${mentee.studentUserName}_${mentee.mentorUserName}`,
                         )
                       }
                     >
                       💬
-                      {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`] > 0 && (
+                      {unreadCounts[
+                        `${mentee.studentUserName}_${mentee.mentorUserName}`
+                      ] > 0 && (
                         <span className="chat-unread-badge">
-                          {unreadCounts[`${mentee.studentUserName}_${mentee.mentorUserName}`]}
+                          {
+                            unreadCounts[
+                              `${mentee.studentUserName}_${mentee.mentorUserName}`
+                            ]
+                          }
                         </span>
                       )}
                     </button>
@@ -419,11 +437,13 @@ function Dashboard() {
           {/* Directory links */}
           <div className="lists-column-links">
             <h3>Directory</h3>
-            <Link to="/alumni"><i className="fi fi-rr-users"></i> View Alumni</Link>
-            <Link to="/students"><i className="fi fi-rr-user-graduate"></i> View Students</Link>
+            <Link to="/alumni">
+              <i className="fi fi-rr-users"></i> View Alumni
+            </Link>
+            <Link to="/students">
+              <i className="fi fi-rr-user-graduate"></i> View Students
+            </Link>
           </div>
-
-
         </div>
       </div>
 
