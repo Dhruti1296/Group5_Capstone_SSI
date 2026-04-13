@@ -1,6 +1,6 @@
 .become-mentor-body {
   min-height: 100vh;
-  background: linear-gradient(140deg, #000 40%, #deb169 85%);
+  background: #111114;
   color: #fff;
   font-family: "Cinzel", serif;
 }
@@ -12,18 +12,33 @@
 }
 
 .become-mentor-page h2 {
-  font-size: 2.2rem;
+  font-size: 2rem;
   color: #d4af37;
   margin-bottom: 0.5rem;
+  font-family: "Cinzel", serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .become-mentor-subtitle {
-  color: #ccc;
+  color: #9ca3af;
   font-size: 0.95rem;
   margin-bottom: 2rem;
   line-height: 1.6;
 }
 
+.become-mentor-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  color: #d4af37;
+  font-size: 1.2rem;
+  gap: 10px;
+}
+
+/* ── Form ────────────────────────────────── */
 .become-mentor-form {
   display: flex;
   flex-direction: column;
@@ -33,41 +48,63 @@
 .become-mentor-form label {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
+}
+
+.label-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #e8c97a;
+  font-family: "Cinzel", serif;
+}
+
+.label-text .fi {
   font-size: 0.9rem;
-  color: #d4af37;
 }
 
 .become-mentor-form input,
 .become-mentor-form textarea {
-  background: #111;
-  border: 1px solid #d4af37;
+  background: #1a1a1e;
+  border: 1px solid rgba(212, 175, 55, 0.35);
   border-radius: 8px;
   padding: 10px 14px;
-  color: #fff;
-  font-size: 0.95rem;
+  color: #f5f4f0;
+  font-size: 0.92rem;
   font-family: "Cinzel", serif;
   outline: none;
-  transition: border-color 0.3s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
   resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .become-mentor-form input:focus,
 .become-mentor-form textarea:focus {
-  border-color: #fff;
+  border-color: #d4af37;
+  background: #222226;
+}
+
+.become-mentor-form input::placeholder,
+.become-mentor-form textarea::placeholder {
+  color: #6b7280;
 }
 
 .required {
-  color: #e05c5c;
+  color: #fca5a5;
+  margin-left: 2px;
 }
 
 .char-count {
   font-size: 0.75rem;
-  color: #888;
+  color: #6b7280;
   text-align: right;
 }
 
-/* Expertise tags */
+/* ── Expertise ───────────────────────────── */
 .expertise-section {
   display: flex;
   flex-direction: column;
@@ -75,13 +112,21 @@
 }
 
 .expertise-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #e8c97a;
+  font-family: "Cinzel", serif;
+}
+
+.expertise-label .fi {
   font-size: 0.9rem;
-  color: #d4af37;
 }
 
 .expertise-hint {
   font-size: 0.8rem;
-  color: #888;
+  color: #6b7280;
   margin: 0;
 }
 
@@ -94,101 +139,144 @@
 
 .expertise-tag {
   background: transparent;
-  border: 1px solid #d4af37;
-  color: #d4af37;
-  border-radius: 20px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #e8c97a;
+  border-radius: 999px;
   padding: 6px 14px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-family: "Cinzel", serif;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .expertise-tag:hover {
-  background: rgba(212, 175, 55, 0.15);
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
 }
 
 .expertise-tag.selected {
   background: #d4af37;
+  border-color: #d4af37;
   color: #111;
   font-weight: bold;
 }
 
-/* Submit button */
+/* ── Submit button ───────────────────────── */
 .update-btn {
   margin-top: 1rem;
-  padding: 12px 24px;
+  padding: 11px 24px;
   background: #d4af37;
   color: #111;
   border: none;
-  border-radius: 8px;
+  border-radius: 999px;
   cursor: pointer;
   font-weight: bold;
   font-family: "Cinzel", serif;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
   align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .update-btn:hover:not(:disabled) {
-  background: #fff;
-  color: #111;
+  background: #e8c97a;
+  transform: scale(1.02);
 }
 
 .update-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* Already applied state */
+/* ── Status screen ───────────────────────── */
 .already-applied {
-  background: #000;
-  border: 2px solid #d4af37;
-  border-radius: 12px;
-  padding: 2rem;
+  background: #1a1a1e;
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
   text-align: center;
 }
 
-.already-applied h3 {
+.already-applied.status-approved {
+  border-color: #6ee7b7;
+  background: rgba(6, 95, 70, 0.1);
+}
+
+.already-applied.status-approved .status-icon,
+.already-applied.status-approved h3 {
+  color: #6ee7b7;
+}
+
+.already-applied.status-rejected {
+  border-color: #fca5a5;
+  background: rgba(192, 84, 74, 0.1);
+}
+
+.already-applied.status-rejected .status-icon,
+.already-applied.status-rejected h3 {
+  color: #fca5a5;
+}
+
+.already-applied.status-pending {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.already-applied.status-pending .status-icon,
+.already-applied.status-pending h3 {
   color: #d4af37;
-  font-size: 1.4rem;
-  margin-bottom: 0.8rem;
 }
 
 .already-applied p {
-  color: #ccc;
+  color: #9ca3af;
   margin-bottom: 1.5rem;
   line-height: 1.6;
 }
 
 .status-icon {
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+  display: block;
 }
 
+.status-icon .fi {
+  font-size: 2.5rem;
+}
+
+/* ── Submitted details ───────────────────── */
 .submitted-details {
-  background: #0a0a0a;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 1rem;
-  margin: 1rem 0;
+  background: #111114;
+  border: 1px solid #2a2a2e;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin: 1rem auto 1.5rem;
   text-align: left;
   width: 95%;
+  box-sizing: border-box;
 }
 
 .submitted-details h4 {
   color: #d4af37;
   margin-bottom: 0.8rem;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #2a2a2e;
+  padding-bottom: 0.5rem;
 }
 
 .submitted-details p {
-  color: #ccc;
+  color: #c4c4cc;
   font-size: 0.85rem;
-  margin: 0.3rem 0;
+  margin: 0.4rem 0;
+  line-height: 1.5;
 }
 
 .submitted-details strong {
-  color: #d4af37;
+  color: #e8c97a;
 }
 
 .submitted-tags {
@@ -196,4 +284,31 @@
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.6rem;
+}
+
+/* ── Notification ────────────────────────── */
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 9999;
+  text-align: center;
+  font-family: "Cinzel", serif;
+}
+
+.notification.success {
+  background: #1a1a1e;
+  border: 1.5px solid #6ee7b7;
+  color: #6ee7b7;
+}
+
+.notification.error {
+  background: #1a1a1e;
+  border: 1.5px solid #fca5a5;
+  color: #fca5a5;
 }

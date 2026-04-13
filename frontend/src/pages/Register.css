@@ -82,22 +82,12 @@
   color: #fff;
   transition: 0.3s;
   font-size: 1rem;
-  opacity: 0; /* start hidden for animation */
+  opacity: 0;
+  box-sizing: border-box;
 }
 
-.register-select {
-  width: 50.5vw;
-}
-
-.register-input:focus,
-.register-select:focus {
-  border-color: #fff;
-  outline: none;
-}
-
-/* Button */
 .register-button {
-  width: 50.5vw;
+  width: 100%;
   padding: 14px;
   margin-top: 15px;
   background: #d4af37;
@@ -108,7 +98,14 @@
   cursor: pointer;
   transition: 0.3s;
   font-size: 1rem;
-  opacity: 0; /* start hidden for animation */
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+.register-input:focus,
+.register-select:focus {
+  border-color: #fff;
+  outline: none;
 }
 
 .register-button:hover {

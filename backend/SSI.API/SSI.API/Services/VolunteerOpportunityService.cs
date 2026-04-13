@@ -25,8 +25,20 @@ namespace SSI.API.Services
             return opportunity;
         }
 
-        public async Task UpdateAsync(string id, VolunteerOpportunity opportunity) =>
-            await _opportunities.ReplaceOneAsync(o => o.Id == id, opportunity);
+        public async Task UpdateAsync(string id, VolunteerOpportunity opportunity)
+        {
+            // Never let the incoming object override the _id
+            var filter = Builders<VolunteerOpportunity>.Filter.Eq(o => o.Id, id);
+
+            var update = Builders<VolunteerOpportunity>.Update
+                .Set(o => o.Title, opportunity.Title)
+                .Set(o => o.Description, opportunity.Description)
+                .Set(o => o.Date, opportunity.Date)
+                .Set(o => o.Location, opportunity.Location)
+                .Set(o => o.Status, opportunity.Status);
+
+            await _opportunities.UpdateOneAsync(filter, update);
+        }
 
         public async Task DeleteAsync(string id) =>
             await _opportunities.DeleteOneAsync(o => o.Id == id);

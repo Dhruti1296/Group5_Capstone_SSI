@@ -385,7 +385,7 @@ function AdminDashboard() {
     });
 
   const textareaStyle = {
-    width: "100%",
+    width: "97%",
     background: "#0a0a0a",
     border: "1px solid #333",
     borderRadius: "8px",
@@ -986,7 +986,8 @@ function AdminDashboard() {
                             <h3>{opp.title}</h3>
                             <p className="admin-meta">
                               <i className="fi fi-rr-calendar"></i> {opp.date}{" "}
-                              &nbsp;·&nbsp; 📍 {opp.location}
+                              &nbsp;·&nbsp; <i className="fi fi-rr-marker"></i>{" "}
+                              {opp.location}
                             </p>
                           </div>
                           <span
@@ -1218,7 +1219,8 @@ function AdminDashboard() {
                             <p className="admin-meta">
                               <i className="fi fi-rr-calendar"></i>{" "}
                               {formatDate(event.eventDate)}
-                              &nbsp;·&nbsp; 📍 {event.location}
+                              &nbsp;·&nbsp; <i className="fi fi-rr-marker"></i>{" "}
+                              {event.location}
                               {event.type && <>&nbsp;·&nbsp; 🏷️ {event.type}</>}
                             </p>
                           </div>

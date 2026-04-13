@@ -162,8 +162,9 @@ namespace SSI.API.Controllers
         [HttpPut("volunteer-opportunities/{id}")]
         public async Task<IActionResult> UpdateOpportunity(string id, [FromBody] VolunteerOpportunity opp)
         {
+            opp.Id = null;
             await _opportunityService.UpdateAsync(id, opp);
-            return Ok(opp);
+            return Ok();
         }
 
         // DELETE opportunity

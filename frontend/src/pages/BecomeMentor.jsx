@@ -42,10 +42,9 @@ function BecomeMentor() {
 
   const [notification, setNotification] = useState(null);
   const [saving, setSaving] = useState(false);
-  const [application, setApplication] = useState(null); // full application object
+  const [application, setApplication] = useState(null);
   const [checking, setChecking] = useState(true);
 
-  // Pre-fill from user context
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
@@ -59,7 +58,6 @@ function BecomeMentor() {
     }
   }, [user]);
 
-  // Check if already applied and get full status
   useEffect(() => {
     const checkApplication = async () => {
       try {
@@ -69,7 +67,6 @@ function BecomeMentor() {
           setApplication(data);
         }
       } catch (err) {
-        // no application found — that's fine
       } finally {
         setChecking(false);
       }
@@ -98,7 +95,6 @@ function BecomeMentor() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.name.trim()) {
       showNotification("Name is required.", "error");
       return;
@@ -134,7 +130,6 @@ function BecomeMentor() {
           linkedin: formData.linkedin,
         }),
       });
-
       if (res.ok) {
         const data = await res.json();
         setApplication(data);
@@ -153,57 +148,40 @@ function BecomeMentor() {
     }
   };
 
-  // Status screen content based on application status
   const renderStatusScreen = () => {
     const status = application?.status || "Pending";
-
     const config = {
       Approved: {
-        icon: "✓",
+        icon: <i className="fi fi-sr-check-circle"></i>,
+        colorClass: "status-approved",
         title: "Application Approved!",
         message:
           "Congratulations! You are now listed in the mentor directory. Students will be able to find and reach out to you.",
-        color: "#3fb950",
-        borderColor: "#3fb950",
-        btnLabel: "Back to Dashboard",
-        btnAction: () => navigate("/dashboard"),
       },
       Rejected: {
-        icon: "✗",
+        icon: <i className="fi fi-sr-cross-circle"></i>,
+        colorClass: "status-rejected",
         title: "Application Not Approved",
         message:
           "Unfortunately your application was not approved at this time. Please contact the admin for more details.",
-        color: "#e05c5c",
-        borderColor: "#e05c5c",
-        btnLabel: "Back to Dashboard",
-        btnAction: () => navigate("/dashboard"),
       },
       Pending: {
-        icon: "⏳",
+        icon: <i className="fi fi-rr-hourglass"></i>,
+        colorClass: "status-pending",
         title: "Application Under Review",
         message:
           "Your application has been submitted and is currently being reviewed by the admin. You will be notified once a decision is made.",
-        color: "#d4af37",
-        borderColor: "#d4af37",
-        btnLabel: "Back to Dashboard",
-        btnAction: () => navigate("/dashboard"),
       },
     };
 
     const c = config[status] || config.Pending;
 
     return (
-      <div className="already-applied" style={{ borderColor: c.borderColor }}>
-        <div
-          className="status-icon"
-          style={{ color: c.color, fontSize: "2.5rem" }}
-        >
-          {c.icon}
-        </div>
-        <h3 style={{ color: c.color }}>{c.title}</h3>
+      <div className={`already-applied ${c.colorClass}`}>
+        <div className="status-icon">{c.icon}</div>
+        <h3>{c.title}</h3>
         <p>{c.message}</p>
 
-        {/* Show their submitted details */}
         {application && (
           <div className="submitted-details">
             <h4>Your Submitted Details</h4>
@@ -231,27 +209,19 @@ function BecomeMentor() {
           </div>
         )}
 
-        <button className="update-btn" onClick={c.btnAction}>
-          {c.btnLabel}
+        <button className="update-btn" onClick={() => navigate("/dashboard")}>
+          <i className="fi fi-rr-arrow-left"></i> Back to Dashboard
         </button>
       </div>
     );
   };
 
-  // Show loading while checking
   if (checking) {
     return (
       <div className="become-mentor-body">
         <Navbar />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "60vh",
-          }}
-        >
-          <p style={{ color: "#d4af37", fontSize: "1.2rem" }}>Loading...</p>
+        <div className="become-mentor-loading">
+          <i className="fi fi-rr-spinner"></i> Loading...
         </div>
         <Footer />
       </div>
@@ -269,19 +239,23 @@ function BecomeMentor() {
       )}
 
       <div className="become-mentor-page">
-        <h2>Become a Mentor</h2>
+        <h2>
+          <i className="fi fi-rr-star"></i> Become a Mentor
+        </h2>
         <p className="become-mentor-subtitle">
           Share your journey and help current students navigate college life and
           their careers.
         </p>
 
-        {/* Show status screen if application exists, form otherwise */}
         {application ? (
           renderStatusScreen()
         ) : (
           <form className="become-mentor-form" onSubmit={handleSubmit}>
             <label>
-              Full Name <span className="required">*</span>
+              <span className="label-text">
+                <i className="fi fi-rr-user"></i> Full Name
+                <span className="required">*</span>
+              </span>
               <input
                 type="text"
                 name="name"
@@ -292,7 +266,10 @@ function BecomeMentor() {
             </label>
 
             <label>
-              Your Role / Field <span className="required">*</span>
+              <span className="label-text">
+                <i className="fi fi-rr-briefcase"></i> Your Role / Field
+                <span className="required">*</span>
+              </span>
               <input
                 type="text"
                 name="role"
@@ -303,7 +280,9 @@ function BecomeMentor() {
             </label>
 
             <label>
-              Year of Graduation
+              <span className="label-text">
+                <i className="fi fi-rr-graduation-cap"></i> Year of Graduation
+              </span>
               <input
                 type="text"
                 name="passedOutYear"
@@ -314,7 +293,10 @@ function BecomeMentor() {
             </label>
 
             <label>
-              Contact Email <span className="required">*</span>
+              <span className="label-text">
+                <i className="fi fi-rr-envelope"></i> Contact Email
+                <span className="required">*</span>
+              </span>
               <input
                 type="email"
                 name="email"
@@ -325,7 +307,9 @@ function BecomeMentor() {
             </label>
 
             <label>
-              LinkedIn Profile URL
+              <span className="label-text">
+                <i className="fi fi-brands-linkedin"></i> LinkedIn Profile URL
+              </span>
               <input
                 type="text"
                 name="linkedin"
@@ -336,7 +320,10 @@ function BecomeMentor() {
             </label>
 
             <label>
-              Bio <span className="required">*</span>
+              <span className="label-text">
+                <i className="fi fi-rr-document"></i> Bio
+                <span className="required">*</span>
+              </span>
               <textarea
                 name="bio"
                 value={formData.bio}
@@ -350,18 +337,17 @@ function BecomeMentor() {
             </label>
 
             <div className="expertise-section">
-              <label className="expertise-label">
-                Areas of Expertise <span className="required">*</span>
-              </label>
+              <span className="expertise-label">
+                <i className="fi fi-rr-tags"></i> Areas of Expertise
+                <span className="required">*</span>
+              </span>
               <p className="expertise-hint">Select all that apply</p>
               <div className="expertise-tags">
                 {EXPERTISE_OPTIONS.map((tag) => (
                   <button
                     key={tag}
                     type="button"
-                    className={`expertise-tag ${
-                      formData.expertise.includes(tag) ? "selected" : ""
-                    }`}
+                    className={`expertise-tag ${formData.expertise.includes(tag) ? "selected" : ""}`}
                     onClick={() => toggleExpertise(tag)}
                   >
                     {tag}
@@ -371,7 +357,15 @@ function BecomeMentor() {
             </div>
 
             <button type="submit" className="update-btn" disabled={saving}>
-              {saving ? "Submitting..." : "Submit Application"}
+              {saving ? (
+                <>
+                  <i className="fi fi-rr-spinner"></i> Submitting...
+                </>
+              ) : (
+                <>
+                  <i className="fi fi-rr-paper-plane"></i> Submit Application
+                </>
+              )}
             </button>
           </form>
         )}

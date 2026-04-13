@@ -93,13 +93,13 @@ function Events() {
           }
           onClick={() => setActiveTab("conestoga")}
         >
-          🌐 Live from Conestoga
+          <i className="fi fi-rr-globe"></i> Live from Conestoga
         </button>
         <button
           className={"events-tab " + (activeTab === "custom" ? "active" : "")}
           onClick={() => setActiveTab("custom")}
         >
-          📌 SSI Events
+          <i className="fi fi-sr-thumbtack"></i> SSI Events
           {customEvents.length > 0 && (
             <span className="events-tab-badge">{customEvents.length}</span>
           )}
@@ -197,7 +197,11 @@ function Events() {
                         <i className="fi fi-rr-calendar"></i>{" "}
                         {formatEventDate(event.eventDate)}
                       </span>
-                      {event.location && <span>📍 {event.location}</span>}
+                      {event.location && (
+                        <span>
+                          <i className="fi fi-rr-marker"></i> {event.location}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>

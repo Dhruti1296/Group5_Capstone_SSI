@@ -113,7 +113,7 @@
 .dropdown-content a,
 .dropdown-content button {
   display: block;
-  padding: 10px;
+  padding: 6px;
   text-decoration: none;
   color: #fff;
   background: transparent;
@@ -151,6 +151,10 @@
 }
 
 .menu-logout-btn {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #fff;
   background: transparent;
   border: none;
   color: #d4af37;
@@ -158,6 +162,7 @@
   font-size: 1rem;
   cursor: pointer;
   padding: 0;
+  width: 100%;
   text-align: left;
   transition: color 0.3s ease;
 }
