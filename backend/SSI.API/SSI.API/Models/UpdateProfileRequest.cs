@@ -11,7 +11,7 @@ namespace SSI.API.Models
         public string? Department { get; set; }
         public string? PassedOutYear { get; set; }
         public string? CurrentJob { get; set; }
-public string? Company { get; set; }
-public string? LinkedIn { get; set; }
+        public string? Company { get; set; }
+        public string? LinkedIn { get; set; }
     }
 }

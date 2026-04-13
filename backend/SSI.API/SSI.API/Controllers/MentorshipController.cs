@@ -164,9 +164,9 @@ namespace SSI.API.Controllers
         }
 
         // GET /api/mentorship/unread-counts — get unread counts for all rooms
-         [HttpGet("unread-counts")]
-         public async Task<IActionResult> GetUnreadCounts()
-         {
+        [HttpGet("unread-counts")]
+        public async Task<IActionResult> GetUnreadCounts()
+        {
             var userName = User.FindFirstValue(ClaimTypes.Name);
             if (userName == null) return Unauthorized();
 
@@ -177,30 +177,30 @@ namespace SSI.API.Controllers
             var counts = new Dictionary<string, long>();
 
             if (asStudent != null)
-             {
-               var roomId = $"{asStudent.StudentUserName}_{asStudent.MentorUserName}";
-               counts[roomId] = await _mentorshipService.GetUnreadCountAsync(roomId, userName);
-             }
+            {
+                var roomId = $"{asStudent.StudentUserName}_{asStudent.MentorUserName}";
+                counts[roomId] = await _mentorshipService.GetUnreadCountAsync(roomId, userName);
+            }
 
             foreach (var mentee in asMentor)
             {
-              var roomId = $"{mentee.StudentUserName}_{mentee.MentorUserName}";
-              counts[roomId] = await _mentorshipService.GetUnreadCountAsync(roomId, userName);
-          }      
+                var roomId = $"{mentee.StudentUserName}_{mentee.MentorUserName}";
+                counts[roomId] = await _mentorshipService.GetUnreadCountAsync(roomId, userName);
+            }
 
-             return Ok(counts);
-       }
+            return Ok(counts);
+        }
 
-       // PATCH /api/mentorship/chat/{roomId}/mark-read — mark messages as read
-       [HttpPatch("chat/{roomId}/mark-read")]
-       public async Task<IActionResult> MarkRead(string roomId)
-       {
-        var userName = User.FindFirstValue(ClaimTypes.Name);
-        if (userName == null) return Unauthorized();
+        // PATCH /api/mentorship/chat/{roomId}/mark-read — mark messages as read
+        [HttpPatch("chat/{roomId}/mark-read")]
+        public async Task<IActionResult> MarkRead(string roomId)
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            if (userName == null) return Unauthorized();
 
-        await _mentorshipService.MarkMessagesReadAsync(roomId, userName);
-        return Ok("Messages marked as read.");
-       }
+            await _mentorshipService.MarkMessagesReadAsync(roomId, userName);
+            return Ok("Messages marked as read.");
+        }
     }
 
     public class MentorshipRequestBody

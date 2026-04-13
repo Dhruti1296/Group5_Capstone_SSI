@@ -137,56 +137,56 @@ namespace SSI.API.Controllers
         [HttpDelete("posts/{postId}/comments/{commentIndex}")]
         public async Task<IActionResult> DeleteComment(string postId, int commentIndex)
         {
-           await _postService.DeleteCommentAsync(postId, commentIndex);
-           return Ok("Comment deleted.");
+            await _postService.DeleteCommentAsync(postId, commentIndex);
+            return Ok("Comment deleted.");
         }
 
         // GET all opportunities including closed
-[HttpGet("volunteer-opportunities")]
-public async Task<IActionResult> GetAllOpportunities()
-{
-    var opps = await _opportunityService.GetAllAsync();
-    return Ok(opps);
-}
+        [HttpGet("volunteer-opportunities")]
+        public async Task<IActionResult> GetAllOpportunities()
+        {
+            var opps = await _opportunityService.GetAllAsync();
+            return Ok(opps);
+        }
 
-// POST create opportunity
-[HttpPost("volunteer-opportunities")]
-public async Task<IActionResult> CreateOpportunity([FromBody] VolunteerOpportunity opp)
-{
-    opp.CreatedAt = DateTime.UtcNow;
-    await _opportunityService.CreateAsync(opp);
-    return Ok(opp);
-}
+        // POST create opportunity
+        [HttpPost("volunteer-opportunities")]
+        public async Task<IActionResult> CreateOpportunity([FromBody] VolunteerOpportunity opp)
+        {
+            opp.CreatedAt = DateTime.UtcNow;
+            await _opportunityService.CreateAsync(opp);
+            return Ok(opp);
+        }
 
-// PUT update opportunity
-[HttpPut("volunteer-opportunities/{id}")]
-public async Task<IActionResult> UpdateOpportunity(string id, [FromBody] VolunteerOpportunity opp)
-{
-    await _opportunityService.UpdateAsync(id, opp);
-    return Ok(opp);
-}
+        // PUT update opportunity
+        [HttpPut("volunteer-opportunities/{id}")]
+        public async Task<IActionResult> UpdateOpportunity(string id, [FromBody] VolunteerOpportunity opp)
+        {
+            await _opportunityService.UpdateAsync(id, opp);
+            return Ok(opp);
+        }
 
-// DELETE opportunity
-[HttpDelete("volunteer-opportunities/{id}")]
-public async Task<IActionResult> DeleteOpportunity(string id)
-{
-    await _opportunityService.DeleteAsync(id);
-    return Ok("Deleted.");
-}
+        // DELETE opportunity
+        [HttpDelete("volunteer-opportunities/{id}")]
+        public async Task<IActionResult> DeleteOpportunity(string id)
+        {
+            await _opportunityService.DeleteAsync(id);
+            return Ok("Deleted.");
+        }
 
-// GET /api/admins/{userName} — used by Event Microservice for admin validation
-[AllowAnonymous]
-[HttpGet("/api/admins/{userName}")]
-public async Task<IActionResult> GetAdminByUserName(string userName)
-{
-    var admin = await _context.Admins
-        .Find(a => a.UserName == userName)
-        .FirstOrDefaultAsync();
+        // GET /api/admins/{userName} — used by Event Microservice for admin validation
+        [AllowAnonymous]
+        [HttpGet("/api/admins/{userName}")]
+        public async Task<IActionResult> GetAdminByUserName(string userName)
+        {
+            var admin = await _context.Admins
+                .Find(a => a.UserName == userName)
+                .FirstOrDefaultAsync();
 
-    if (admin == null) return NotFound("Admin not found.");
+            if (admin == null) return NotFound("Admin not found.");
 
-    return Ok(new { admin.UserName, admin.Role });
-}
+            return Ok(new { admin.UserName, admin.Role });
+        }
 
 
     }

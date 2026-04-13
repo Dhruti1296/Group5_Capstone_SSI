@@ -122,6 +122,6 @@ namespace SSI.API.Controllers
             return Ok($"Fixed {count} users.");
         }
 
-      
+
     }
 }

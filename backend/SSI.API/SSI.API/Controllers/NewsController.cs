@@ -24,13 +24,13 @@ namespace SSI.API.Controllers
 
         [HttpGet("detail")]
         public async Task<IActionResult> GetNewsDetail([FromQuery] string url)
-       {
-         if (string.IsNullOrWhiteSpace(url) ||
-          !url.StartsWith("https://blogs1.conestogac.on.ca"))
-         return BadRequest("Invalid URL.");
+        {
+            if (string.IsNullOrWhiteSpace(url) ||
+             !url.StartsWith("https://blogs1.conestogac.on.ca"))
+                return BadRequest("Invalid URL.");
 
-         var detail = await _scraperService.GetNewsDetailAsync(url);
-         return detail != null ? Ok(detail) : NotFound("News not found.");
+            var detail = await _scraperService.GetNewsDetailAsync(url);
+            return detail != null ? Ok(detail) : NotFound("News not found.");
         }
     }
 }

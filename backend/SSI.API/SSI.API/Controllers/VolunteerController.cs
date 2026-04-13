@@ -12,9 +12,9 @@ namespace SSI.API.Controllers
     public class VolunteerController : ControllerBase
     {
         private readonly VolunteerService _volunteerService;
-private readonly VolunteerOpportunityService _opportunityService;
+        private readonly VolunteerOpportunityService _opportunityService;
 
-        public VolunteerController(VolunteerService volunteerService,VolunteerOpportunityService opportunityService)
+        public VolunteerController(VolunteerService volunteerService, VolunteerOpportunityService opportunityService)
         {
             _volunteerService = volunteerService;
             _opportunityService = opportunityService;
@@ -43,23 +43,23 @@ private readonly VolunteerOpportunityService _opportunityService;
         }
 
         // GET /api/volunteer/my-applications
-       [HttpGet("my-applications")]
-       public async Task<IActionResult> GetMyApplications()
-       {
-         var userName = User.FindFirstValue(ClaimTypes.Name);
-         if (userName == null) return Unauthorized();
+        [HttpGet("my-applications")]
+        public async Task<IActionResult> GetMyApplications()
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            if (userName == null) return Unauthorized();
 
-         var applications = await _volunteerService.GetByUserNameAsync(userName);
-         return Ok(applications);
+            var applications = await _volunteerService.GetByUserNameAsync(userName);
+            return Ok(applications);
         }
 
         // Public — anyone can see open opportunities
-[AllowAnonymous]
-[HttpGet("opportunities")]
-public async Task<IActionResult> GetOpportunities()
-{
-    var opps = await _opportunityService.GetAllAsync();
-    return Ok(opps.Where(o => o.Status == "Open"));
-}
+        [AllowAnonymous]
+        [HttpGet("opportunities")]
+        public async Task<IActionResult> GetOpportunities()
+        {
+            var opps = await _opportunityService.GetAllAsync();
+            return Ok(opps.Where(o => o.Status == "Open"));
+        }
     }
 }
