@@ -1,0 +1,309 @@
+.students-page {
+  min-height: 100vh;
+  background: linear-gradient(140deg, #000 40%, #deb169 85%);
+  color: #fff;
+  font-family: "Cinzel", serif;
+}
+
+.students-header {
+  text-align: center;
+  padding: 8rem 2rem 2rem;
+}
+
+.students-header h2 {
+  font-size: 2.5rem;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+}
+
+.students-header p {
+  color: #ccc;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.students-search {
+  width: 100%;
+  max-width: 480px;
+  padding: 12px 20px;
+  background: #111;
+  border: 2px solid #d4af37;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 1rem;
+  font-family: "Cinzel", serif;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.students-search:focus {
+  border-color: #fff;
+}
+
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 2rem 4rem;
+}
+
+.students-card {
+  background: #000;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.students-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+}
+
+.students-avatar {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7a6228, #c9a84c);
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.students-avatar span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
+.students-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.students-name {
+  color: #d4af37;
+  font-size: 1rem;
+  margin: 0 0 0.2rem;
+}
+
+.students-detail {
+  color: #ccc;
+  font-size: 0.85rem;
+  margin: 0 0 0.2rem;
+}
+
+.students-username {
+  color: #666;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.students-empty {
+  color: #aaa;
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 3rem 0;
+}
+
+.students-card {
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+}
+
+.students-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
+}
+
+.students-view-btn {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: #d4af37;
+  font-family: "Cinzel", serif;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.students-card:hover .students-view-btn {
+  opacity: 1;
+}
+
+/* ── Profile Modal — same styles as Alumni ── */
+.profile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.profile-modal {
+  background: #111;
+  border: 1px solid #d4af37;
+  border-radius: 20px;
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.profile-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  color: #888;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.profile-modal-close:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+.profile-modal-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7a6228, #c9a84c);
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  border: 3px solid #d4af37;
+  overflow: hidden;
+}
+
+.profile-modal-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-modal-name {
+  font-family: "Cinzel", serif;
+  font-size: 1.2rem;
+  color: #d4af37;
+  margin-bottom: 4px;
+}
+
+.profile-modal-username {
+  font-size: 0.82rem;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.profile-modal-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid #d4af37;
+  border-radius: 999px;
+  color: #d4af37;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+}
+
+.student-badge {
+  background: rgba(29, 78, 216, 0.12);
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
+.profile-modal-details {
+  background: #0a0a0a;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-modal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.profile-modal-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.profile-modal-label {
+  font-size: 0.78rem;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.profile-modal-value {
+  font-size: 0.85rem;
+  color: #ddd;
+  text-align: right;
+}
+
+.profile-modal-empty {
+  font-size: 0.82rem;
+  color: #555;
+  text-align: center;
+  padding: 8px 0;
+}

@@ -1,0 +1,199 @@
+.volunteer-page {
+  min-height: 100vh;
+  background: linear-gradient(140deg, #000 40%, #deb169 85%);
+  color: #fff;
+}
+
+.volunteer-header {
+  text-align: center;
+  padding: 8rem 2rem 2rem;
+}
+
+.volunteer-header h2 {
+  font-size: 2.5rem;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+}
+
+.volunteer-header p {
+  color: #ccc;
+  font-size: 1rem;
+}
+
+.volunteer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 2rem 4rem;
+}
+
+.volunteer-card {
+  background: #000;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.volunteer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+}
+
+.volunteer-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.volunteer-card-header h3 {
+  color: #d4af37;
+  font-size: 1rem;
+  margin: 0;
+  flex: 1;
+}
+
+.volunteer-badge {
+  background: #d4af37;
+  color: #111;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.volunteer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.volunteer-desc {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.volunteer-btn {
+  padding: 10px;
+  background: #d4af37;
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: "Cinzel", serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: auto;
+}
+
+.volunteer-btn:hover:not(:disabled) {
+  background: #fff;
+  color: #111;
+}
+
+.volunteer-btn.applied {
+  background: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  cursor: default;
+}
+
+.volunteer-btn.applied {
+  background: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  cursor: default;
+}
+
+.volunteer-btn.approved {
+  background: transparent;
+  border: 2px solid #3fb950;
+  color: #3fb950;
+  cursor: default;
+}
+
+.volunteer-btn.rejected {
+  background: transparent;
+  border: 2px solid #e05c5c;
+  color: #e05c5c;
+  cursor: default;
+}
+
+.volunteer-status-banner {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.volunteer-status-banner.pending {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.volunteer-status-banner.approved {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.volunteer-status-banner.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.volunteer-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  background: #c9a84c;
+  color: #111;
+}
+
+.volunteer-btn:hover:not(:disabled) {
+  background: #e8c97a;
+  transform: scale(1.01);
+}
+
+.volunteer-btn:disabled {
+  cursor: default;
+  transform: none;
+}
+
+.volunteer-btn.applied {
+  background: #e8e2d6;
+  color: #6b7280;
+}
+
+.volunteer-btn.approved {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.volunteer-btn.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}

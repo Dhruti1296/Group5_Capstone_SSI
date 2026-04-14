@@ -1,0 +1,306 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Golden spotlight background */
+  background:
+    radial-gradient(
+      90% 70% at bottom center,
+      rgba(212, 175, 55, 0.65),
+      transparent 75%
+    ),
+    radial-gradient(
+      70% 70% at left center,
+      rgba(212, 175, 55, 0.35),
+      transparent 70%
+    ),
+    radial-gradient(
+      70% 70% at right center,
+      rgba(212, 175, 55, 0.35),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 40% at top center,
+      rgba(212, 175, 55, 0.25),
+      transparent 70%
+    ),
+    linear-gradient(to bottom, #000, #0a0a0a, #000);
+
+  box-shadow: inset 0 0 280px rgba(212, 175, 55, 0.28);
+  position: relative;
+}
+
+.register-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 120px;
+  padding-bottom: 120px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Card container */
+.register-container {
+  width: 70%;
+  max-width: 750px;
+  padding: 40px;
+  background: rgba(17, 17, 17, 0.9);
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+
+  /* Zoom-in animation */
+  animation: zoom-in 1s ease forwards;
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+/* Title */
+.register-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #d4af37;
+  margin-bottom: 20px;
+}
+
+/* Inputs + Select */
+.register-input,
+.register-select {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+  transition: 0.3s;
+  font-size: 1rem;
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+.register-button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  background: #d4af37;
+  color: #111;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+.register-input:focus,
+.register-select:focus {
+  border-color: #fff;
+  outline: none;
+}
+
+.register-button:hover {
+  background: #fff;
+  color: black;
+  border: 1px solid #d4af37;
+}
+
+/* Login link */
+.login-text {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.login-link {
+  color: #d4af37;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sequential field animations */
+.register-input:nth-of-type(1) {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 0.3s;
+}
+.register-input:nth-of-type(2) {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 0.6s;
+}
+.register-input:nth-of-type(3) {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 0.9s;
+}
+.register-select {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 1.2s;
+}
+.register-button {
+  animation: slideIn 0.6s ease forwards;
+  animation-delay: 1.5s;
+}
+
+/* Notification banner */
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  z-index: 1000;
+  text-align: center;
+  animation:
+    slideDown 0.5s ease,
+    fadeOut 0.5s ease 3s forwards;
+}
+
+/*  Success glow */
+.notification.success {
+  background: #111;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.8),
+    0 0 30px rgba(212, 175, 55, 0.6);
+  animation:
+    glowPulse 2s infinite alternate,
+    slideDown 0.5s ease;
+}
+
+/*  Error style */
+.notification.error {
+  background: #111;
+  border: 2px solid #d4af37;
+  color: #ff4d4d;
+  box-shadow:
+    0 0 15px rgba(255, 77, 77, 0.8),
+    0 0 30px rgba(255, 77, 77, 0.6);
+}
+
+/* Slide down animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Fade out after delay */
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Glowing pulse effect */
+@keyframes glowPulse {
+  from {
+    box-shadow:
+      0 0 10px rgba(212, 175, 55, 0.6),
+      0 0 20px rgba(212, 175, 55, 0.4);
+  }
+  to {
+    box-shadow:
+      0 0 20px rgba(212, 175, 55, 1),
+      0 0 40px rgba(212, 175, 55, 0.8);
+  }
+}
+
+/* Smooth fade-out animation */
+.fade-out {
+  animation: fadeOut 1.5s forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Optional: slide-in for login page */
+.login-page {
+  animation: slideIn 1s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Press down effect */
+.register-button:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 8px #d4af37;
+}

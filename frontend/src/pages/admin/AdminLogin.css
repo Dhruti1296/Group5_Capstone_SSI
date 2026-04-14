@@ -1,0 +1,116 @@
+.admin-login-page {
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Cinzel", serif;
+}
+
+.admin-login-card {
+  background: #111;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+}
+
+.admin-login-card h2 {
+  color: #d4af37;
+  font-size: 1.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.admin-login-card p {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-input {
+  display: block;
+  width: 100%;
+  margin: 0.6rem 0;
+  padding: 12px;
+  background: #000;
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: "Cinzel", serif;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.admin-input:focus {
+  border-color: #fff;
+}
+
+.admin-login-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 12px;
+  background: #d4af37;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: "Cinzel", serif;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.admin-login-btn:hover {
+  background: #fff;
+}
+
+.admin-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+.admin-notification.success {
+  background: #111;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+}
+
+.admin-notification.error {
+  background: #111;
+  border: 2px solid #e05c5c;
+  color: #e05c5c;
+}
+
+.admin-login-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #333;
+}
+
+.admin-back-link {
+  color: #888;
+  text-decoration: none;
+  font-size: 0.82rem;
+  text-align: center;
+  transition: color 0.2s ease;
+  font-family: "Cinzel", serif;
+}
+
+.admin-back-link:hover {
+  color: #d4af37;
+}

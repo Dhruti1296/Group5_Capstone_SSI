@@ -1,0 +1,625 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: "Cinzel", serif;
+}
+
+.logo {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+}
+
+.video-overlay button {
+  margin: 0 10px;
+  padding: 10px 20px;
+}
+
+.down-arrow {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #deb169;
+  animation: fadeArrow 2s infinite;
+}
+
+@keyframes fadeArrow {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.alumni-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.alumni-card {
+  background: #f5f5f5;
+  padding: 1rem;
+  text-align: center;
+}
+
+.footer {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+.video-container {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.background-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw;
+  /* keep proper 16:9 */
+  min-height: 100vh;
+  min-width: 177.77vh;
+  transform: translate(-50%, -50%) scale(1.02);
+  /* 👈 zoom slightly */
+  pointer-events: none;
+  z-index: -1;
+}
+
+.background-video iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.video-overlay {
+  position: absolute;
+  bottom: 40px;
+  /* distance from bottom of video */
+  left: 50%;
+  transform: translateX(-50%);
+  /* center horizontally */
+  text-align: center;
+  color: white;
+  z-index: 1;
+}
+
+.video-overlay button {
+  margin: 0 10px;
+  padding: 10px 20px;
+}
+
+.logo img {
+  height: 150px;
+  width: auto;
+  display: block;
+  background: none;
+  border-radius: 75px;
+}
+
+.logo img {
+  height: 100px;
+  width: auto;
+  display: block;
+}
+
+.menu-button {
+  background: black;
+  border: 3px solid #b89863;
+  color: #e5e5e5;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  height: 16%;
+  border-radius: 20px;
+  right: 2%;
+  position: relative;
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(20, 20, 20, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: white;
+}
+
+.menu-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.menu-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+/* Animations */
+.drop-in {
+  animation-name: dropIn;
+}
+
+@keyframes dropIn {
+  from {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.bottom-buttons {
+  position: absolute;
+  bottom: -71px;
+  left: 80px;
+  display: flex;
+  gap: 1px;
+  z-index: 2;
+}
+
+.bottom-buttons button {
+  background: rgb(249, 248, 247);
+  color: rgb(93 77 77);
+  border: 4px solid #cb9f59;
+  padding: 30px 20px;
+  /* bigger padding = larger button */
+  font-size: 1.2rem;
+  /* larger text */
+  border-radius: 75px;
+  /* cfaa6f */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bottom-buttons button:hover {
+  background: #cb9f59;
+  color: black;
+}
+
+.bottom-buttons button span {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: lightgray;
+}
+
+/* Link bar styling */
+.link-bar {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+  padding: 2rem 0;
+  background: rgb(249, 248, 247);
+}
+
+/* Base link style */
+.link-bar a {
+  font-family: "Cinzel", serif;
+  font-size: 1.5rem;
+  font-weight: 525;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.link-bar a:hover {
+  border-bottom: 2px solid #b89863;
+}
+
+/* Zoom-in animation setup */
+.animation-zoom-in.animation-group .animation-item {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.animation-zoom-in.animation-group.content-appeared .animation-item {
+  animation-name: zoom-in;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes zoom-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Sequential delays for each link */
+.animation-group .animation-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.animation-group .animation-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.animation-group .animation-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.animation-group .animation-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* anchor to right side */
+  width: 320px;
+  height: 100%;
+  background: #111;
+  border-left: 2px solid #d4af37;
+  transform: translateX(100%);
+  /* start off-screen */
+  transition: transform 0.4s ease;
+  z-index: 1000;
+  padding: 2rem;
+  font-family: "Cinzel", serif;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+  /* slide into view */
+}
+
+.side-menu.closing {
+  animation: slideOut 0.5s forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.side-menu h2,
+.side-menu ul li a {
+  font-family: "Cinzel", serif;
+  /* 👈 ensure headings & links match */
+}
+
+.community-section h2,
+.community-section h3,
+.community-section p,
+.community-section a,
+.community-section button {
+  font-family: "Cinzel", serif;
+}
+
+.down-arrow-link {
+  display: inline-block;
+  font-size: 2rem;
+  color: #b89863;
+  animation: bounce 1.5s infinite;
+  text-decoration: none;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-10px);
+  }
+
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.community-section {
+  background: linear-gradient(
+    to bottom,
+    #deb169 0%,
+    #1a1a1e 25%,
+    #111114 50%,
+    #1a1a1e 75%,
+    #deb169 100%
+  );
+  width: 100%;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #fff;
+  font-family: "Cinzel", serif;
+  animation: fadeUp 1s ease forwards;
+}
+
+.community-section p {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  max-width: 70rem;
+  margin: 0 auto;
+  font-style: italic;
+}
+
+.circle-arrow {
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #deb169;
+  animation: fadeArrow 2s infinite;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.circle-arrow:hover {
+  transform: translateX(-50%) scale(1.15);
+  color: black;
+}
+
+.site-footer {
+  background: #111;
+  /* solid black base */
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-card {
+  background: #000;
+  /* card background */
+  border: 2px solid #deb169;
+  /* golden border */
+  border-radius: 1.5rem;
+  padding: 2rem;
+  max-width: 70rem;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  text-align: center;
+  animation: fadeUp 1s ease forwards;
+}
+
+/* Contact section */
+.footer-contact h3,
+.footer-social h3 {
+  color: #deb169;
+  margin-bottom: 1rem;
+}
+
+.footer-contact p {
+  margin: 0.3rem 0;
+}
+
+.footer-link {
+  color: #deb169;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #fff;
+}
+
+/* Social icons */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-icon {
+  font-size: 1.5rem;
+  color: #deb169;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+  opacity: 1;
+  transform: translateY(20px);
+}
+
+.social-icon.content-appeared {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.social-icon:hover {
+  transform: scale(1.2) rotate(5deg);
+  color: #fff;
+}
+
+/* Scroll animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.link-bar,
+.community-section {
+  position: relative;
+  z-index: 10;
+  /* ensures they sit above video + overlay */
+}
+
+.video-fade-overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.video-fade-overlay.fade-in {
+  animation: fadeOverlay 1.2s ease forwards;
+}
+
+@keyframes fadeOverlay {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.menu-card {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background: #111;
+  border-left: 2px solid #d4af37;
+  padding: 2rem;
+  z-index: 1001;
+  font-family: "Cinzel", serif;
+  overflow-y: auto;
+}
+
+.menu-card.drop-in {
+  animation: slideInRight 0.4s ease forwards;
+}
+
+.menu-card.closing {
+  animation: slideOut 0.4s ease forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.menu-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-links li a,
+.menu-links li .menu-logout-btn {
+  display: block;
+  padding: 12px 16px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.menu-links li a:hover,
+.menu-links li .menu-logout-btn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+/* Flaticon base sizing */
+.fi {
+  font-size: 1rem;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Profile nav icons */
+.profile-nav-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Event/News detail meta icons */
+.event-meta-icon,
+.news-meta-icon {
+  font-size: 1rem;
+}
+
+/* Feature card icons in About page */
+.about-feature-icon .fi {
+  font-size: 2rem;
+}
+
+/* Social icons in Footer */
+.social-icon .fi {
+  font-size: 1.2rem;
+}

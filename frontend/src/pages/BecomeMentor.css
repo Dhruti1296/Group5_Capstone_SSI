@@ -1,0 +1,314 @@
+.become-mentor-body {
+  min-height: 100vh;
+  background: #111114;
+  color: #fff;
+  font-family: "Cinzel", serif;
+}
+
+.become-mentor-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 8rem 2rem 4rem;
+}
+
+.become-mentor-page h2 {
+  font-size: 2rem;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+  font-family: "Cinzel", serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.become-mentor-subtitle {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.become-mentor-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  color: #d4af37;
+  font-size: 1.2rem;
+  gap: 10px;
+}
+
+/* ── Form ────────────────────────────────── */
+.become-mentor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.become-mentor-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #e8c97a;
+  font-family: "Cinzel", serif;
+}
+
+.label-text .fi {
+  font-size: 0.9rem;
+}
+
+.become-mentor-form input,
+.become-mentor-form textarea {
+  background: #1a1a1e;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #f5f4f0;
+  font-size: 0.92rem;
+  font-family: "Cinzel", serif;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.become-mentor-form input:focus,
+.become-mentor-form textarea:focus {
+  border-color: #d4af37;
+  background: #222226;
+}
+
+.become-mentor-form input::placeholder,
+.become-mentor-form textarea::placeholder {
+  color: #6b7280;
+}
+
+.required {
+  color: #fca5a5;
+  margin-left: 2px;
+}
+
+.char-count {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: right;
+}
+
+/* ── Expertise ───────────────────────────── */
+.expertise-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.expertise-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #e8c97a;
+  font-family: "Cinzel", serif;
+}
+
+.expertise-label .fi {
+  font-size: 0.9rem;
+}
+
+.expertise-hint {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.expertise-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.expertise-tag {
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #e8c97a;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-family: "Cinzel", serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.expertise-tag:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
+}
+
+.expertise-tag.selected {
+  background: #d4af37;
+  border-color: #d4af37;
+  color: #111;
+  font-weight: bold;
+}
+
+/* ── Submit button ───────────────────────── */
+.update-btn {
+  margin-top: 1rem;
+  padding: 11px 24px;
+  background: #d4af37;
+  color: #111;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "Cinzel", serif;
+  font-size: 0.9rem;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.update-btn:hover:not(:disabled) {
+  background: #e8c97a;
+  transform: scale(1.02);
+}
+
+.update-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Status screen ───────────────────────── */
+.already-applied {
+  background: #1a1a1e;
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.already-applied.status-approved {
+  border-color: #6ee7b7;
+  background: rgba(6, 95, 70, 0.1);
+}
+
+.already-applied.status-approved .status-icon,
+.already-applied.status-approved h3 {
+  color: #6ee7b7;
+}
+
+.already-applied.status-rejected {
+  border-color: #fca5a5;
+  background: rgba(192, 84, 74, 0.1);
+}
+
+.already-applied.status-rejected .status-icon,
+.already-applied.status-rejected h3 {
+  color: #fca5a5;
+}
+
+.already-applied.status-pending {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.already-applied.status-pending .status-icon,
+.already-applied.status-pending h3 {
+  color: #d4af37;
+}
+
+.already-applied p {
+  color: #9ca3af;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.status-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.status-icon .fi {
+  font-size: 2.5rem;
+}
+
+/* ── Submitted details ───────────────────── */
+.submitted-details {
+  background: #111114;
+  border: 1px solid #2a2a2e;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin: 1rem auto 1.5rem;
+  text-align: left;
+  width: 95%;
+  box-sizing: border-box;
+}
+
+.submitted-details h4 {
+  color: #d4af37;
+  margin-bottom: 0.8rem;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #2a2a2e;
+  padding-bottom: 0.5rem;
+}
+
+.submitted-details p {
+  color: #c4c4cc;
+  font-size: 0.85rem;
+  margin: 0.4rem 0;
+  line-height: 1.5;
+}
+
+.submitted-details strong {
+  color: #e8c97a;
+}
+
+.submitted-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+/* ── Notification ────────────────────────── */
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 9999;
+  text-align: center;
+  font-family: "Cinzel", serif;
+}
+
+.notification.success {
+  background: #1a1a1e;
+  border: 1.5px solid #6ee7b7;
+  color: #6ee7b7;
+}
+
+.notification.error {
+  background: #1a1a1e;
+  border: 1.5px solid #fca5a5;
+  color: #fca5a5;
+}

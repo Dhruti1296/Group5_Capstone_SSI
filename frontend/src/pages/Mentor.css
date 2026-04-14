@@ -1,0 +1,159 @@
+.mentor-page {
+  min-height: 100vh;
+  background: linear-gradient(140deg, #000 40%, #deb169 85%);
+  color: #fff;
+}
+
+.mentor-header {
+  text-align: center;
+  padding: 8rem 2rem 2rem;
+}
+
+.mentor-header h2 {
+  font-size: 2.5rem;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+}
+
+.mentor-header p {
+  color: #ccc;
+  font-size: 1rem;
+}
+
+.mentor-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 860px;
+  margin: 2rem auto;
+  padding: 0 2rem 4rem;
+}
+
+.mentor-card {
+  background: #000;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.mentor-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+}
+
+.mentor-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #d4af37;
+  color: #111;
+  font-size: 1.8rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #d4af37;
+}
+
+.mentor-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mentor-name {
+  color: #d4af37;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.mentor-role {
+  color: #ccc;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.mentor-year {
+  color: #888;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.mentor-bio {
+  color: #ddd;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0.4rem 0;
+}
+
+.mentor-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.mentor-tag {
+  background: transparent;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  font-size: 0.75rem;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.mentor-btn {
+  align-self: flex-start;
+  padding: 8px 20px;
+  background: #d4af37;
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: "Cinzel", serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mentor-btn:hover:not(:disabled) {
+  background: #fff;
+  color: #111;
+}
+
+.mentor-btn.requested {
+  background: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  cursor: default;
+}
+
+.mentor-linkedin {
+  font-size: 0.82rem;
+  color: #d4af37;
+  text-decoration: none;
+  margin-bottom: 0.4rem;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.mentor-linkedin:hover {
+  color: #fff;
+}
+
+.active-mentor-banner {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: #d4af37;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  display: inline-block;
+}
