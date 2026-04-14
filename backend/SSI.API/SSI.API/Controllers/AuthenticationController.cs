@@ -60,12 +60,6 @@ namespace SSI.API.Controllers
             if (user.Password.Length < 8)
                 errors.Add("Password must be at least 8 characters long.");
 
-            //Name
-            if (string.IsNullOrWhiteSpace(user.Name))
-            {
-                errors.Add("Name is required");
-            }
-
             //if any errors we have in the list
             if (errors.Any())
             {
@@ -95,7 +89,7 @@ namespace SSI.API.Controllers
             {
                 return BadRequest(new
                 {
-                    message = "VAlidation Error",
+                    message = "Validation Error",
                     errors = new[]
                 {
                     "Login input is required"
