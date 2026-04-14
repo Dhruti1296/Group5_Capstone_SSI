@@ -15,6 +15,7 @@ namespace SSI.API.Controllers
         }
 
         // GET /api/news
+        // fetches all news articles from the website...
         [HttpGet]
         public async Task<IActionResult> GetNews()
         {
@@ -22,15 +23,16 @@ namespace SSI.API.Controllers
             return Ok(news);
         }
 
+
         [HttpGet("detail")]
         public async Task<IActionResult> GetNewsDetail([FromQuery] string url)
         {
             if (string.IsNullOrWhiteSpace(url) ||
              !url.StartsWith("https://blogs1.conestogac.on.ca"))
-                return BadRequest("Invalid URL.");
+                return BadRequest("Not a Conestoga related news article!!.");
 
             var detail = await _scraperService.GetNewsDetailAsync(url);
-            return detail != null ? Ok(detail) : NotFound("News not found.");
+            return detail != null ? Ok(detail) : NotFound("News content not found!!.");
         }
     }
 }

@@ -12,6 +12,7 @@ namespace SSI.API.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
+        // Injecting required services for the admin operations...
         private readonly UserServices _userServices;
         private readonly PostService _postService;
         private readonly MentorService _mentorService;
@@ -20,6 +21,7 @@ namespace SSI.API.Controllers
         private readonly VolunteerOpportunityService _opportunityService;
         private readonly MongoDbContext _context;
 
+        // constructor to initialize all services...
         public AdminController(
             UserServices userServices,
             PostService postService,
@@ -38,13 +40,17 @@ namespace SSI.API.Controllers
             _context = context;
         }
 
+        // ****************** USERS ******************
+
         // GET /api/admin/users
+        // retrieves all users data along with their mentor application status...
         [HttpGet("users")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userServices.GetAllAsync();
             var mentorApps = await _mentorService.GetAllAsync();
 
+            // displays only d necessary fields related to the users...
             var result = users.Select(u => new
             {
                 id = u.Id,
@@ -61,6 +67,7 @@ namespace SSI.API.Controllers
         }
 
         // DELETE /api/admin/users/{userName}
+        // deletes the specified username...
         [HttpDelete("users/{userName}")]
         public async Task<IActionResult> DeleteUser(string userName)
         {
@@ -68,7 +75,11 @@ namespace SSI.API.Controllers
             return deleted ? Ok("User deleted.") : NotFound("User not found.");
         }
 
+
+        // ****************** POST ******************
+
         // GET /api/admin/posts
+        // retrieves all the post...
         [HttpGet("posts")]
         public async Task<IActionResult> GetAllPosts()
         {
@@ -77,12 +88,25 @@ namespace SSI.API.Controllers
         }
 
         // DELETE /api/admin/posts/{id}
+        // allows admin to delete any particular post...
         [HttpDelete("posts/{id}")]
         public async Task<IActionResult> DeletePost(string id)
         {
             await _postService.AdminDeleteAsync(id);
             return Ok("Post deleted.");
         }
+
+        // DELETE /api/admin/posts/{postId}/comments/{commentIndex}
+        // deletes a specific comment from a post...
+        [HttpDelete("posts/{postId}/comments/{commentIndex}")]
+        public async Task<IActionResult> DeleteComment(string postId, int commentIndex)
+        {
+            await _postService.DeleteCommentAsync(postId, commentIndex);
+            return Ok("Comment deleted.");
+        }
+
+
+        // ****************** MENTOR & VOLUNTEER ******************
 
         // GET /api/admin/mentor-applications
         [HttpGet("mentor-applications")]
@@ -133,14 +157,8 @@ namespace SSI.API.Controllers
             return Ok("Status updated.");
         }
 
-        // DELETE /api/admin/posts/{postId}/comments/{commentIndex}
-        [HttpDelete("posts/{postId}/comments/{commentIndex}")]
-        public async Task<IActionResult> DeleteComment(string postId, int commentIndex)
-        {
-            await _postService.DeleteCommentAsync(postId, commentIndex);
-            return Ok("Comment deleted.");
-        }
 
+        // ************** VOLUNTEER OPPORTUNITIES ******************
         // GET all opportunities including closed
         [HttpGet("volunteer-opportunities")]
         public async Task<IActionResult> GetAllOpportunities()
@@ -175,7 +193,10 @@ namespace SSI.API.Controllers
             return Ok("Deleted.");
         }
 
-        // GET /api/admins/{userName} — used by Event Microservice for admin validation
+        // ****************** ADMIN VALIDATION ******************
+
+        // GET /api/admins/{userName}
+        // used by Event Microservice for admin validation...
         [AllowAnonymous]
         [HttpGet("/api/admins/{userName}")]
         public async Task<IActionResult> GetAdminByUserName(string userName)
@@ -188,7 +209,6 @@ namespace SSI.API.Controllers
 
             return Ok(new { admin.UserName, admin.Role });
         }
-
 
     }
 
