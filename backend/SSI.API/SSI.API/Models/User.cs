@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace SSI.API.Models
 {
@@ -8,6 +9,7 @@ namespace SSI.API.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        [JsonIgnore]
         public string? Id { get; set; }
 
         [BsonElement("UserName")]
