@@ -6,14 +6,16 @@ namespace SSI.API.Services
 {
     public class PostService
     {
+        // MongoDB collection for Posts...
         private readonly IMongoCollection<Post> _posts;
 
+        // constructor to initialize MongoDB collection using context...
         public PostService(MongoDbContext context)
         {
             _posts = context.Posts;
         }
 
-        // Get all posts, newest first
+        // Get all posts from db (sorted by the latest first)...
         public async Task<List<Post>> GetAllAsync()
         {
             return await _posts
@@ -22,7 +24,7 @@ namespace SSI.API.Services
                 .ToListAsync();
         }
 
-        // Get posts by a specific user
+        // Get posts created by a specific user (created by latest first)...
         public async Task<List<Post>> GetByUserAsync(string userName)
         {
             return await _posts
@@ -31,7 +33,7 @@ namespace SSI.API.Services
                 .ToListAsync();
         }
 
-        // Create a new post
+        // Create and insert a new post into MongoDB...
         public async Task CreateAsync(Post post)
         {
             await _posts.InsertOneAsync(post);
@@ -67,13 +69,16 @@ namespace SSI.API.Services
             return await _posts.Find(p => p.Id == postId).FirstOrDefaultAsync();
         }
 
-        // Add a comment
+        // Add a comment to an existing post...
         public async Task<Post?> AddCommentAsync(string postId, Comment comment)
         {
             var update = Builders<Post>.Update.Push(p => p.Comments, comment);
             await _posts.UpdateOneAsync(p => p.Id == postId, update);
             return await _posts.Find(p => p.Id == postId).FirstOrDefaultAsync();
         }
+
+
+        // ****************** ADMIN POST & COMMENTINDEX DELETE ******************
 
         public async Task AdminDeleteAsync(string postId)
         {
