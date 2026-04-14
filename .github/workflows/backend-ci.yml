@@ -36,7 +36,7 @@ jobs:
         run: |
           echo "Checking required backend files..."
 
-          if [ ! -f "backend/SSI.API/SSI.API/Controllers/AdminController.cs" ]; then
+          if [ ! -f "backend/SSI.API/SSI.API/Controllers/AdminControllers.cs" ]; then
             echo "AdminController.cs missing"
             exit 1
           fi
