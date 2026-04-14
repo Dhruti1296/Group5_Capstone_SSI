@@ -3,6 +3,7 @@ using System.Net;
 
 namespace SSI.API.Services
 {
+    // represents a simple event...
     public class ScrapedEvent
     {
         public string Title { get; set; } = null!;
@@ -18,6 +19,7 @@ namespace SSI.API.Services
         public string Url { get; set; } = null!;
     }
 
+    //represents full event info....
     public class ScrapedEventDetail
     {
         public string Title { get; set; } = null!;
@@ -29,6 +31,7 @@ namespace SSI.API.Services
         public string DetailUrl { get; set; } = null!;
     }
 
+    // represents basic news info...
     public class ScrapedNews
     {
         public string Title { get; set; } = null!;
@@ -37,6 +40,7 @@ namespace SSI.API.Services
         public string DetailUrl { get; set; } = null!;
     }
 
+    // represents full new details...
     public class ScrapedNewsDetail
     {
         public string Title { get; set; } = null!;
@@ -51,14 +55,17 @@ namespace SSI.API.Services
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "https://blogs1.conestogac.on.ca/events/";
 
+        // creates a constructor and pretends to be a browser...
         public EventScraperService()
         {
             _httpClient = new HttpClient();
+            
+            //for pretending to be a browser...
             _httpClient.DefaultRequestHeaders.Add("User-Agent",
                 "Mozilla/5.0 (compatible; SSI-App/1.0)");
         }
 
-        // ✅ CENTRAL CLEAN METHOD
+        // to remove or format scraped text properly before using it...
         private static string Clean(string? text)
         {
             if (string.IsNullOrWhiteSpace(text)) return "";
@@ -71,6 +78,7 @@ namespace SSI.API.Services
             return decoded;
         }
 
+        // scrapes event list from the websote and returns an structured event data...
         public async Task<List<ScrapedEvent>> GetEventsAsync()
         {
             var events = new List<ScrapedEvent>();
@@ -81,9 +89,11 @@ namespace SSI.API.Services
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
 
+                //finds event table...
                 var tables = doc.DocumentNode.SelectNodes("//table");
                 if (tables == null) return events;
 
+                //goes through each tables...
                 foreach (var table in tables)
                 {
                     string currentDate = "";
@@ -146,6 +156,7 @@ namespace SSI.API.Services
             return events;
         }
 
+        // fetches full event details...
         public async Task<ScrapedEventDetail?> GetEventDetailAsync(string url)
         {
             try
@@ -268,6 +279,7 @@ namespace SSI.API.Services
             }
         }
 
+        // fetches the list of news articles headlines and short descriptions from the website...
         public async Task<List<ScrapedNews>> GetNewsAsync()
         {
             var newsList = new List<ScrapedNews>();
@@ -347,6 +359,7 @@ namespace SSI.API.Services
             return newsList;
         }
 
+        // method extracts complete news article details including image and full content...
         public async Task<ScrapedNewsDetail?> GetNewsDetailAsync(string url)
         {
             try
